@@ -1,2 +1,2 @@
-# YOD_Android
-This project is under the Gudience of Ambalika ghosh and for Android Tanvir Ahmed.
+# Satvixk 
+This project is under the Gudience of Shagun and Tanvir is on Android Developer
