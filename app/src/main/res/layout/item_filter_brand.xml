@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/mainLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <!--<ImageView-->
+                <!--android:id="@+id/ivUncheckTick"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="@dimen/dp_16"-->
+                <!--android:src="@drawable/_tick_grel_icon" />-->
+
+            <CheckBox
+                android:id="@+id/checkboxUncheckTick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_16"
+                android:button="@drawable/_tick_grel_icon"/>
+
+            <TextView
+                android:id="@+id/filterBrandText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_16"
+                android:text="Manyavar"
+                android:textColor="@color/colorLiteGrey"
+                android:textSize="14dp"
+                app:font="@{`lato_regular`}"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:background="@color/colorLightGrey" />
+
+    </LinearLayout>
+</layout>

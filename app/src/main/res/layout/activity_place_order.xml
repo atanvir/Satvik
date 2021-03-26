@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:id="@+id/mainRl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        tools:context=".fragments.AddressMainFragment">
+
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:contentInsetStart="@dimen/dp_0">
+
+
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:src="@drawable/back_new_buttom" />
+
+
+            <TextView
+                android:id="@+id/tv_title1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Address"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sp_16"
+                android:visibility="visible"
+                app:font="@{`lato_regular`}" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/my_toolbar"
+            android:background="@color/colorLightGrey" />
+
+        <RelativeLayout
+            android:id="@+id/submainRl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/view"
+            android:visibility="visible"
+            android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/layout_address_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_12">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name : "
+                android:textStyle="bold"
+                android:textColor="@color/colorBlack"
+                android:textSize="14dp"
+                app:font="@{`lato_regular`}" />
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textStyle="bold"
+                android:textColor="@color/colorBlack"
+                android:textSize="14dp"
+                app:font="@{`lato_regular`}" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_address_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:layout_below="@+id/layout_address_1"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="@dimen/dp_12">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Address : "
+                android:textColor="@color/colorBlack"
+                android:textSize="14dp"
+                app:font="@{`lato_regular`}" />
+
+            <TextView
+                android:id="@+id/tvAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/colorBlack"
+                android:textSize="14dp"
+                app:font="@{`lato_regular`}" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_address_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:layout_below="@+id/layout_address_2"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_12">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mobile Number : "
+                android:textColor="@color/colorBlack"
+                android:textSize="14dp"
+                app:font="@{`lato_regular`}" />
+
+            <TextView
+                android:id="@+id/tvContactNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/colorBlack"
+                android:textSize="14dp"
+                app:font="@{`lato_regular`}" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_address_4"
+            android:layout_width="match_parent"
+            android:visibility="visible"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_address_3"
+            android:layout_marginTop="@dimen/dp_30"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorLightGrey" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvEditORChangeAddress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_20"
+                    android:text="Edit/Change"
+                    android:textColor="@color/colorLogOut"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorLightGrey" />
+
+                <TextView
+                    android:id="@+id/addNewAddressText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:visibility="visible"
+                    android:padding="@dimen/dp_20"
+                    android:text="Add New Address"
+                    android:textColor="@color/colorLogOut"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorLightGrey" />
+
+        </LinearLayout>
+
+
+
+        <TextView
+            android:id="@+id/tvAddNewAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginBottom="15dp"
+            android:gravity="center_vertical"
+            android:textAlignment="center"
+            android:text="+Add New Address"
+            android:textAllCaps="true"
+
+            android:textColor="@color/colorLogOut"
+            android:textSize="14dp"
+            android:visibility="gone"
+            app:font="@{`lato_bold`}" />
+
+
+        <View
+            android:id="@+id/newaddressView"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:visibility="gone"
+            android:layout_below="@+id/tvAddNewAddress"
+            android:background="@color/colorLightGrey" />
+
+
+
+        <!--billing section-->
+
+        <LinearLayout
+            android:id="@+id/lllcc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_address_4"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="@dimen/dp_12">
+
+            <TextView
+                android:id="@+id/tvv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Price Deatils"
+                android:textColor="@color/colorPureBlack"
+                android:textSize="14dp"
+                app:font="@{`lato_bold`}" />
+
+        </LinearLayout>
+
+
+
+
+        <View
+            android:visibility="gone"
+            android:id="@+id/vie"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/lllcc"
+            android:layout_marginTop="@dimen/dp_5"
+            android:background="@color/colorLightGrey" />
+
+
+        <LinearLayout
+            android:id="@+id/layout_address_5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/vie"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:orientation="vertical">
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/tvvv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/vie"
+                android:text="Price Deatils"
+                android:textAllCaps="true"
+                android:textColor="@color/colorBlack"
+                android:textSize="14dp"
+                app:font="@{`lato_regular`}" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_0">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Price"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        app:font="@{`lato_regular`}" />
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/tvTotalMrp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text=""
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+            </LinearLayout>
+
+
+
+
+            <LinearLayout
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Discount"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-Rs.2,720"
+                    android:textColor="@color/colorLogOut"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llCouponApply"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Applied Coupon"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+
+                <TextView
+                    android:id="@+id/tvCouponDiscount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-1000"
+                    android:textColor="@color/colorLogOut"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llGiftWrapPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/_10sdp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Gift Wrap"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        app:font="@{`lato_regular`}" />
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/tvGiftWrapPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Rs.7,696"
+                    android:textColor="@color/colorLogOut"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Estimated Tax"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rs.539"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+            </LinearLayout>
+
+
+
+
+
+            <LinearLayout
+                android:id="@+id/llDeliveryCharges"
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Shipping Charges"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+
+                <TextView
+                    android:id="@+id/tvDeliveryCharges"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/colorLogOut"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Total"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_bold`}" />
+
+                <TextView
+                    android:id="@+id/tvTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/colorPureBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_bold`}" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+
+
+
+
+        <LinearLayout
+            android:id="@+id/llContinue"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/drawable_gradient_line"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CONTINUE"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_16"
+                app:font="@{`lato_regular`}" />
+        </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>

@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        tools:context=".fragments.ProductListFragment">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_product_list"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:contentInsetStart="@dimen/dp_0">
+
+
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="@dimen/dp_10"
+                android:src="@drawable/back_new_buttom"
+                android:visibility="visible" />
+
+            <RelativeLayout
+                android:id="@+id/rlTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tvWomen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
+                    android:text="KIDS"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/sp_16"
+                    app:font="@{`lato_regular`}" />
+
+
+            </RelativeLayout>
+
+
+            <ImageView
+                android:id="@+id/ivSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginRight="@dimen/dp_5"
+                android:padding="@dimen/dp_10"
+                android:src="@drawable/_saved_icon_99" />
+
+            <ImageView
+                android:id="@+id/ivSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:padding="@dimen/dp_10"
+                android:src="@drawable/search_icon_new" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+
+        <View
+            android:id="@+id/view_product_list"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/toolbar_product_list"
+            android:background="@color/colorLightGrey" />
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/view_product_list">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:background="@drawable/banner_yod_stylee"
+                    android:scaleType="fitXY" />
+
+                <RelativeLayout
+                    android:id="@+id/rl1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ivBanner"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10">
+
+
+                    <RelativeLayout
+                        android:id="@+id/rlFlashSale"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/ivFlashSale"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/dp_10"
+                            android:src="@drawable/lightning" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp_5"
+                            android:layout_toRightOf="@+id/ivFlashSale"
+                            android:padding="@dimen/dp_5"
+                            android:text="Flash Sale"
+                            android:textAllCaps="true"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="18sp"
+                            app:font="@{`lato_bold`}" />
+                    </RelativeLayout>
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/flashSaleRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/rlFlashSale" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rl1"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_0">
+
+                    <TextView
+                        android:id="@+id/tvShopByOccasion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:text="Shop By Occassion"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPureBlack"
+                        android:textSize="14dp"
+                        app:font="@{`lato_bold`}" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/shopByOccasionRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvShopByOccasion" />
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/ivBanner2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rl2"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:background="@drawable/banner_yod_stylee"
+                    android:scaleType="fitXY" />
+
+                <RelativeLayout
+                    android:id="@+id/rl3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ivBanner2"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10">
+
+                    <TextView
+                        android:id="@+id/tvEthnicCollection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:text="Ethnic Collection"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPureBlack"
+                        android:textSize="14dp"
+                        app:font="@{`lato_bold`}" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:layout_toRightOf="@id/tvEthnicCollection"
+                        android:layout_alignParentEnd="true"
+                        android:gravity="end">
+
+                        <TextView
+                            android:id="@+id/tvEthnicCollectionViewAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="View All"
+                            android:textAllCaps="true"
+                            android:textColor="@color/colorPureBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_bold`}" />
+
+
+                        <ImageView
+                            android:id="@+id/ivBackward"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/tvEthnicCollectionViewAll"
+                            android:layout_centerInParent="true"
+                            android:padding="@dimen/dp_5"
+                            android:layout_marginRight="@dimen/dp_5"
+                            android:src="@drawable/dropdown" />
+
+                        <ImageView
+                            android:id="@+id/ivForward"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/ivBackward"
+                            android:layout_centerInParent="true"
+                            android:padding="@dimen/dp_5"
+                            android:src="@drawable/dropdown" />
+                    </RelativeLayout>
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/ethnicCollectionRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvEthnicCollection" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rl3"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_0">
+
+                    <TextView
+                        android:id="@+id/tvDressesAndJumpSuits"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:text="Dresses"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPureBlack"
+                        android:textSize="14dp"
+                        app:font="@{`lato_bold`}" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:layout_toRightOf="@id/tvDressesAndJumpSuits"
+                        android:layout_alignParentEnd="true"
+                        android:gravity="end">
+
+                        <TextView
+                            android:id="@+id/tvDressesAndJumpSuitsViewAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="View All"
+                            android:textAllCaps="true"
+                            android:textColor="@color/colorPureBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_bold`}" />
+
+
+                        <ImageView
+                            android:id="@+id/ivBackwardDressesAndJumpSuitsViewAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/tvDressesAndJumpSuitsViewAll"
+                            android:layout_centerInParent="true"
+                            android:padding="@dimen/dp_5"
+                            android:layout_marginRight="@dimen/dp_5"
+                            android:src="@drawable/dropdown" />
+
+                        <ImageView
+                            android:id="@+id/ivForwardDressesAndJumpSuitsViewAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/ivBackwardDressesAndJumpSuitsViewAll"
+                            android:layout_centerInParent="true"
+                            android:padding="@dimen/dp_5"
+                            android:src="@drawable/dropdown" />
+                    </RelativeLayout>
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/dressesAndJumpSuitsRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvDressesAndJumpSuits" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rl4"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_0">
+
+                    <TextView
+                        android:id="@+id/tvLatestTops"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:text="Track Pants"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPureBlack"
+                        android:textSize="14dp"
+                        app:font="@{`lato_bold`}" />
+
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:layout_toRightOf="@id/tvLatestTops"
+                        android:layout_alignParentEnd="true"
+                        android:gravity="end">
+
+                        <TextView
+                            android:id="@+id/tvLatestTopsViewAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="View All"
+                            android:textAllCaps="true"
+                            android:textColor="@color/colorPureBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_bold`}" />
+
+
+                        <ImageView
+                            android:id="@+id/ivBackwardLatestTopsViewAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/tvLatestTopsViewAll"
+                            android:layout_centerInParent="true"
+                            android:padding="@dimen/dp_5"
+                            android:layout_marginRight="@dimen/dp_5"
+                            android:src="@drawable/dropdown" />
+
+                        <ImageView
+                            android:id="@+id/ivForwardLatestTopsViewAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/ivBackwardLatestTopsViewAll"
+                            android:layout_centerInParent="true"
+                            android:padding="@dimen/dp_5"
+                            android:src="@drawable/dropdown" />
+                    </RelativeLayout>
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/latestTopsRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvLatestTops" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rl5"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_0">
+
+                    <TextView
+                        android:id="@+id/tvFootWear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:text="FootWear"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPureBlack"
+                        android:textSize="14dp"
+                        app:font="@{`lato_bold`}" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:layout_toRightOf="@id/tvFootWear"
+                        android:layout_alignParentEnd="true"
+                        android:gravity="end">
+
+                        <TextView
+                            android:id="@+id/tvtvFootWearViewAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="View All"
+                            android:textAllCaps="true"
+                            android:textColor="@color/colorPureBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_bold`}" />
+
+
+                        <ImageView
+                            android:id="@+id/ivBackwardtvFootWearViewAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/tvtvFootWearViewAll"
+                            android:layout_centerInParent="true"
+                            android:padding="@dimen/dp_5"
+                            android:layout_marginRight="@dimen/dp_5"
+                            android:src="@drawable/dropdown" />
+
+                        <ImageView
+                            android:id="@+id/ivForwardtvFootWearViewAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/ivBackwardtvFootWearViewAll"
+                            android:layout_centerInParent="true"
+                            android:padding="@dimen/dp_5"
+                            android:src="@drawable/dropdown" />
+                    </RelativeLayout>
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/FootWearRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvFootWear" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rl6"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_0">
+
+                    <TextView
+                        android:id="@+id/tvFossilSmartWatches"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:text="Fossil Smart Watches"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPureBlack"
+                        android:textSize="14dp"
+                        app:font="@{`lato_bold`}" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:layout_toRightOf="@id/tvFossilSmartWatches"
+                        android:layout_alignParentEnd="true"
+                        android:gravity="end">
+
+                        <TextView
+                            android:id="@+id/tvFossilSmartWatchesViewAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="View All"
+                            android:textAllCaps="true"
+                            android:textColor="@color/colorPureBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_bold`}" />
+
+
+                        <ImageView
+                            android:id="@+id/ivBackwardFossilSmartWatchesViewAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/tvFossilSmartWatchesViewAll"
+                            android:layout_centerInParent="true"
+                            android:padding="@dimen/dp_5"
+                            android:layout_marginRight="@dimen/dp_5"
+                            android:src="@drawable/dropdown" />
+
+                        <ImageView
+                            android:id="@+id/ivForwardFossilSmartWatchesViewAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/ivBackwardFossilSmartWatchesViewAll"
+                            android:layout_centerInParent="true"
+                            android:padding="@dimen/dp_5"
+                            android:src="@drawable/dropdown" />
+                    </RelativeLayout>
+
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/FossilSmartWatchesRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvFossilSmartWatches" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rl7"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_0">
+
+                    <TextView
+                        android:id="@+id/tvNewStylishTops"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:text="Kids Accsssories"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPureBlack"
+                        android:textSize="14dp"
+                        app:font="@{`lato_bold`}" />
+
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:layout_toRightOf="@id/tvNewStylishTops"
+                        android:layout_alignParentEnd="true"
+                        android:gravity="end">
+
+                        <TextView
+                            android:id="@+id/tvNewStylishTopsViewAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="View All"
+                            android:textAllCaps="true"
+                            android:textColor="@color/colorPureBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_bold`}" />
+
+
+                        <ImageView
+                            android:id="@+id/ivBackwardNewStylishTopsViewAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/tvNewStylishTopsViewAll"
+                            android:layout_centerInParent="true"
+                            android:padding="@dimen/dp_5"
+                            android:layout_marginRight="@dimen/dp_5"
+                            android:src="@drawable/dropdown" />
+
+                        <ImageView
+                            android:id="@+id/ivForwardNewStylishTopsViewAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/ivBackwardNewStylishTopsViewAll"
+                            android:layout_centerInParent="true"
+                            android:padding="@dimen/dp_5"
+                            android:src="@drawable/dropdown" />
+                    </RelativeLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/kidsAccessoriesRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvNewStylishTops" />
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/ivBanner3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rl8"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:background="@drawable/banner_yod_stylee"
+                    android:scaleType="fitXY" />
+
+            </RelativeLayout>
+
+        </ScrollView>
+
+
+    </RelativeLayout>
+</layout>

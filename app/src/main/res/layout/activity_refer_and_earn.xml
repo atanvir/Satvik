@@ -1,0 +1,622 @@
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite">
+
+
+        <RelativeLayout
+            android:id="@+id/rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/my_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:contentInsetStart="@dimen/dp_0">
+
+
+                <ImageView
+                    android:id="@+id/ivBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_10"
+                    android:src="@drawable/_back_icon" />
+
+
+                <TextView
+                    android:id="@+id/tv_title1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Refer &amp; Earn"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/sp_16"
+                    android:visibility="visible"
+                    app:font="@{`lato_regular`}" />
+            </androidx.appcompat.widget.Toolbar>
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/my_toolbar"
+                android:background="@color/colorLightGrey" />
+        </RelativeLayout>
+
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/rl"
+            android:layout_marginTop="@dimen/dp_20">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginEnd="@dimen/dp_10">
+
+                <RelativeLayout
+                    android:id="@+id/rlMain"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/drawable_rectangle_red_color"
+                    android:padding="@dimen/dp_20">
+
+
+                    <RelativeLayout
+                        android:id="@+id/rl1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tvAnEasy"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="An Easy Friendship Recipe to be a Better Friend:"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_regular`}" />
+
+
+                        <ImageView
+                            android:id="@+id/imgRefer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tvAnEasy"
+                            android:layout_marginStart="@dimen/dp_20"
+                            android:layout_marginTop="@dimen/dp_20"
+                            android:layout_marginEnd="@dimen/dp_20"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/refer_img" />
+
+
+                        <!--<RelativeLayout-->
+                        <!--android:id="@+id/rl2"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_below="@+id/imgRefer"-->
+                        <!--android:layout_marginTop="@dimen/dp_10"-->
+                        <!--android:gravity="center">-->
+
+                        <!--<TextView-->
+                        <!--android:id="@+id/tv1"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:gravity="center"-->
+                        <!--android:text="Friends get "-->
+                        <!--android:textColor="@color/colorBlack"-->
+                        <!--android:textSize="14dp"-->
+                        <!--app:font="@{`lato_regular`}" />-->
+
+                        <!--<TextView-->
+                        <!--android:id="@+id/tv2"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_toRightOf="@+id/tv1"-->
+                        <!--android:text="Coupon Code "-->
+                        <!--android:textColor="@color/colorPureBlack"-->
+                        <!--android:textSize="14dp"-->
+                        <!--app:font="@{`lato_bold`}" />-->
+
+                        <!--<TextView-->
+                        <!--android:id="@+id/tv3"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_toRightOf="@+id/tv2"-->
+                        <!--android:text="when they SIGN UP."-->
+                        <!--android:textColor="@color/colorBlack"-->
+                        <!--android:textSize="14dp"-->
+                        <!--app:font="@{`lato_regular`}" />-->
+
+                        <!--</RelativeLayout>-->
+
+                        <!--<RelativeLayout-->
+                        <!--android:id="@+id/rl3"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_below="@+id/rl2"-->
+                        <!--android:layout_marginTop="@dimen/dp_5"-->
+                        <!--android:layout_marginBottom="@dimen/dp_5"-->
+                        <!--android:gravity="center">-->
+
+                        <!--<TextView-->
+                        <!--android:id="@+id/tv11"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:gravity="center"-->
+                        <!--android:text="You get "-->
+                        <!--android:textColor="@color/colorBlack"-->
+                        <!--android:textSize="14dp"-->
+                        <!--app:font="@{`lato_regular`}" />-->
+
+                        <!--<TextView-->
+                        <!--android:id="@+id/tv22"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_toRightOf="@+id/tv11"-->
+                        <!--android:text="Coupon Code "-->
+                        <!--android:textColor="@color/colorPureBlack"-->
+                        <!--android:textSize="14dp"-->
+                        <!--app:font="@{`lato_bold`}" />-->
+
+                        <!--<TextView-->
+                        <!--android:id="@+id/tv33"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_toRightOf="@+id/tv22"-->
+                        <!--android:text="when they SIGN UP."-->
+                        <!--android:textColor="@color/colorBlack"-->
+                        <!--android:textSize="14dp"-->
+                        <!--app:font="@{`lato_regular`}" />-->
+
+                        <!--</RelativeLayout>-->
+
+                        <RelativeLayout
+                            android:id="@+id/rlFirst"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/imgRefer"
+                            android:layout_centerHorizontal="true">
+
+
+                            <ImageView
+                                android:id="@+id/ivJoin"
+                                android:layout_width="@dimen/dp_50"
+                                android:layout_height="@dimen/dp_50"
+                                android:layout_marginStart="@dimen/dp_20"
+                                android:layout_marginTop="@dimen/dp_20"
+                                android:layout_marginEnd="@dimen/dp_20"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/join" />
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toRightOf="@+id/ivJoin"
+                                android:gravity="center">
+
+
+                                <TextView
+                                    android:id="@+id/tv11"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Step 1"
+                                    android:textColor="@color/colorLogOut"
+                                    android:textSize="14dp"
+                                    app:font="@{`lato_regular`}" />
+
+                                <TextView
+                                    android:id="@+id/tv22"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/tv11"
+                                    android:gravity="start|center"
+                                    android:lines="2"
+                                    android:text="Login or Sign Up at Yard of Deals &amp; Share a unique referral code with your friends. "
+                                    android:textColor="@color/colorPureBlack"
+                                    android:textSize="@dimen/sp_11"
+                                    app:font="@{`lato_bold`}" />
+
+                            </RelativeLayout>
+
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/rlSecond"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/rlFirst"
+                            android:layout_marginTop="10dp">
+
+
+                            <ImageView
+                                android:id="@+id/ivCart"
+                                android:layout_width="@dimen/dp_50"
+                                android:layout_height="@dimen/dp_50"
+                                android:layout_marginStart="@dimen/dp_20"
+                                android:layout_marginTop="@dimen/dp_20"
+                                android:layout_marginEnd="@dimen/dp_20"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/cart" />
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:layout_toRightOf="@+id/ivCart">
+
+
+                                <TextView
+                                    android:id="@+id/tvCartContentUp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Step 2"
+                                    android:textColor="@color/colorLogOut"
+                                    android:textSize="14dp"
+                                    app:font="@{`lato_regular`}" />
+
+                                <TextView
+                                    android:id="@+id/tvCartContentDown"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:lines="2"
+                                    android:gravity="start|center"
+                                    android:layout_below="@+id/tvCartContentUp"
+                                    android:text="Your Friends reviews Rs. 100 off, valid on their first purchase."
+                                    android:textColor="@color/colorPureBlack"
+                                    android:textSize="@dimen/sp_11"
+                                    app:font="@{`lato_bold`}" />
+
+                            </RelativeLayout>
+
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/rlSecond"
+                            android:layout_marginTop="10dp">
+
+
+                            <ImageView
+                                android:id="@+id/ivGallary"
+                                android:layout_width="@dimen/dp_50"
+                                android:layout_height="@dimen/dp_50"
+                                android:layout_marginStart="@dimen/dp_20"
+                                android:layout_marginTop="@dimen/dp_20"
+                                android:layout_marginEnd="@dimen/dp_20"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/wallet" />
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:layout_toRightOf="@+id/ivGallary">
+
+
+                                <TextView
+                                    android:id="@+id/tvGallaryContentUp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Step 3"
+                                    android:textColor="@color/colorLogOut"
+                                    android:textSize="14dp"
+                                    app:font="@{`lato_regular`}" />
+
+                                <TextView
+                                    android:id="@+id/tvGallaryContentDown"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:lines="2"
+                                    android:gravity="start|center"
+                                    android:layout_below="@+id/tvGallaryContentUp"
+                                    android:text="After your friend shops with us, you get Rs. 100 off on your next order."
+                                    android:textColor="@color/colorPureBlack"
+                                    android:textSize="@dimen/sp_11"
+                                    app:font="@{`lato_bold`}" />
+
+                            </RelativeLayout>
+
+
+                        </RelativeLayout>
+
+
+                    </RelativeLayout>
+
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tvAnEasyss"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/rlMain"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/drawable_rectangle_grey"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text=""
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}"
+                    app:layout_constraintBottom_toBottomOf="@+id/rlMain"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.501"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rlMain" />
+
+
+                <!--  <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_below="@+id/tvAnEasyss"
+                       android:layout_marginTop="@dimen/dp_30"
+                       android:layout_marginStart="@dimen/dp_20"
+                       android:layout_marginEnd="@dimen/dp_20"
+                       android:gravity="center">
+
+                       <RelativeLayout
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_weight="1"
+                           android:padding="@dimen/dp_10">
+
+                           <ImageView
+                               android:id="@+id/whatsup"
+                               android:layout_width="@dimen/dp_50"
+                               android:layout_height="@dimen/dp_50"
+                               android:scaleType="fitXY"
+                               android:layout_centerInParent="true"
+                               android:src="@drawable/whatsapp" />
+
+                           <TextView
+                               android:id="@+id/tvAnEasyssss"
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:layout_below="@+id/whatsup"
+                               android:gravity="center"
+                               android:text="WhatsApp"
+                               android:layout_marginTop="20dp"
+                               android:textAllCaps="true"
+                               android:textColor="@color/colorBlack"
+                               android:textSize="14dp"
+                               app:font="@{`lato_regular`}" />
+                       </RelativeLayout>
+
+                       <RelativeLayout
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_weight="1"
+                           android:padding="@dimen/dp_10">
+
+                           <ImageView
+                               android:id="@+id/fb"
+                               android:layout_width="@dimen/dp_50"
+                               android:layout_height="@dimen/dp_50"
+                               android:scaleType="fitXY"
+                               android:layout_centerInParent="true"
+                               android:src="@drawable/fb" />
+
+                           <TextView
+                               android:id="@+id/tvFb"
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:layout_below="@+id/fb"
+                               android:layout_marginTop="20dp"
+                               android:gravity="center"
+                               android:text="Facebook"
+                               android:textAllCaps="true"
+                               android:textColor="@color/colorBlack"
+                               android:textSize="14dp"
+                               app:font="@{`lato_regular`}" />
+                       </RelativeLayout>
+
+                       <RelativeLayout
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_weight="1"
+                           android:padding="@dimen/dp_10">
+
+                           <ImageView
+                               android:id="@+id/twitter"
+                               android:layout_width="@dimen/dp_50"
+                               android:layout_height="@dimen/dp_50"
+                               android:scaleType="fitXY"
+                               android:layout_centerInParent="true"
+                               android:src="@drawable/twitter" />
+
+                           <TextView
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:layout_below="@+id/twitter"
+                               android:gravity="center"
+                               android:layout_marginTop="20dp"
+                               android:text="Facebook"
+                               android:textAllCaps="true"
+                               android:textColor="@color/colorBlack"
+                               android:textSize="14dp"
+                               app:font="@{`lato_regular`}" />
+                       </RelativeLayout>
+
+                       <RelativeLayout
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_weight="1"
+                           android:padding="@dimen/dp_10">
+
+                           <ImageView
+                               android:id="@+id/more"
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:scaleType="fitXY"
+                               android:layout_centerInParent="true"
+                               android:src="@drawable/more" />
+
+                           <TextView
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:layout_below="@+id/more"
+                               android:gravity="center"
+                               android:layout_marginTop="20dp"
+                               android:text="More"
+                               android:textAllCaps="true"
+                               android:textColor="@color/colorBlack"
+                               android:textSize="14dp"
+                               app:font="@{`lato_regular`}" />
+
+
+                       </RelativeLayout>
+
+                   </LinearLayout>-->
+
+                <TextView
+                    android:id="@+id/tvWhatsapp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="32dp"
+                    android:drawableTop="@drawable/whatsapp"
+                    android:drawablePadding="4dp"
+                    android:text="WhatsApp"
+                    android:textColor="@color/colorBlack"
+                    app:font="@{`lato_regular`}"
+                    app:layout_constraintEnd_toStartOf="@+id/tvFacebbok"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvAnEasyss" />
+
+                <TextView
+                    android:id="@+id/tvFacebbok"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:drawableTop="@drawable/fb"
+                    android:drawablePadding="@dimen/_8sdp"
+                    android:text="Facebook"
+                    android:textColor="@color/colorBlack"
+                    app:font="@{`lato_regular`}"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/tvWhatsapp"
+                    app:layout_constraintEnd_toStartOf="@+id/tvTwitter"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/tvWhatsapp" />
+
+                <TextView
+                    android:id="@+id/tvTwitter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:drawableTop="@drawable/twitter"
+                    android:drawablePadding="8dp"
+                    android:text="Twitter"
+                    android:textColor="@color/colorBlack"
+                    app:font="@{`lato_regular`}"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/tvFacebbok"
+                    app:layout_constraintEnd_toStartOf="@+id/tvMore"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/tvFacebbok" />
+
+                <TextView
+                    android:id="@+id/tvMore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:drawableTop="@drawable/more"
+                    android:drawablePadding="@dimen/_20sdp"
+                    android:gravity="center"
+                    android:text="More"
+                    android:textColor="@color/colorBlack"
+                    app:font="@{`lato_regular`}"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/tvTwitter"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/tvTwitter" />
+
+                <TextView
+                    android:id="@+id/textView81"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="OR"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvFacebbok" />
+
+                <TextView
+                    android:id="@+id/tvCopyLink"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/drawable_rectangle_logout_btn"
+                    android:gravity="center"
+                    android:text="Copy referral link"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorLogOut"
+                    android:textSize="14dp"
+                    app:font="@{`lato_bold`}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView81" />
+
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    style="@style/customTabLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:background="@null"
+                    android:textSize="@dimen/sp_18"
+                    app:tabIndicatorColor="@color/colorLogOut"
+                    app:tabSelectedTextColor="@color/colorBlack"
+                    app:tabTextColor="@color/colorBlack"
+                    app:layout_constraintEnd_toEndOf="@+id/tvCopyLink"
+                    app:layout_constraintStart_toStartOf="@+id/tvCopyLink"
+                    app:layout_constraintTop_toBottomOf="@+id/tvCopyLink"
+                    app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget" />
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/viewPager"
+                    android:layout_width="0dp"
+                    android:layout_height="500dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="32dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/tabLayout"
+                    app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </ScrollView>
+
+
+    </RelativeLayout>
+</layout>

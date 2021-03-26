@@ -1,0 +1,451 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:id="@+id/mainRl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite">
+
+        <LinearLayout
+            android:id="@+id/layout_add_new_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/my_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:contentInsetStart="@dimen/dp_0">
+
+
+                <ImageView
+                    android:id="@+id/ivBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_10"
+                    android:src="@drawable/_back_icon" />
+
+
+                <TextView
+                    android:id="@+id/tv_title1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/address"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/sp_16"
+                    android:visibility="visible"
+                    app:font="@{`lato_regular`}" />
+            </androidx.appcompat.widget.Toolbar>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorLightGrey" />
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/layout_add_new_address">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:clipChildren="false">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtName"
+                        android:layout_width="match_parent"
+                        android:layout_height="26dp"
+                        android:background="@null"
+                        android:digits="abcdefghijklmnopqrstu vwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:gravity="start"
+                        android:hint="@string/name"
+                        android:imeOptions="actionNext"
+                        android:inputType="textCapWords|textNoSuggestions"
+                        android:maxLength="40"
+                        android:maxLines="1"
+                        android:paddingStart="@dimen/dp_20"
+                        android:paddingTop="10dp"
+                        android:textColor="@color/colorLoginSignupText"
+                        android:textColorHint="@color/colorExremeLite"
+                        android:textCursorDrawable="@drawable/drawable_cursor_logout"
+                        android:textSize="14dp"
+                        app:font="@{`lato_regular`}" />
+                    
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_below="@+id/rlMyCoupons"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:background="@color/colorLightGrey" />
+
+                <!-- <EditText
+                     android:id="@+id/edtGender"
+                     android:layout_width="match_parent"
+                     android:layout_height="@dimen/dp_120"
+                     android:layout_marginStart="@dimen/dp_20"
+                     android:layout_marginTop="@dimen/dp_30"
+                     android:layout_marginEnd="@dimen/dp_20"
+                     android:background="@drawable/drawable_rectangle_grey"
+                     android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                     android:gravity="start"
+                     android:hint="@string/address"
+                     android:imeOptions="actionNext"
+                     android:inputType="textCapWords|textNoSuggestions"
+                     android:maxLength="40"
+                     android:maxLines="1"
+                     android:padding="@dimen/dp_18"
+                     android:scrollHorizontally="true"
+                     android:textColor="@color/colorLoginSignupText"
+                     android:textColorHint="@color/colorExremeLite"
+                     android:textSize="14dp"
+                     app:font="@{`lato_regular`}"
+                     android:textCursorDrawable="@drawable/drawable_cursor_logout"
+                     />-->
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipChildren="false"
+                    android:focusable="false"
+                    android:layout_marginTop="@dimen/dp_20">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:gravity="start"
+                        android:hint="@string/address"
+                        android:imeOptions="actionNext"
+                        android:inputType="textCapWords|textNoSuggestions"
+                        android:maxLength="40"
+                        android:maxLines="1"
+                        android:paddingTop="@dimen/_10sdp"
+                        android:paddingStart="@dimen/dp_20"
+                        android:textColor="@color/colorLoginSignupText"
+                        android:textColorHint="@color/colorExremeLite"
+                        android:textSize="14dp"
+                        app:font="@{`lato_regular`}"
+                        android:textCursorDrawable="@drawable/drawable_cursor_logout"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_below="@+id/rlMyCoupons"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:background="@color/colorLightGrey" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:descendantFocusability="beforeDescendants"
+                    android:clipChildren="false"
+                    android:focusableInTouchMode="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtPinCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:gravity="start"
+                        android:hint="@string/pin_code"
+                        android:imeOptions="actionNext"
+                        android:inputType="phone"
+                        android:maxLength="15"
+                        android:maxLines="1"
+                        android:paddingStart="@dimen/dp_20"
+                        android:paddingTop="@dimen/_10sdp"
+
+                        android:scrollHorizontally="true"
+                        android:textColorHint="@color/colorExremeLite"
+                        android:textColor="@color/colorLoginSignupText"
+                        android:textSize="14dp"
+                        app:font="@{`lato_regular`}"
+                        android:textCursorDrawable="@drawable/drawable_cursor_logout"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_below="@+id/rlMyCoupons"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:background="@color/colorLightGrey"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipChildren="false"
+                    android:layout_marginTop="@dimen/dp_20">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtLocality"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+                        android:gravity="start"
+                        android:paddingTop="@dimen/_10sdp"
+                        android:hint="@string/locality"
+                        android:imeOptions="actionNext"
+                        android:inputType="textCapWords|textNoSuggestions"
+                        android:maxLength="40"
+                        android:maxLines="1"
+                        android:paddingStart="@dimen/dp_20"
+                        android:textColorHint="@color/colorExremeLite"
+                        android:textColor="@color/colorLoginSignupText"
+                        android:textSize="14dp"
+                        app:font="@{`lato_regular`}"
+                        android:textCursorDrawable="@drawable/drawable_cursor_logout"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_below="@+id/rlMyCoupons"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:background="@color/colorLightGrey"/>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipChildren="false"
+                    android:layout_marginTop="@dimen/dp_20">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:gravity="start"
+                        android:paddingTop="@dimen/_10sdp"
+                        android:hint="@string/city"
+                        android:imeOptions="actionNext"
+                        android:inputType="textCapWords|textNoSuggestions"
+                        android:maxLength="40"
+                        android:maxLines="1"
+                        android:paddingStart="@dimen/dp_20"
+                        android:textColorHint="@color/colorExremeLite"
+                        android:textColor="@color/colorLoginSignupText"
+                        android:textSize="14dp"
+                        app:font="@{`lato_regular`}"
+                        android:textCursorDrawable="@drawable/drawable_cursor_logout"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_below="@+id/rlMyCoupons"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:background="@color/colorLightGrey"/>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipChildren="false"
+                    android:layout_marginTop="@dimen/dp_20">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtState"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:gravity="start"
+                        android:paddingTop="@dimen/_10sdp"
+                        android:hint="@string/state"
+                        android:imeOptions="actionNext"
+                        android:inputType="textCapWords|textNoSuggestions"
+                        android:maxLength="40"
+                        android:maxLines="1"
+                        android:paddingStart="@dimen/dp_20"
+                        android:textColorHint="@color/colorExremeLite"
+                        android:textColor="@color/colorLoginSignupText"
+                        android:textSize="14dp"
+                        app:font="@{`lato_regular`}"
+                        android:textCursorDrawable="@drawable/drawable_cursor_logout"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_below="@+id/rlMyCoupons"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:background="@color/colorLightGrey"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipChildren="false"
+                    android:layout_marginTop="@dimen/dp_20">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtMobile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:gravity="start"
+                        android:paddingTop="@dimen/_10sdp"
+                        android:hint="@string/mobile_number"
+                        android:imeOptions="actionNext"
+                        android:inputType="phone"
+                        android:maxLength="15"
+                        android:maxLines="1"
+                        android:paddingStart="@dimen/dp_20"
+                        android:textColorHint="@color/colorExremeLite"
+                        android:textColor="@color/colorLoginSignupText"
+                        android:textSize="14dp"
+                        app:font="@{`lato_regular`}"
+                        android:textCursorDrawable="@drawable/drawable_cursor_logout"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_below="@+id/rlMyCoupons"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:background="@color/colorLightGrey"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:text="@string/type_of_address"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rdbHome"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dp_40"
+                        android:layout_weight="1"
+                        android:button="@drawable/selected_new_number"
+                        android:padding="@dimen/dp_10"
+                        android:text="Home"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp" />
+
+                    <RadioButton
+                        android:id="@+id/rdbOffice"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dp_40"
+                        android:layout_marginLeft="@dimen/dp_5"
+                        android:layout_weight="1"
+                        android:button="@drawable/selected_new_number"
+                        android:padding="@dimen/dp_10"
+                        android:text="Office/Commercial"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp" />
+
+                </RadioGroup>
+
+
+                <CheckBox
+                    android:id="@+id/chbSelectPerson"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:button="@drawable/new_rect"
+                    android:padding="@dimen/dp_10"
+                    android:text="Make this my default address"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="15dp" />
+
+
+                <!-- <CheckBox
+                     android:id="@+id/chbSelectPerson"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_marginTop="@dimen/dp_10"
+                     android:layout_marginStart="@dimen/dp_15"
+                     android:layout_marginEnd="@dimen/dp_20"
+                     android:text="Make this my default address"
+                     android:buttonTint="@color/colorLightGrey" />-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/llTop"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_20">
+
+                    <TextView
+                        android:id="@+id/tvCancel"
+                        android:layout_width="@dimen/dp_0"
+                        android:layout_height="@dimen/dp_40"
+                        android:layout_weight="1"
+                        android:background="@drawable/drawable_rectangle_logout_btn_with_radius"
+                        android:gravity="center"
+                        android:text="cancel"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        app:font="@{`lato_regular`}" />
+
+                    <TextView
+                        android:id="@+id/tvSave"
+                        android:layout_width="@dimen/dp_0"
+                        android:layout_height="@dimen/dp_40"
+                        android:layout_marginStart="@dimen/dp_30"
+                        android:layout_weight="1"
+                        android:background="@drawable/drawable_rectangle_gradient_with_radius_two"
+                        android:gravity="center"
+                        android:text="Save"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="14dp"
+                        app:font="@{`lato_regular`}" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </RelativeLayout>
+</layout>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainCL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/progressbar"
+            android:layout_width="@dimen/dp_90"
+            android:layout_height="@dimen/dp_90"
+            android:layout_marginStart="16dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/relativeLayout3"
+            app:layout_constraintHorizontal_bias="0.09"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="loading.json"
+            app:lottie_loop="true" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorLightGrey" />
+
+            <RelativeLayout
+                android:id="@+id/rlTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:padding="@dimen/dp_8"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:id="@+id/llTop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageIv"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.3"
+                        android:contentDescription="hotel"
+                        android:gravity="center"
+                        android:scaleType="fitXY"
+                        />
+
+                    <RelativeLayout
+                        android:id="@+id/rlFood"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="start">
+
+                        <LinearLayout
+                            android:id="@+id/llRight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:gravity="start"
+                            android:orientation="vertical"
+                            android:paddingStart="@dimen/dp_5"
+                            android:paddingEnd="@dimen/dp_5"
+                            android:paddingBottom="@dimen/dp_5">
+
+                            <TextView
+                                android:id="@+id/tvProductName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:gravity="start"
+                                android:paddingStart="@dimen/dp_5"
+                                android:paddingEnd="@dimen/dp_5"
+                                android:textStyle="bold"
+                                android:paddingBottom="@dimen/dp_2"
+                                android:text="Lee Jeans"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="14dp"
+                                app:font="@{`lato_regular`}" />
+
+                            <TextView
+                                android:id="@+id/tvProductDesc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:gravity="start"
+                                android:paddingStart="@dimen/dp_5"
+                                android:paddingTop="@dimen/dp_2"
+                                android:paddingEnd="@dimen/dp_5"
+                                android:paddingBottom="@dimen/dp_2"
+                                android:text="Men Blue Fit Mid-RiseJeans,"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="14dp"
+                                app:font="@{`lato_regular`}" />
+
+                            <TextView
+                                android:id="@+id/tvSizeQty"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:gravity="start"
+                                android:paddingStart="@dimen/dp_5"
+                                android:paddingTop="@dimen/dp_2"
+                                android:paddingEnd="@dimen/dp_5"
+                                android:paddingBottom="@dimen/dp_2"
+                                android:text="Size:32 | Qty 1"
+                                android:textSize="14dp"
+                                android:visibility="visible"
+                                app:font="@{`lato_regular`}" />
+
+                            <RelativeLayout
+                                android:id="@+id/rlRupee"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp_3"
+                                android:gravity="center_vertical"
+                                android:paddingStart="@dimen/dp_5"
+                                android:paddingTop="@dimen/dp_2"
+                                android:paddingEnd="@dimen/dp_5"
+                                android:paddingBottom="@dimen/dp_2">
+
+                                <LinearLayout
+                                    android:id="@+id/llRupee"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/dp_10"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+
+                                    <TextView
+                                        android:id="@+id/tvTotalMrp"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentStart="true"
+                                        android:layout_marginStart="@dimen/dp_2"
+                                        android:text="Rs.1619"
+                                        android:textStyle="bold"
+                                        android:textColor="@color/colorBlack"
+                                        android:textSize="14dp"
+                                        app:font="@{`lato_regular`}" />
+
+                                </LinearLayout>
+
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentEnd="true"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tvOrderStatus"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="DELIVERED"
+                                        android:textColor="@color/colorLogOut"
+                                        android:textSize="14dp"
+                                        app:font="@{`lato_regular`}" />
+
+                                    <TextView
+                                        android:id="@+id/tvDate"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Feb 2,2019"
+                                        android:textAllCaps="true"
+                                        android:textColor="@color/colorBlack"
+                                        android:textSize="14dp"
+                                        app:font="@{`lato_regular`}" />
+
+                                </LinearLayout>
+
+
+                            </RelativeLayout>
+
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

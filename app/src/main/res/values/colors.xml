@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#c0896d</color>
+    <color name="colorAccent">#c0896d</color>
+
+    //////////////////////////////////////////////
+
+    <color name="colorBlue">#003D78</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorBlack">#0e433e </color>
+    <color name="colorLightGrey">#D6D6D6</color>
+    <color name="colorLightGrey2">#5CD6D6D6</color>
+    <color name="colorLoginButtonEnd">#0e433e</color>
+    <color name="colorLoginButtonEnd2">#65753587</color>
+    <color name="colorPink">#c0896d</color>
+    <color name="colorPink2">#79DF048B</color>
+    <color name="colorPercent">#60CB4324</color>
+    <color name="colorLoginInput">#ECECEC</color>
+    <color name="colorOffer">#87D6BA</color>
+    <color name="colorLogOut">#0e433e</color>
+    <color name="colorLiteGrey">#C0C0C0</color>
+    <color name="colorView">#E4E4E4</color>
+    <color name="stroke">#4bcbc9c9</color>
+    <color name="background">#f4f4f4</color>
+    <color name="categoriesText">#303030</color>
+    <color name="colorPureBlack">#c0896d</color>
+    <color name="colorForgotPass">#525252</color>
+    <color name="colorExremeLite">#8F9090</color>
+    <color name="colorLoginSignupText">#4b4c4d</color>
+    <color name="colorBagFragBackground">#f4f4f4</color>
+    <color name="ColorGreen">#009F52</color>
+    <color name="ColorYellow">#FEF586</color>
+    <color name="ColorBlue">#0B65C9</color>
+    <color name="ColorMaroon">#69263D</color>
+    <color name="ColorCoffee">#5F3A3A</color>
+    <color name="ColorBronze">#D46531</color>
+    <color name="red">#F1394D</color>
+    <color name="grey">#F3F3F3</color>
+
+
+    // appbar color white
+
+
+
+</resources>

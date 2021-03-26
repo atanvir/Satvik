@@ -1,0 +1,148 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        xmlns:card_view="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@color/colorWhite"
+            android:elevation="3dp"
+            card_view:cardCornerRadius="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/dp_200"
+                    android:layout_height="@dimen/dp_250"
+                    android:background="@drawable/image_c"
+                    android:scaleType="fitXY" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingLeft="5dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableEnd="@drawable/saved_98"
+                            android:paddingStart="@dimen/dp_5"
+                            android:paddingEnd="@dimen/dp_5"
+                            android:paddingTop="@dimen/dp_2"
+                            android:paddingBottom="@dimen/dp_2"
+                            android:text="LOREM IPSUM"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_regular`}"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="@dimen/dp_5"
+                            android:paddingTop="@dimen/dp_2"
+                            android:paddingEnd="@dimen/dp_5"
+                            android:paddingBottom="@dimen/dp_2"
+                            android:text="Contrary to popular"
+                            android:textColor="@color/colorExremeLite"
+                            android:textSize="14dp"
+                            app:font="@{`lato_regular`}"/>
+
+
+                        <RelativeLayout
+                            android:id="@+id/rlRupee"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_3"
+                            android:gravity="center_vertical"
+                            android:paddingStart="@dimen/dp_5"
+                            android:paddingEnd="@dimen/dp_5"
+                            android:paddingTop="@dimen/dp_2"
+                            android:paddingBottom="@dimen/dp_2">
+
+                            <LinearLayout
+                                android:id="@+id/llRupee"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvRupee"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:text="Rs.2000"
+                                    android:textColor="@color/colorPureBlack"
+                                    android:textSize="14dp"
+                                    app:font="@{`lato_bold`}"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/llRupeee"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/dp_3"
+                                android:layout_toRightOf="@+id/llRupee"
+                                android:orientation="horizontal">
+
+
+                                <TextView
+                                    android:id="@+id/tvCuttedText"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:text="\u20B91000"
+                                    android:textColor="@color/colorExremeLite"
+                                    android:textSize="14dp"
+                                    app:font="@{`lato_regular`}"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="@dimen/dp_3"
+                                android:layout_toRightOf="@+id/llRupeee"
+                                android:gravity="start">
+
+                                <TextView
+                                    android:id="@+id/tvOrderDate"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="(73% OFF)"
+                                    android:textColor="@color/colorPercent"
+                                    android:textSize="14dp"
+                                    app:font="@{`lato_regular`}"/>
+
+                            </LinearLayout>
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
+</layout>

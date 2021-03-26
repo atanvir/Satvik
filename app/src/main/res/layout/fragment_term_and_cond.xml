@@ -1,0 +1,86 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite">
+
+
+            <RelativeLayout
+                android:id="@+id/rl1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:id="@+id/tvFirst"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="1.In case you do not receive a coupon, send us an email with your reffered friend's &amp; your details "
+                    android:textColor="@color/colorPureBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+
+                <TextView
+                    android:id="@+id/tvSecond"
+                    android:layout_below="@+id/tvFirst"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="2.Referral coupon cannot be clubbed with any additional offer &amp; coupon"
+                    android:textColor="@color/colorPureBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+
+                <TextView
+                    android:id="@+id/tvThird"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvSecond"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:text="3.Referee coupon is valid only on order value above Rs.999 on yardsofdeal.com "
+                    android:textColor="@color/colorPureBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+
+                <TextView
+                    android:id="@+id/tvFourth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvThird"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:text="4.Referral coupon is a one-time applicable coupon, and would not &amp; be reissued under any circumstances "
+                    android:textColor="@color/colorPureBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+
+                <TextView
+                    android:id="@+id/tvFifth"
+                    android:layout_below="@+id/tvFourth"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="5.Offer may vary fromtime to time based on company's descretion"
+                    android:textColor="@color/colorPureBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+
+                <TextView
+                    android:id="@+id/tvSixth"
+                    android:layout_below="@+id/tvFifth"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="6.All other website terms and condition only "
+                    android:textColor="@color/colorPureBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}"
+
+                    />
+
+            </RelativeLayout>
+
+    </RelativeLayout>
+</layout>

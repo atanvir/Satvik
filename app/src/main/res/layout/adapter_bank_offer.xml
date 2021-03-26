@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+
+    <TextView
+        android:id="@+id/tvOfferLabel"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="3dp"
+        android:text="Bank Offer:"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+         android:layout_gravity="center"
+        android:textColor="@color/quantum_purple"/>
+
+    <TextView
+        android:id="@+id/tvDis"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintTop_toTopOf="@id/tvOfferLabel"
+        app:layout_constraintBottom_toBottomOf="@id/tvOfferLabel"
+        android:text="10% Discount On Lorem Ipsum is simply dummy"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintStart_toEndOf="@id/tvOfferLabel"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="8dp"
+        android:gravity="start"
+        android:textSize="14dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

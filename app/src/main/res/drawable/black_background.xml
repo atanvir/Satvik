@@ -1,0 +1,22 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item >
+
+    <shape>
+        <solid
+            android:width="@dimen/_10sdp"
+            android:color="#000000"  />
+    </shape>
+
+
+
+    </item>
+
+    <item android:width="@dimen/dp_1" android:gravity="center">
+
+        <shape android:shape="rectangle">
+            <solid android:color="@color/colorWhite"/>
+        </shape>
+
+    </item>
+</layer-list>

@@ -1,0 +1,100 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <!-- <item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+        <item name="colorPrimaryDark">@color/colorWhite</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <!--<item name="android:colorControlActivated">@color/colorLogOut</item>
+           <item name="android:colorControlNormal">@color/colorExremeLite</item>-->
+
+    </style>
+
+    <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="AppTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="MyAppThemeWhite" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+
+    <style name="editTextStyle_white">
+        <item name="android:textCursorDrawable">@color/stroke</item>
+        <item name="android:background">@android:color/transparent</item>
+
+       <!-- <item name="colorControlActivated">#009688</item>-->
+       <!-- <item name="colorControlNormal">#2196F3</item>-->
+
+    </style>
+
+
+    <style name="Widget.ExpandableListView" parent="Widget.ExpandableListView.White">
+        <item name="android:groupIndicator">@android:color/white</item>
+        <item name="android:indicatorLeft">?android:attr/expandableListPreferredItemIndicatorLeft</item>
+        <item name="android:indicatorRight">?android:attr/expandableListPreferredItemIndicatorRight</item>
+        <item name="android:childDivider">@android:color/white</item>
+    </style>
+
+    <style name="Widget.ExpandableListView.White">
+        <item name="android:childDivider">@android:color/white</item>
+    </style>
+
+
+    <style name="ThemeDialogCustom" parent="@android:style/Theme.Holo.NoActionBar.Fullscreen">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
+
+    <style name="PauseDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/zoom_in</item>
+        <item name="android:windowExitAnimation">@anim/zoom_out</item>
+    </style>
+
+
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+
+    <style name="customTabLayout" parent="Widget.Design.TabLayout">
+
+        <item name="android:textStyle">bold</item>
+
+        <!--<item name="tabIndicatorColor">@color/colorWhite</item>-->
+        <!--<item name="tabIndicatorHeight">2dp</item>
+        <item name="tabPaddingStart">12dp</item>
+        <item name="tabPaddingEnd">12dp</item>-->
+        <!-- <item name="textAllCaps">false</item>-->
+        <!-- <item name="android:dividerPadding">3dp</item>
+         <item name="android:textSize">18sp</item>
+         <item name="android:textColor">@color/colorRose</item>
+         <item name="android:divider">@android:color/black</item>
+         <item name="tabBackground">?attr/selectableItemBackground</item>
+         <item name="tabSelectedTextColor">@color/colorRose</item>-->
+    </style>
+
+    <style name="DialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+</resources>

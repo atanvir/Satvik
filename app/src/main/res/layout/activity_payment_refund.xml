@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:contentInsetStart="@dimen/dp_0">
+
+
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_10"
+                android:src="@drawable/_back_icon" />
+
+
+            <TextView
+                android:id="@+id/tv_title1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Payment/Refund"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sp_16"
+                android:visibility="visible"
+                app:font="@{`lato_regular`}"/>
+        </androidx.appcompat.widget.Toolbar>
+
+        <View
+            android:id="@+id/viewOne"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_1"
+            android:layout_below="@+id/my_toolbar"
+            android:background="@color/colorLightGrey"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/viewOne">
+
+            <RelativeLayout
+                android:id="@+id/rlMain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/rlnotrecvRefund"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:padding="@dimen/dp_5">
+
+                    <TextView
+                        android:id="@+id/notrecvText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:layout_marginEnd="@dimen/dp_20"
+                        android:gravity="start|center"
+                        android:lines="2"
+                        android:text="My return was picked up but I haven't received\nmy refund yet."
+                        android:textColor="@color/colorBlack"
+                        app:font="@{`lato_regular`}"
+                        android:textSize="14dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_16"
+                        android:background="@drawable/back_buttom" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_below="@+id/rlnotrecvRefund"
+                    android:id="@+id/view1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="@color/colorLightGrey"/>
+
+                <RelativeLayout
+                    android:id="@+id/rlpaymentDebited"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/view1"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:padding="@dimen/dp_5">
+
+                    <TextView
+                        android:id="@+id/paymentDebtText"
+                        android:gravity="start|center"
+                        android:lines="2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:layout_marginEnd="@dimen/dp_20"
+                        app:font="@{`lato_regular`}"
+                        android:text="My payment has been debited multiple times."
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_16"
+                        android:background="@drawable/back_buttom" />
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_below="@+id/rlpaymentDebited"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="@color/colorLightGrey"/>
+
+                <RelativeLayout
+                    android:id="@+id/rlaccountDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/view2"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:padding="@dimen/dp_5">
+
+                    <TextView
+                        android:id="@+id/accountDetailsText"
+                        android:gravity="start|center"
+                        android:lines="2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:layout_marginEnd="@dimen/dp_20"
+                        app:font="@{`lato_regular`}"
+                        android:text="My bank account details for refund."
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_16"
+                        android:background="@drawable/back_buttom" />
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/view3"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_below="@+id/rlaccountDetail"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="@color/colorLightGrey"/>
+
+                <RelativeLayout
+                    android:id="@+id/rlWallet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/view3"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:padding="@dimen/dp_5">
+
+                    <TextView
+                        android:id="@+id/walletText"
+                        android:gravity="start|center"
+                        android:lines="2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:layout_marginEnd="@dimen/dp_20"
+                        app:font="@{`lato_regular`}"
+                        android:text="I am unable to pay using wallet."
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_16"
+                        android:background="@drawable/back_buttom" />
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/view4"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_below="@+id/rlWallet"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="@color/colorLightGrey"/>
+
+               <!-- <RelativeLayout
+                    android:id="@+id/rlDiscount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/view4"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:padding="@dimen/dp_5">
+
+                    <TextView
+                        android:gravity="start|center"
+                        android:lines="2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:layout_marginEnd="@dimen/dp_20"
+                        app:font="@{`lato_regular`}"
+                        android:text="I am self shipped my return but haven't\nreceived my refund yet "
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_16"
+                        android:background="@drawable/back_buttom" />
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/view5"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_below="@+id/rlDiscount"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="@color/colorLightGrey"/>
+
+                <RelativeLayout
+                    android:id="@+id/rlOther"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/view5"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:padding="@dimen/dp_5">
+
+                    <TextView
+                        android:gravity="start|center"
+                        android:lines="2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:layout_marginEnd="@dimen/dp_20"
+                        app:font="@{`lato_regular`}"
+                        android:text="My order didn't get placed, but payment\ngot debited"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_16"
+                        android:background="@drawable/back_buttom" />
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/view6"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_below="@+id/rlOther"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="@color/colorLightGrey"/>-->
+
+            </RelativeLayout>
+
+
+        </ScrollView>
+
+    </RelativeLayout>
+</layout>

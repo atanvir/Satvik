@@ -1,0 +1,281 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:contentInsetStart="@dimen/dp_0">
+
+
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_10"
+                android:src="@drawable/_back_icon" />
+
+
+            <TextView
+                android:id="@+id/tv_title1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/return_order"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sp_16"
+                android:visibility="visible"
+                app:font="@{`lato_regular`}" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/my_toolbar"
+            android:background="@color/colorLiteGrey" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/my_toolbar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tvSelectIssue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="@dimen/dp_15"
+                        android:text="Select Issue"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        app:font="@{`lato_bold`}" />
+
+                    <View
+                        android:id="@+id/view"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/tvSelectIssue"
+                        android:background="@color/colorLightGrey" />
+
+                    <TextView
+                        android:id="@+id/tvSelect"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/view"
+                        android:drawableEnd="@drawable/black_arrow"
+                        android:gravity="start"
+                        android:padding="@dimen/dp_15"
+                        android:text="It didn't look good on me."
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        app:font="@{`lato_regular`}" />
+
+                    <View
+                        android:id="@+id/vieww"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/tvSelect"
+                        android:background="@color/colorLightGrey" />
+
+                    <TextView
+                        android:id="@+id/tvPleaseChoose"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/vieww"
+                        android:gravity="start"
+                        android:padding="@dimen/dp_15"
+                        android:text="Please Choose address for pickup."
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        app:font="@{`lato_regular`}" />
+
+                    <View
+                        android:id="@+id/viewww"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/tvPleaseChoose"
+                        android:background="@color/colorLightGrey" />
+
+                    <LinearLayout
+                        android:id="@+id/llAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_50"
+                        android:layout_below="@+id/viewww"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvDefaultAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start|center"
+                            android:padding="@dimen/dp_15"
+                            android:text="Default Address"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_regular`}" />
+
+                        <ImageView
+                            android:id="@+id/ivDefaultAddress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="@dimen/dp_15"
+                            android:src="@drawable/new_rect" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorLightGrey">
+
+                        </View>
+
+                        <TextView
+                            android:id="@+id/tvAddNewAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:paddingStart="@dimen/dp_5"
+                            android:text="Add New Address"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_regular`}" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/viewwww"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/llAddress"
+                        android:layout_marginBottom="@dimen/dp_0"
+                        android:background="@color/colorLightGrey" />
+
+
+                    <TextView
+                        android:id="@+id/choose"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/viewwww"
+                        android:drawableEnd="@drawable/black_down_arrow"
+                        android:gravity="start"
+                        android:padding="@dimen/dp_15"
+                        android:text="Choose mode of refund"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        app:font="@{`lato_bold`}" />
+
+                    <View
+                        android:id="@+id/viewwwww"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/choose"
+                        android:layout_marginBottom="@dimen/dp_10"
+                        android:background="@color/colorLightGrey" />
+
+
+                  <!--  <CheckBox
+                        android:id="@+id/chbBankAccount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/viewwwww"
+                        android:layout_marginStart="@dimen/dp_18"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:button="@drawable/new_rect"
+                        android:padding="@dimen/dp_10"
+                        android:text="Bank Account"
+                        app:font="@{`lato_regular`}" />-->
+
+                    <RelativeLayout
+                        android:id="@+id/rl"
+                        android:layout_below="@+id/viewwwww"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tvBankAccount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:padding="@dimen/dp_15"
+                            android:text="Wallets"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_bold`}" />
+
+                        <ImageView
+                            android:layout_toRightOf="@+id/tvBankAccount"
+                            android:id="@+id/ivDropDown"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_alignParentEnd="true"
+                            android:src="@drawable/dropdown" />
+                    </RelativeLayout>
+
+
+
+                    <CheckBox
+                        android:id="@+id/chbIConfirmIntact"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/rl"
+                        android:layout_marginStart="@dimen/dp_18"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:button="@drawable/new_rect"
+                        android:padding="@dimen/dp_10"
+                        android:text="I confirm that all the tags are intact."
+                        app:font="@{`lato_regular`}" />
+
+                    <CheckBox
+                        android:id="@+id/chbIConfirm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/chbIConfirmIntact"
+                        android:layout_marginStart="@dimen/dp_18"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:button="@drawable/new_rect"
+                        android:padding="@dimen/dp_10"
+                        android:text="I confirm that the Product is unused."
+                        app:font="@{`lato_regular`}" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <TextView
+            android:id="@+id/tvRequestReturn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:background="@drawable/drawable_gradient_line"
+            android:gravity="center"
+            android:text="Request Return"
+            android:textAllCaps="true"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/sp_16"
+            android:visibility="visible"
+            app:font="@{`lato_bold`}" />
+
+    </RelativeLayout>
+</layout>

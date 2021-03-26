@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <RelativeLayout
+        android:id="@+id/rlMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:contentInsetStart="@dimen/dp_0">
+
+
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_10"
+                android:src="@drawable/_back_icon" />
+
+
+            <TextView
+                android:id="@+id/tv_title1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Apply Coupon"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sp_16"
+                android:visibility="visible"
+                app:font="@{`lato_regular`}" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_1"
+            android:layout_below="@+id/my_toolbar" />
+
+
+        <EditText
+            android:id="@+id/edtCoupon"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_100"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:background="@drawable/drawable_rectangle_grey"
+            android:gravity="start"
+            android:hint="@string/enter_coupon_code"
+            android:imeOptions="actionNext"
+            android:inputType="textCapWords|textNoSuggestions"
+            android:maxLength="40"
+            android:maxLines="1"
+            android:padding="@dimen/dp_18"
+            android:scrollHorizontally="true"
+            android:textColor="@color/colorLoginSignupText"
+            android:textColorHint="@color/colorExremeLite"
+            android:textSize="14dp"
+            app:font="@{`lato_regular`}"
+             />
+
+
+        <Button
+            android:layout_below="@+id/edtCoupon"
+            android:id="@+id/btnApplyCode"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/dp_50"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:background="@drawable/drawable_gradient_line_with_radius"
+            android:gravity="center"
+            android:text="Apply Code"
+            android:textAllCaps="true"
+            android:textColor="@color/colorWhite"
+            android:textSize="14dp"
+            app:font="@{`lato_regular`}" />
+
+    </RelativeLayout>
+</layout>

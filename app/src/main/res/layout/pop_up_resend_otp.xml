@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/mainRl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite">
+
+        <RelativeLayout
+            android:id="@+id/root_bottomsheet_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_17">
+
+            <TextView
+                android:id="@+id/tvMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                app:font="@{`lato_regular`}"
+                android:textSize="14dp"
+                android:text="Enter the otp sent on your registered\n phone number."/>
+
+
+            <TextView
+                android:id="@+id/tvResendOtp"
+                android:layout_below="@+id/tvMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Resend Otp"
+                android:textColor="@color/colorBlack"
+                android:layout_marginTop="@dimen/dp_30"
+                android:textSize="14dp"
+                app:font="@{`lato_bold`}"
+                android:gravity="center"/>
+
+
+            <!--<com.goodiebag.pinview.Pinview-->
+                <!--android:layout_below="@+id/tvResendOtp"-->
+                <!--android:id="@+id/edtCode"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/dp_50"-->
+                <!--android:layout_marginStart="@dimen/dp_0"-->
+                <!--android:layout_marginEnd="@dimen/dp_0"-->
+                <!--android:layout_marginTop="@dimen/dp_30"-->
+                <!--app:cursorVisible="true"-->
+                <!--app:forceKeyboard="true"-->
+                <!--app:inputType="number"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/textView7"-->
+                <!--app:pinBackground="@drawable/bg_pinview"-->
+                <!--app:pinHeight="32dp"-->
+                <!--app:pinLength="6"-->
+                <!--app:pinWidth="32dp" />-->
+
+
+            <EditText
+                android:visibility="visible"
+                android:layout_below="@+id/tvResendOtp"
+                android:id="@+id/edtCode"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:layout_marginStart="@dimen/dp_30"
+                android:layout_marginEnd="@dimen/dp_30"
+                android:layout_marginTop="@dimen/dp_30"
+                android:background="@drawable/drawable_rectangle_grey_without_radius"
+                android:gravity="center"
+                android:imeOptions="actionDone"
+                android:inputType="phone"
+                android:padding="@dimen/dp_15"
+                android:maxLength="6"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/dp_16"
+                android:textCursorDrawable="@drawable/drawable_cursor_logout" />
+
+            <Button
+                android:id="@+id/btnSubmitResendOtp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edtCode"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginEnd="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_40"
+                android:layout_marginBottom="@dimen/dp_20"
+                android:background="@drawable/drawable_gradient_solid_corner"
+                android:gravity="center"
+                android:text="Submit"
+                android:textAllCaps="true"
+                android:textColor="@color/colorWhite"
+                android:textSize="14dp"
+                app:font="@{`lato_regular`}" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+</layout>

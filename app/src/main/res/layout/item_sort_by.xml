@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:orientation="vertical"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="56dp"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+        <TextView
+            android:id="@+id/textView24"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="SORT BY"
+            android:textColor="@color/colorPureBlack"
+            android:textSize="@dimen/_14sdp"
+            app:font="@{`lato_regular`}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/view7"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/colorLightGrey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView24" />
+
+        <TextView
+            android:id="@+id/tvWhatsNew"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:padding="@dimen/dp_3"
+            android:text="WHAT'S NEW"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_12sdp"
+            app:font="@{`lato_regular`}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view7" />
+
+        <TextView
+            android:id="@+id/tvPopularity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="@dimen/dp_3"
+            android:text="POPULARITY "
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_12sdp"
+            app:font="@{`lato_regular`}"
+            app:layout_constraintEnd_toEndOf="@+id/tvWhatsNew"
+            app:layout_constraintStart_toStartOf="@+id/tvWhatsNew"
+            app:layout_constraintTop_toBottomOf="@+id/tvWhatsNew" />
+
+        <TextView
+            android:id="@+id/tvDiscount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="@dimen/dp_3"
+            android:text="DISCOUNT"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_12sdp"
+            app:font="@{`lato_regular`}"
+            app:layout_constraintEnd_toEndOf="@+id/tvPopularity"
+            app:layout_constraintStart_toStartOf="@+id/tvPopularity"
+            app:layout_constraintTop_toBottomOf="@+id/tvPopularity" />
+
+        <TextView
+            android:id="@+id/tvLowToHigh"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="@dimen/dp_3"
+            android:text="PRICE - LOW TO HIGH "
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_12sdp"
+            app:font="@{`lato_regular`}"
+            app:layout_constraintEnd_toEndOf="@+id/tvDiscount"
+            app:layout_constraintStart_toStartOf="@+id/tvDiscount"
+            app:layout_constraintTop_toBottomOf="@+id/tvDiscount" />
+
+        <TextView
+            android:id="@+id/tvHighToLow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="@dimen/dp_3"
+            android:text="PRICE - HIGH TO LOW"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_12sdp"
+            app:font="@{`lato_regular`}"
+            app:layout_constraintEnd_toEndOf="@+id/tvLowToHigh"
+            app:layout_constraintStart_toStartOf="@+id/tvLowToHigh"
+            app:layout_constraintTop_toBottomOf="@+id/tvLowToHigh" />
+
+        <TextView
+            android:id="@+id/tvDeliveryTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:padding="@dimen/dp_3"
+            android:text="DELIVERY TIME "
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_12sdp"
+            app:font="@{`lato_regular`}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tvHighToLow"
+            app:layout_constraintStart_toStartOf="@+id/tvHighToLow"
+            app:layout_constraintTop_toBottomOf="@+id/tvHighToLow" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

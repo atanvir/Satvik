@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBagFragBackground"
+        android:orientation="vertical"
+        android:showDividers="none"
+        android:padding="@dimen/dp_5">
+
+        <TextView
+            android:padding="@dimen/dp_5"
+            android:id="@+id/rowThirdText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:font="@{`lato_regular`}"
+            android:layout_marginStart="@dimen/dp_30"
+            android:text="T-shitrts"
+            android:textColor="@color/categoriesText"
+            android:textSize="14sp" />
+    </LinearLayout>
+</layout>

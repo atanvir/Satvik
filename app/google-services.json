@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "375673094358",
+    "project_id": "satvick-life",
+    "storage_bucket": "satvick-life.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:375673094358:android:d0431d11f77c2a82588977",
+        "android_client_info": {
+          "package_name": "com.satvick"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "375673094358-gtjj7n3fh1g3c3sv1sggeko69092705l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.satvick",
+            "certificate_hash": "934d15fb5db8270de80a506196b0750a8227783a"
+          }
+        },
+        {
+          "client_id": "375673094358-anj74mgcjpip8i7t5e4ekq1ib6ta895u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnpbrALm255Yq5IRCM6FLBCMwQb9Xtu0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "375673094358-anj74mgcjpip8i7t5e4ekq1ib6ta895u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "375673094358-4od19c5sj92ofnqmfdi936e0te48q6d7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.satvick.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

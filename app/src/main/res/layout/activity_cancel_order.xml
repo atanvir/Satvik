@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/rlRecentOrdersOngoing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:contentInsetStart="@dimen/dp_0">
+
+
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_10"
+                android:src="@drawable/_back_icon" />
+
+
+            <TextView
+                android:id="@+id/tv_title1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Cancel Order"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/sp_16"
+                android:visibility="visible"
+                app:font="@{`lato_regular`}" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <View
+            android:id="@+id/vieww"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/my_toolbar"
+            android:background="@color/colorLiteGrey" />
+
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/vieww">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:id="@+id/tvPleaseTell"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rlReturnPolicy"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:gravity="start"
+                    android:text="@string/please_tell_the_reason_for_cancellation"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_bold`}" />
+
+                <TextView
+                    android:id="@+id/tvPleaseTellCorrect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvPleaseTell"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:gravity="start"
+                    android:text="Please tell correct reason for return.This information is only\nused to improve our service"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+
+                <TextView
+                    android:id="@+id/tvSelectIssue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvPleaseTellCorrect"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:gravity="start"
+                    android:text="@string/select_issue_star"
+                    android:textColor="@color/colorExremeLite"
+                    android:textSize="14dp"
+                    android:visibility="gone"
+                    app:font="@{`lato_bold`}" />
+
+                <RelativeLayout
+                    android:id="@+id/rlReason"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvSelectIssue"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:layout_marginBottom="@dimen/dp_20"
+                    android:background="@drawable/drawable_rectangle_grey_corner_1dp">
+
+                    <RadioGroup
+                        android:id="@+id/radioGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:id="@+id/tvIncorrectSize"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp_10"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:gravity="start|center"
+                            android:text="Incorrect Size Ordered"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_regular`}" />
+
+                        <View
+                            android:id="@+id/view1"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@+id/tvMyReason"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:background="@color/colorLightGrey" />
+
+                        <RadioButton
+                            android:id="@+id/tvProductNotRequired"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/view1"
+                            android:layout_marginStart="@dimen/dp_10"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:gravity="start|center"
+                            android:text="Product Not Required Anymore"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_regular`}" />
+
+                        <View
+                            android:id="@+id/view2"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@+id/tvTheProduct"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:background="@color/colorLightGrey" />
+
+                        <RadioButton
+                            android:id="@+id/tvCashIsssue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/view2"
+                            android:layout_marginStart="@dimen/dp_10"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:gravity="start|center"
+                            android:text="Cash Issue"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_regular`}" />
+
+                        <View
+                            android:id="@+id/view3"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@+id/tvReceived"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:background="@color/colorLightGrey" />
+
+                        <RadioButton
+                            android:id="@+id/tvOrderByMistake"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/view3"
+                            android:layout_marginStart="@dimen/dp_10"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:gravity="start|center"
+                            android:text="Ordered By Mistake"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_regular`}" />
+
+                        <View
+                            android:id="@+id/view4"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@+id/tvReceivedAWrong"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:background="@color/colorLightGrey" />
+
+                        <RadioButton
+                            android:id="@+id/tvWantToChange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/view4"
+                            android:layout_marginStart="@dimen/dp_10"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:layout_marginBottom="@dimen/dp_10"
+                            android:gravity="start|center"
+                            android:text="Wants To Change Style?Color"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_regular`}" />
+
+                    </RadioGroup>
+
+                </RelativeLayout>
+
+                <EditText
+                    android:id="@+id/edtAdditionalComment"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_100"
+                    android:layout_below="@+id/rlReason"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:background="@drawable/drawable_rectangle_grey_solid"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    android:gravity="start"
+                    android:hint="Additional Comments"
+                    android:imeOptions="actionNext"
+                    android:inputType="textCapWords|textNoSuggestions"
+                    android:maxLength="40"
+                    android:maxLines="1"
+                    android:paddingStart="@dimen/dp_5"
+                    android:paddingTop="@dimen/dp_10"
+                    android:scrollHorizontally="true"
+                    android:textColor="@color/colorLoginSignupText"
+                    android:textColorHint="@color/colorExremeLite"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+
+                <LinearLayout
+                    android:id="@+id/llTotalRefund"
+                    android:layout_below="@+id/edtAdditionalComment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_30"
+                    android:visibility="visible"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvRefundAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:gravity="start"
+                        android:textAllCaps="true"
+                        android:text="Total Refund Amount : "
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        app:font="@{`lato_regular`}" />
+
+                    <TextView
+                        android:id="@+id/tvPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_0"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:gravity="start"
+                        android:textAllCaps="true"
+                        android:text="Rs.0.00"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        app:font="@{`lato_bold`}" />
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_below="@+id/llTotalRefund"
+                    android:id="@+id/tvPriceDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:gravity="start"
+                    android:textAllCaps="true"
+                    android:text="Upon confirmation,refund amount will be credited to original modes of payment."
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}"/>
+
+            </RelativeLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_below="@+id/scrollView"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:padding="@dimen/dp_10">
+
+            <TextView
+                android:id="@+id/tvCancel"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginEnd="@dimen/dp_5"
+                android:layout_weight="1"
+                android:background="@drawable/drawable_rectangle_logout_btn_with_radius"
+                android:gravity="center"
+                android:text="Cancel"
+                android:textAllCaps="true"
+                android:textColor="@color/colorLogOut"
+                android:textSize="14dp"
+                app:font="@{`lato_regular`}" />
+
+            <TextView
+                android:id="@+id/tvConfirm"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginStart="@dimen/dp_5"
+                android:layout_weight="1"
+                android:background="@drawable/drawable_rectangle_logout_btn_with_radius"
+                android:gravity="center"
+                android:text="Confirm"
+                android:textAllCaps="true"
+                android:textColor="@color/colorLogOut"
+                android:textSize="14dp"
+                app:font="@{`lato_regular`}" />
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</layout>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/mainRl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:focusableInTouchMode="true">
+
+        <RelativeLayout
+            android:id="@+id/root_bottomsheet_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_17"
+            android:layout_marginTop="@dimen/dp_17"
+            android:layout_marginEnd="@dimen/dp_17"
+            android:layout_marginBottom="@dimen/dp_17">
+
+            <TextView
+                android:id="@+id/tvMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="Enter your registered phone number."
+                android:textColor="@color/colorBlack"
+                android:textSize="14dp"
+                app:font="@{`lato_regular`}" />
+
+
+
+            <RelativeLayout
+                android:id="@+id/llTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvMessage"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginBottom="@dimen/dp_20">
+
+                <com.hbb20.CountryCodePicker
+                    android:id="@+id/ccpSinUp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="@dimen/dp_0"
+                    android:layout_marginBottom="@dimen/dp_0"
+                    android:drawablePadding="@dimen/dp_0"
+                    android:gravity="center"
+                    app:hideNameCode="false"
+                    app:keyboardAutoPopOnSearch="false"
+                    app:showFlag="false"
+                    app:textSize="14dp" />
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tvPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_60"
+                    android:gravity="center"
+                    app:hintAnimationEnabled="false"
+                    app:hintEnabled="false"
+                    android:visibility="visible">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@null"
+                        android:hint="@string/phone_number"
+                        android:imeOptions="actionDone"
+                        android:inputType="phone"
+                        android:maxLength="10"
+                        android:maxLines="1"
+                        android:padding="@dimen/_12sdp"
+                        android:scrollHorizontally="true"
+                        android:textColor="@color/colorLoginSignupText"
+                        android:textColorHint="@color/colorExremeLite"
+                        android:textCursorDrawable="@drawable/drawable_cursor_logout"
+                        android:textSize="14dp"
+                        app:font="@{`lato_regular`}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_below="@+id/tvPhone"
+                    android:layout_marginStart="@dimen/dp_0"
+                    android:layout_marginTop="@dimen/dp_2"
+                    android:layout_marginEnd="@dimen/dp_0"
+                    android:background="@color/colorLightGrey" />
+
+            </RelativeLayout>
+
+
+            <Button
+                android:id="@+id/btnSubmitResendOtp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:layout_below="@+id/llTop"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_30"
+                android:layout_marginEnd="@dimen/dp_20"
+                android:layout_marginBottom="@dimen/dp_30"
+                android:background="@drawable/drawable_gradient_solid_corner"
+                android:gravity="center"
+                android:text="Submit"
+                android:textAllCaps="true"
+                android:textColor="@color/colorWhite"
+                android:textSize="14dp"
+                app:font="@{`lato_regular`}" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+</layout>

@@ -1,0 +1,154 @@
+<resources>
+    <string name="app_name">Soulahe</string>
+    <string name="skip"><u>Skip</u></string>
+    <string name="phone_number">Phone Number</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password ?</string>
+    <string name="log_in">LogIn</string>
+    <string name="or">or</string>
+    <string name="log_in_using_otp"><u>Login Using OTP</u></string>
+    <string name="login_using">Or Login Using</string>
+    <string name="new_to_yod">New to Soulahe?</string>
+    <string name="sign_up_now"> Sign Up Now</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="name">Name</string>
+    <string name="email">Email Id</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="country">Country</string>
+    <string name="already_have">Already have an account ?</string>
+    <string name="underline_log_in"><u>Log In</u></string>
+    <string name="home">Home</string>
+    <string name="categories">Categories</string>
+    <string name="more">More</string>
+    <string name="profile">Profile</string>
+    <string name="bag">Bag</string>
+    <string name="full_name">Full Name</string>
+    <string name="gender">Gender</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="birth_date">Birth Date</string>
+    <string name="address">Address</string>
+    <string name="pin_code">Pin Code</string>
+    <string name="locality">Locality/Town</string>
+    <string name="city">City/District</string>
+    <string name="state">State</string>
+    <string name="type_of_address">Type of Address</string>
+    <string name="return_order">Return Order</string>
+    <string name="underline_resend_otp"><u>Resend OTP</u></string>
+
+
+    //////////////////////////////////////////////////////
+
+    <string name="enter_email">Enter email ID</string>
+    <string name="enter_phone">Enter phone number</string>
+    <string name="enter_name">Edit name</string>
+    <string name="contact_us">Contact Monami Team</string>
+    <string name="please_enter_name">Please enter name</string>
+    <string name="name_should_not_more_than_fourty_character">Name should not more than 40 character</string>
+    <string name="please_enter_phone_number">Please enter phone number </string>
+    <string name="please_enter_email_or_phone">Please enter email or phone number</string>
+    <string name="please_enter_valid_email">Please enter valid email</string>
+    <string name="please_enter_password">Please enter password</string>
+    <string name="password_should_not_more_than_10_character">Password should not more than 10 character</string>
+    <string name="please_enter_confirm_password">Please enter confirm password</string>
+    <string name="confirm_password_should_not_more_than_10_character">Confirm password should not more than 10 character</string>
+    <string name="please_enter_old_password">Please enter current password</string>
+    <string name="please_enter_new_password">Please enter new password</string>
+    <string name="Please_enter_confirm_password">Please enter confirm password</string>
+    <string name="please_enter_country_name">Please enter country name</string>
+    <string name="please_enter_same_new_password_and_confirm_password">Please enter same new password and confirm password</string>
+
+
+    ////////////////////
+
+    <string name="take_photo">Take Photo</string>
+    <string name="choose_from_gallery">Choose From Gallery</string>
+    <string name="cancell">Cancel</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="strike_line"> <strike>Testing for line strike through in android. See examples here  crossed </strike> </string>
+    <string name="helpCenter">Help Center</string>
+    <string name="editAddress">Edit Address</string>
+
+    <string name="email_or_phone_no">Phone Number/Email</string>
+
+    <string name="select_issue_star">Select Issue<font color='#000000'><sup>*</sup></font></string>
+
+    <string name="please_tell_the_reason">Please tell the reason for return.<font color='#000000'><sup>*</sup></font></string>
+
+    <string name="card_number">Card Number<font color='#8F9090'><sup>*</sup></font></string>
+
+    <string name="name_on_card">Name On Card<font color='#8F9090'><sup>*</sup></font></string>
+
+    <string name="expiry_month">Expiry Month<font color='#8F9090'><sup>*</sup></font></string>
+
+    <string name="expiry_year">Expiry Year<font color='#8F9090'><sup>*</sup></font></string>
+
+    <string name="cvv">CVV<font color='#8F9090'><sup>*</sup></font></string>
+
+    <string name="please_tell_the_reason_for_exchange">Please tell the reason for exchange<font color='#000000'><sup>*</sup></font></string>
+    <string name="hot"><u>Hot</u></string>
+
+    <string name="please_tell_the_reason_for_cancellation">Please tell the reason for cancellation<font color='#000000'><sup>*</sup></font></string>
+    <!--<string name="your_code_yod562">Your Code: <b>YOD562</b></string>-->
+    <string name="your_code_yod562"><![CDATA[Your Code: <b>YOD562</b>]]></string>
+    <string name="service_error">Please check your internet connection</string>
+    <string name="please_enter_address">Please enter address</string>
+    <string name="please_enter_pincode">Please enter pincode</string>
+    <string name="please_enter_locality_or_town">Please enter locality or town</string>
+    <string name="please_enter_city_or_district">Please enter city or district</string>
+    <string name="please_enter_state">Please enter state</string>
+    <string name="please_enter_valid_address">Please enter valid address</string>
+    <string name="please_enter_valid_zip_code">Please enter valid pin code</string>
+    <string name="please_enter_valid_locality">Please enter valid locality</string>
+    <string name="please_enter_valid_city">Please enter valid city</string>
+    <string name="please_enter_valid_state">Please enter valid state</string>
+    <string name="please_enter_otp">Please enter otp</string>
+
+    <string name="facebook_app_id">200306198100426</string>
+    <string name="fb_login_protocol_scheme">fb1038917789614424</string>
+    <string name="success">Success</string>
+    <string name="cancel">Cancel</string>
+    <string name="error">Error</string>
+    <string name="share_referral_code_using">Share referral code using</string>
+    <string name="enter_coupon_code">Enter Coupon Code</string>
+
+    ///////////////////////////
+
+    <string name="access_code">Access Code</string>
+    <string name="pay_button">Pay</string>
+    <string name="merchant_id">Merchant Id</string>
+    <string name="currency">Currency</string>
+    <string name="amount">Amount</string>
+    <string name="redirect_url">Redirect Url</string>
+    <string name="cancel_url">Cancel Url</string>
+    <string name="rsa_url">RSA Key Url</string>
+    <!--<string name="access_code_key">AVTG82GA78AU95GTUA</string>-->
+<!--    <string name="access_code_key">AVIJ88GJ45BW78JIWB</string>-->
+    <string name="access_code_key">AVPK04IC25AQ00KPQA</string>
+
+<!--    <string name="merchant_id_key">204482</string>-->
+    <string name="merchant_id_key">340993</string>
+    <!--<string name="redirect_url_key">http://youdomain.com/payment-response.php</string>-->
+    <string name="redirect_url_key">http://54.237.193.27/api/indipay/response</string>
+    <!--<string name="cancel_url_key">http://youdomain.com/payment-cancel.php</string>-->
+    <string name="cancel_url_key">http://54.237.193.27/api/indipay/response</string>
+    <!--<string name="rsa_key_url">https://secure.ccavenue.com/transaction/jsp/GetRSA.jsp</string>-->
+    <!--<string name="rsa_key_url">https://test.ccavenue.com/transaction/getRSAKey</string>-->
+    <string name="rsa_key_url">https://secure.ccavenue.com/transaction/jsp/GetRSA.jsp</string>
+    <string name="please_select_size">Please select size first!</string>
+    <string name="please_select_color">Please select color!</string>
+    <string name="added_to_cart">Product added to cart successfully</string>
+    <string name="added_to_cart_already">Product already added to cart</string>
+    <string name="are_you_sure_wants">Are you sure .? \n Wants to update the current address </string>
+    <string name="out_of_stock">Product will be available soon</string>
+    <string name="months_ago">Months  ago</string>
+    <string name="day_ago">Day ago</string>
+    <string name="days_ago">Days ago</string>
+    <string name="hour_ago">Hour ago</string>
+    <string name="size_chart">Size Chart</string>
+<!--    <string name="place_api_key">AIzaSyAGw8XoZzu1UzkXOXwYe2wD2ssQLvpSDZg</string>-->
+    <string name="place_api_key">AIzaSyDLRsO_oOSnSc0pzp6MzZ0Hg7cByd7k8qo</string>
+
+</resources>

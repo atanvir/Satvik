@@ -1,0 +1,172 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvDefaultAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            app:font="@{`lato_bold`}"
+            android:text="Default Address"/>
+
+
+        <View
+            android:visibility="visible"
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:layout_below="@+id/tvDefaultAddress"
+            android:layout_marginTop="@dimen/dp_10"
+            android:background="@color/colorLightGrey" />
+
+
+        <TextView
+            android:layout_below="@+id/view2"
+            android:id="@+id/tvNameDefault"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_20"
+            android:gravity="start|center"
+            android:text="name"
+            android:textColor="@color/colorBlack"
+            android:textSize="14dp"
+            android:visibility="visible"
+            app:font="@{`lato_regular`}" />
+
+        <LinearLayout
+            android:layout_below="@+id/tvNameDefault"
+            android:id="@+id/llDefault"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_10"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:text="Address:"
+                android:textColor="@color/colorBlack"
+                android:textSize="14dp"
+                app:font="@{`lato_regular`}" />
+
+
+            <TextView
+                android:id="@+id/tvAddressDefault"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="@dimen/dp_5"
+                android:text=""
+                android:textColor="@color/colorBlack"
+                android:textSize="14dp"
+                app:font="@{`lato_regular`}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llMobile"
+            android:layout_below="@+id/llDefault"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_10"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:text="Mobile Number:"
+                android:textColor="@color/colorBlack"
+                android:textSize="14dp"
+                app:font="@{`lato_regular`}" />
+
+
+            <TextView
+                android:id="@+id/tvPhoneDefault"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="@dimen/dp_5"
+                android:text=""
+                android:textColor="@color/colorBlack"
+                android:textSize="14dp"
+                app:font="@{`lato_regular`}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_below="@+id/llMobile"
+            android:id="@+id/llEditRemove"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorLightGrey" />
+
+            <LinearLayout
+                android:id="@+id/llRemove"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/dp_0">
+
+                <TextView
+                    android:id="@+id/tvEditDefault"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Edit"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorLogOut"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/dp_0"
+                    android:layout_marginBottom="@dimen/dp_0"
+                    android:background="@color/colorLightGrey" />
+
+
+                <TextView
+                    android:id="@+id/tvRemoveDefault"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Remove"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorLogOut"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorLightGrey" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</layout>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bitmap xmlns:android="http://schemas.android.com/apk/res/android" android:tint="@color/colorPink" android:src="@drawable/categories_cc">
+
+</bitmap>

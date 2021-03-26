@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/root_bottomsheet_dialog"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorWhite"
+                android:layout_marginBottom="@dimen/dp_60">
+
+                <ImageView
+                    android:id="@+id/ivLogo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:padding="@dimen/dp_10"
+                    android:src="@drawable/yod_new_logo" />
+
+
+                <TextView
+                    android:id="@+id/tvWelcomeDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:layout_below="@+id/ivLogo"
+                    android:text="sign-up to get discount &amp; Free Shipping\n on your first order"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_14sdp"
+                    app:font="@{`lato_regular`}"/>
+
+
+                <Button
+                    android:layout_below="@+id/tvWelcomeDesc"
+                    android:id="@+id/loginButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:background="@drawable/drawable_gradient_solid_corner"
+                    android:padding="@dimen/dp_0"
+                    android:text="@string/log_in"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+
+                <Button
+                    android:layout_below="@+id/loginButton"
+                    android:id="@+id/signupButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:background="@drawable/drawable_gradient_solid_corner"
+                    android:padding="@dimen/dp_0"
+                    android:text="Signup"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+
+</layout>
