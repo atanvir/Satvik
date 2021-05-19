@@ -57,5 +57,22 @@ public class ForgotPasswordModel {
         public void setStatus(String status) {
             this.status = status;
         }
+
+        @Override
+        public String toString() {
+            return "Changepasswordbyphone{" +
+                    "status='" + status + '\'' +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "ForgotPasswordModel{" +
+                "requestKey='" + requestKey + '\'' +
+                ", message='" + message + '\'' +
+                ", changepasswordbyphone=" + changepasswordbyphone +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

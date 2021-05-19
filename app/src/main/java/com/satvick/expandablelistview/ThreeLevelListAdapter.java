@@ -22,14 +22,14 @@ import com.satvick.utils.GlobalVariables;
 import java.util.List;
 import java.util.Map;
 
-public class ThreeLevelListAdapter extends BaseExpandableListAdapter  {
+public class ThreeLevelListAdapter extends BaseExpandableListAdapter {
     private Context context;
-    private Map<CategoryModel.Categorylist,List<CategoryModel.Categorylist.SubCategoryModel>> data;
+    private Map<CategoryModel.Categorylist, List<CategoryModel.Categorylist.SubCategoryModel>> data;
 
 
-    public ThreeLevelListAdapter(Context context, Map<CategoryModel.Categorylist,List<CategoryModel.Categorylist.SubCategoryModel>> data) {
+    public ThreeLevelListAdapter(Context context, Map<CategoryModel.Categorylist, List<CategoryModel.Categorylist.SubCategoryModel>> data) {
         this.context = context;
-        this.data=data;
+        this.data = data;
     }
 
     @Override
@@ -81,22 +81,17 @@ public class ThreeLevelListAdapter extends BaseExpandableListAdapter  {
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            rlMain.setBackgroundTintList(ColorStateList.valueOf(getRandomColor(groupPosition)));
+            rlMain.setBackgroundColor(groupPosition % 2 == 0 ? context.getColor(R.color.colorLogOut) : context.getColor(R.color.odd_cat_color));
         }
         if (!isExpanded) ivDropDown.setBackgroundResource(R.drawable.down_arrow_two);
         else ivDropDown.setBackgroundResource(R.drawable.up_arrow_one);
 
-        if(data.keySet().toArray()[groupPosition] instanceof CategoryModel.Categorylist){
-            text.setText(""+((CategoryModel.Categorylist)data.keySet().toArray()[groupPosition]).getCategory_name());
-            Glide.with(context).load(((CategoryModel.Categorylist)data.keySet().toArray()[groupPosition]).getCat_image()).into(imageViewCategoriesItem);
+        if (data.keySet().toArray()[groupPosition] instanceof CategoryModel.Categorylist) {
+            text.setText("" + ((CategoryModel.Categorylist) data.keySet().toArray()[groupPosition]).getCategory_name());
+            Glide.with(context).load(((CategoryModel.Categorylist) data.keySet().toArray()[groupPosition]).getCat_image()).into(imageViewCategoriesItem);
         }
 
         return convertView;
-    }
-
-    private int getRandomColor(int pos) {
-        int[] colors = {Color.parseColor("#9BDFB6"), Color.parseColor("#FFB881"), Color.parseColor("#FBE1A3"), Color.parseColor("#F8A596"),Color.parseColor("#9BDFB6")};
-        return colors[pos];
     }
 
     @Override
@@ -108,10 +103,10 @@ public class ThreeLevelListAdapter extends BaseExpandableListAdapter  {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(context, ProductListActivity.class);
-                intent.putExtra("from","HomeFragmentAfterLogin");
-                intent.putExtra(GlobalVariables.subcatid,data.get(data.keySet().toArray()[groupPosition]).get(childPosition).getId());
-                intent.putExtra(GlobalVariables.subcatname,data.get(data.keySet().toArray()[groupPosition]).get(childPosition).getCategory_id());
+                Intent intent = new Intent(context, ProductListActivity.class);
+                intent.putExtra("from", "HomeFragmentAfterLogin");
+                intent.putExtra(GlobalVariables.subcatid, data.get(data.keySet().toArray()[groupPosition]).get(childPosition).getId());
+                intent.putExtra(GlobalVariables.subcatname, data.get(data.keySet().toArray()[groupPosition]).get(childPosition).getCategory_id());
                 context.startActivity(intent);
             }
         });

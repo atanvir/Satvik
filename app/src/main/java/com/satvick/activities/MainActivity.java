@@ -38,7 +38,7 @@ import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.ActivityMainBinding;
 import com.satvick.fragments.BagFragment;
 import com.satvick.fragments.CategoriesFragment;
-import com.satvick.fragments.HomeFragmentAfterLogin;
+import com.satvick.fragments.HomeFragment;
 import com.satvick.fragments.LoginSignupForProfileFragment;
 import com.satvick.fragments.MoreFragment;
 import com.satvick.fragments.ProfileFragment;
@@ -292,48 +292,48 @@ public class MainActivity extends AppCompatActivity implements BagFragment.OnDat
 
 
             else if (mFrom.equalsIgnoreCase("HomeFb")) {
-                navFragment = new HomeFragmentAfterLogin();
+                navFragment = new HomeFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, navFragment).commit();
             }
 
             else if (mFrom.equalsIgnoreCase("HomeGoogle")) {
-                navFragment = new HomeFragmentAfterLogin();
+                navFragment = new HomeFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, navFragment).commit();
             }
 
             else if (mFrom.equalsIgnoreCase("HomeIvFbGoogle")) {
-                navFragment = new HomeFragmentAfterLogin();
+                navFragment = new HomeFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, navFragment).commit();
             }
 
 
             else if (mFrom.equalsIgnoreCase("LoginButton")) {
 
-                navFragment = new HomeFragmentAfterLogin();
+                navFragment = new HomeFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, navFragment).commit();
 
             }
 
             else if (mFrom.equalsIgnoreCase("ProductListFragmentToCameAtHomeAfterLogin")) {
-                navFragment = new HomeFragmentAfterLogin();
+                navFragment = new HomeFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, navFragment).commit();
             }
             else if(mFrom.equalsIgnoreCase(GlobalVariables.flashSale))
             {
                 binding.navigation.setSelectedItemId(R.id.home);
-                navFragment = new HomeFragmentAfterLogin();
+                navFragment = new HomeFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, navFragment).commit();
             }
             else
             {
-                navFragment = new HomeFragmentAfterLogin();
+                navFragment = new HomeFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, navFragment).commit();
             }
         }
         else
         {
 
-            navFragment = new HomeFragmentAfterLogin();
+            navFragment = new HomeFragment();
             getSupportFragmentManager().beginTransaction().replace(R.id.content, navFragment).commit();
 
         }
@@ -352,7 +352,7 @@ public class MainActivity extends AppCompatActivity implements BagFragment.OnDat
                 //Home Fragment
                 case R.id.home:
 
-                    navFragment = new HomeFragmentAfterLogin();
+                    navFragment = new HomeFragment();
 
                     getSupportFragmentManager().beginTransaction().replace(R.id.content, navFragment).commit();
 
@@ -420,7 +420,7 @@ public class MainActivity extends AppCompatActivity implements BagFragment.OnDat
     @Override
     public void onBackPressed() {
 
-       if (navFragment instanceof HomeFragmentAfterLogin) {
+       if (navFragment instanceof HomeFragment) {
            final Dialog dialog=new Dialog(this,android.R.style.Theme_Black);
            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);

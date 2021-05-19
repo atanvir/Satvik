@@ -443,6 +443,34 @@ public class MyOrderDetailsModel implements Parcelable {
             parcel.writeTypedList(notifyStatus);
             parcel.writeString(size_label);
         }
+
+        @Override
+        public String toString() {
+            return "Response{" +
+                    "image='" + image + '\'' +
+                    ", sku='" + sku + '\'' +
+                    ", brand='" + brand + '\'' +
+                    ", productId=" + productId +
+                    ", id=" + id +
+                    ", orderNumber='" + orderNumber + '\'' +
+                    ", buyer='" + buyer + '\'' +
+                    ", location='" + location + '\'' +
+                    ", orderDate='" + orderDate + '\'' +
+                    ", dispatchBy='" + dispatchBy + '\'' +
+                    ", paymentType='" + paymentType + '\'' +
+                    ", coupanCode='" + coupanCode + '\'' +
+                    ", status='" + status + '\'' +
+                    ", productName='" + productName + '\'' +
+                    ", amount='" + amount + '\'' +
+                    ", percentage=" + percentage +
+                    ", mrp='" + mrp + '\'' +
+                    ", quantity=" + quantity +
+                    ", color='" + color + '\'' +
+                    ", size='" + size + '\'' +
+                    ", notifyStatus=" + notifyStatus +
+                    ", size_label='" + size_label + '\'' +
+                    '}';
+        }
     }
 
     public static class Notifystatus implements Parcelable {
@@ -499,4 +527,13 @@ public class MyOrderDetailsModel implements Parcelable {
         }
     }
 
+    @Override
+    public String toString() {
+        return "MyOrderDetailsModel{" +
+                "status='" + status + '\'' +
+                ", response=" + response +
+                ", message='" + message + '\'' +
+                ", requestKey='" + requestKey + '\'' +
+                '}';
+    }
 }

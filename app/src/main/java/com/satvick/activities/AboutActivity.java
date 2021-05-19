@@ -29,7 +29,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         webView = findViewById(R.id.webview);
         ivBack = findViewById(R.id.ivBack);
 
-        url = "http://mobuloustech.com/yodapi/about-us1";
+        url = "https://soulahe.com/about-us1";
 
         webView.setWebViewClient(new CustomWebViewClient());
         WebSettings webSetting = webView.getSettings();

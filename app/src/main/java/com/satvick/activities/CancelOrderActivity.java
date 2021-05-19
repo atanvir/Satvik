@@ -2,13 +2,9 @@ package com.satvick.activities;
 
 import android.app.Dialog;
 import android.content.Intent;
-import androidx.databinding.DataBindingUtil;
-
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +12,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import com.satvick.R;
 import com.satvick.database.SharedPreferenceKey;
@@ -37,25 +37,26 @@ public class CancelOrderActivity extends AppCompatActivity implements View.OnCli
 
     ActivityCancelOrderBinding binding;
 
-    String reason="";
-    String mBrand="";
-    String mImageUrl="";
-    String mProductDesc="";
-    String mSize="";
-    String mColor="";
-    String mQty="";
-    String mMrp="";
-    String mAmount="";
-    String mDiscountedPrice="";
-    String mOrderId="";
-    String mDispatchBy="";
-    String mOrderDate="";
-    String mPaymentType="";
-    String mBuyer="";
-    String mLocation="";
-    String mOrderNumber="";
-    String mProductId="";
-    String mAdditionalComment="";
+    String reason = "";
+    String mBrand = "";
+    String mImageUrl = "";
+    String mProductDesc = "";
+    String mSize = "";
+    String mColor = "";
+    String mQty = "";
+    String mMrp = "";
+    String mAmount = "";
+    String mDiscountedPrice = "";
+    String mOrderId = "";
+    String mDispatchBy = "";
+    String mOrderDate = "";
+    String mPaymentType = "";
+    String mBuyer = "";
+    String mLocation = "";
+    String mOrderNumber = "";
+    String mProductId = "";
+    String mAdditionalComment = "";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,8 +64,7 @@ public class CancelOrderActivity extends AppCompatActivity implements View.OnCli
         init();
 
 
-
-
+        binding.radioGroup.setVisibility(View.GONE);
         binding.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -75,8 +75,8 @@ public class CancelOrderActivity extends AppCompatActivity implements View.OnCli
                 int incorrectSize_id = binding.tvIncorrectSize.getId();
                 int productNotRequired_id = binding.tvProductNotRequired.getId();
                 int cashIssue_id = binding.tvCashIsssue.getId();
-                int orderByMistake_id=binding.tvOrderByMistake.getId();
-                int wantToChange_id=binding.tvWantToChange.getId();
+                int orderByMistake_id = binding.tvOrderByMistake.getId();
+                int wantToChange_id = binding.tvWantToChange.getId();
 
 
                 if (c_id == incorrectSize_id) {
@@ -114,39 +114,36 @@ public class CancelOrderActivity extends AppCompatActivity implements View.OnCli
         binding.tvConfirm.setOnClickListener(this);
 
 
-        Intent intent=getIntent();
-        if(intent!=null){
-            mBrand=getIntent().getStringExtra("brand");
-            mImageUrl=getIntent().getStringExtra("imgURl");
-            mProductDesc=getIntent().getStringExtra("productDesc");
-            mSize=getIntent().getStringExtra("size");
-            mColor=getIntent().getStringExtra("color");
-            mQty=String.valueOf(getIntent().getIntExtra("qty",0));
-            mMrp=getIntent().getStringExtra("mrp");
-            Log.e("Cancel_mrp",getIntent().getStringExtra("mrp"));
-            mAmount=getIntent().getStringExtra("amount");
-            mDiscountedPrice= String.valueOf(getIntent().getIntExtra("discountedPrice",0));
-            mOrderNumber=getIntent().getStringExtra("order_id");
-            mOrderId=String.valueOf(getIntent().getIntExtra("id",0));
-            mDispatchBy=getIntent().getStringExtra("dispatch_by");
-            mOrderDate=getIntent().getStringExtra("order_date");
-            mPaymentType=getIntent().getStringExtra("payment_type");
-            mBuyer=getIntent().getStringExtra("buyer");
-            mLocation=getIntent().getStringExtra("location");
-            mProductId=String.valueOf(getIntent().getIntExtra("product_id",0));
+        Intent intent = getIntent();
+        if (intent != null) {
+            mBrand = getIntent().getStringExtra("brand");
+            mImageUrl = getIntent().getStringExtra("imgURl");
+            mProductDesc = getIntent().getStringExtra("productDesc");
+            mSize = getIntent().getStringExtra("size");
+            mColor = getIntent().getStringExtra("color");
+            mQty = String.valueOf(getIntent().getIntExtra("qty", 0));
+            mMrp = getIntent().getStringExtra("mrp");
+            Log.e("Cancel_mrp", getIntent().getStringExtra("mrp"));
+            mAmount = getIntent().getStringExtra("amount");
+            mDiscountedPrice = String.valueOf(getIntent().getIntExtra("discountedPrice", 0));
+            mOrderNumber = getIntent().getStringExtra("order_id");
+            mOrderId = String.valueOf(getIntent().getIntExtra("id", 0));
+            mDispatchBy = getIntent().getStringExtra("dispatch_by");
+            mOrderDate = getIntent().getStringExtra("order_date");
+            mPaymentType = getIntent().getStringExtra("payment_type");
+            mBuyer = getIntent().getStringExtra("buyer");
+            mLocation = getIntent().getStringExtra("location");
+            mProductId = String.valueOf(getIntent().getIntExtra("product_id", 0));
         }
 
 
-        if(mPaymentType.equalsIgnoreCase("Cash On Delivery"))
-        {
+        if (mPaymentType.equalsIgnoreCase("Cash On Delivery")) {
             binding.llTotalRefund.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             binding.llTotalRefund.setVisibility(View.VISIBLE);
             Double convertedPrice = Double.parseDouble(SharedPreferenceWriter.getInstance(this).getString("converted_amount"));
             String symbol = SharedPreferenceWriter.getInstance(this).getString("symbol");
-            binding.tvPrice.setText(symbol+" "+Math.round(Double.parseDouble(mAmount)*convertedPrice));
+            binding.tvPrice.setText(symbol + " " + Math.round(Double.parseDouble(mAmount) * convertedPrice));
         }
 
 
@@ -160,11 +157,11 @@ public class CancelOrderActivity extends AppCompatActivity implements View.OnCli
                 break;
 
             case R.id.tvCancel:
-                startActivity(new Intent(this, MyOrderActivity.class).putExtra("from","CancelOrderActivity"));
+                startActivity(new Intent(this, MyOrderActivity.class).putExtra("from", "CancelOrderActivity"));
                 break;
 
             case R.id.tvConfirm:
-                if(validateForm()){
+                if (validateForm()) {
                     if (HelperClass.showInternetAlert(CancelOrderActivity.this)) {
                         callRequestForOrderApi();//hit api
                     }
@@ -175,7 +172,7 @@ public class CancelOrderActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void callRequestForOrderApi() {
-        final MyDialog myDialog=new MyDialog(CancelOrderActivity.this);
+        final MyDialog myDialog = new MyDialog(CancelOrderActivity.this);
         myDialog.showDialog();
         Retrofit retrofit = ApiClient.getClient();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
@@ -184,7 +181,7 @@ public class CancelOrderActivity extends AppCompatActivity implements View.OnCli
                 SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.USER_ID),
                 reason,
                 binding.edtAdditionalComment.getText().toString(),
-                mSize,mColor,mOrderId,"cancel","","",mProductId);
+                mSize, mColor, mOrderId, "cancel", "", "", mProductId);
         call.enqueue(new Callback<RequestForOrderModel>() {
             @Override
             public void onResponse(Call<RequestForOrderModel> call, Response<RequestForOrderModel> response) {
@@ -212,14 +209,15 @@ public class CancelOrderActivity extends AppCompatActivity implements View.OnCli
 
 
     private boolean validateForm() {
-        boolean isValidate=true;
+        boolean isValidate = true;
 
         mAdditionalComment = binding.edtAdditionalComment.getText().toString();
 
-        if (reason.equalsIgnoreCase("")) {
-            Toast.makeText(this, "Please select reason", Toast.LENGTH_SHORT).show();
-           return false;
-        }
+        /*edited 17 may*/
+//        if (reason.equalsIgnoreCase("")) {
+//            Toast.makeText(this, "Please select reason", Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
         return isValidate;
     }
 
@@ -227,7 +225,7 @@ public class CancelOrderActivity extends AppCompatActivity implements View.OnCli
     private void openPopUp(String message) {
 
         PopUpCancellationRequestBinding binding;
-        final Dialog dialog=new Dialog(this,android.R.style.Theme_Black);
+        final Dialog dialog = new Dialog(this, android.R.style.Theme_Black);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -244,7 +242,7 @@ public class CancelOrderActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onClick(View v) {
                 //callApi
-                startActivity(new Intent(CancelOrderActivity.this, MyOrderActivity.class).putExtra("from","CancelOrderActivity"));
+                startActivity(new Intent(CancelOrderActivity.this, MyOrderActivity.class).putExtra("from", "CancelOrderActivity"));
             }
         });
         dialog.show();
@@ -253,6 +251,6 @@ public class CancelOrderActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, MyOrderActivity.class).putExtra("from","CancelOrderActivity"));
+        startActivity(new Intent(this, MyOrderActivity.class).putExtra("from", "CancelOrderActivity"));
     }
 }

@@ -1,17 +1,15 @@
 package com.satvick.activities;
 
 import android.content.Intent;
-import androidx.databinding.DataBindingUtil;
-
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.util.Log;
+import androidx.databinding.DataBindingUtil;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -21,6 +19,7 @@ import com.satvick.R;
 import com.satvick.database.SharedPreferenceKey;
 import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.ActivitySplashBinding;
+import com.satvick.utils.HelperClass;
 
 public class SplashActivity extends AppCompatActivity {
     ActivitySplashBinding binding;
@@ -29,15 +28,15 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
-        SharedPreferenceWriter.getInstance(this).writeStringValue("converted_amount","1");
-        SharedPreferenceWriter.getInstance(this).writeStringValue("symbol","₹");
+        SharedPreferenceWriter.getInstance(this).writeStringValue("converted_amount", "1");
+        SharedPreferenceWriter.getInstance(this).writeStringValue("symbol", "₹");
+        HelperClass.printKeyHash(this);
         getDeviceToken();
         getProductId();
     }
 
     private void getDeviceToken() {
         final SharedPreferenceWriter mPreference = SharedPreferenceWriter.getInstance(getApplicationContext());
-
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
@@ -53,20 +52,18 @@ public class SplashActivity extends AppCompatActivity {
                             getDeviceToken();
                         } else {
                             mPreference.writeStringValue(SharedPreferenceKey.DEVICE_TOKEN, device_token);
-                            Log.e("token",mPreference.getString(SharedPreferenceKey.DEVICE_TOKEN));
+                            Log.e("token", mPreference.getString(SharedPreferenceKey.DEVICE_TOKEN));
                         }
 
-                     }
+                    }
                 });
     }
 
 
     private void goNext() {
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 finish();
 
@@ -83,15 +80,15 @@ public class SplashActivity extends AppCompatActivity {
             if (appLinkData != null) {
                 String url = appLinkData.toString();
                 String status1 = url.substring(url.lastIndexOf("/") + 1);
-                Intent intent=new Intent(this,MainActivity.class);
-                intent.putExtra("isDeepLink",true);
-                intent.putExtra("product_id",status1);
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("isDeepLink", true);
+                intent.putExtra("product_id", status1);
                 startActivity(intent);
                 this.finish();
-            }else {
+            } else {
                 goNext();
             }
-        }else {
+        } else {
             goNext();
         }
     }

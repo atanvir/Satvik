@@ -1085,7 +1085,7 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
         ImageView closeiv = dialog.findViewById(R.id.closeiv);
         TextView messagetxt = dialog.findViewById(R.id.messagetxt);
         LottieAnimationView lottieAnimationView = dialog.findViewById(R.id.lottieAnimationView);
-        if (message.equalsIgnoreCase("Please select "+binding.tvLabelSize.getText().toString().trim())) {
+        if (message.equalsIgnoreCase("Please select any size")) {
             lottieAnimationView.setAnimation("warning.json");
             messagetxt.setText(message);
 
@@ -1139,10 +1139,13 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
         if (outOfStock) {
             CommonMessagePopup(getString(R.string.out_of_stock), "");
         } else if (sizeText == null && sizeList.size() > 0) {
-            CommonMessagePopup("Please select " + binding.tvLabelSize.getText().toString().trim(), "");
+            /*updated on 17may*/
+           // CommonMessagePopup("Please select " + binding.tvLabelSize.getText().toString().trim(), "");
+            CommonMessagePopup("Please select any size", "");
         } else if (!isValidVariant) {
             CommonMessagePopup("Not valid product variant", "FAILURE");
-        } else {
+        }
+        else {
             if (SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false") ||
                     SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) {
                 boolean isProductExists = false;

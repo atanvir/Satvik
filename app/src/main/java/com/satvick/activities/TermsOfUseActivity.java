@@ -24,7 +24,7 @@ public class TermsOfUseActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_terms_of_use);
         webView = findViewById(R.id.webview);
         ivBack = findViewById(R.id.ivBack);
-        url = "http://mobuloustech.com/yodapi/tandc";
+        url = "https://soulahe.com/tandc";
 
         webView.setWebViewClient(new CustomWebViewClient());
         WebSettings webSetting = webView.getSettings();

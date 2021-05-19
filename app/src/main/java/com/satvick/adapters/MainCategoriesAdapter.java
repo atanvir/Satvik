@@ -20,13 +20,13 @@ import com.satvick.utils.GlobalVariables;
 
 import java.util.List;
 
-public class HomeSlidingProductAdapter extends RecyclerView.Adapter<HomeSlidingProductAdapter.ViewHolder> {
+public class MainCategoriesAdapter extends RecyclerView.Adapter<MainCategoriesAdapter.ViewHolder> {
 
     Context context;
     LayoutInflater inflater;
     List<HomeModel.Woman> list;
 
-public HomeSlidingProductAdapter(Context context, List<HomeModel.Woman> list) {
+    public MainCategoriesAdapter(Context context, List<HomeModel.Woman> list) {
         this.context = context;
         this.list = list;
         setHasStableIds(true);
@@ -43,16 +43,16 @@ public HomeSlidingProductAdapter(Context context, List<HomeModel.Woman> list) {
     }
 
     @Override
-    public HomeSlidingProductAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MainCategoriesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (inflater == null) {
             inflater = LayoutInflater.from(parent.getContext());
         }
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sliding_home, parent, false);
-        return new HomeSlidingProductAdapter.ViewHolder(itemView);
+        return new MainCategoriesAdapter.ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(HomeSlidingProductAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(MainCategoriesAdapter.ViewHolder holder, int position) {
         Glide.with(context).load(list.get(position).getImage()).into(holder.image);
         holder.tvProductName.setText(list.get(position).getName());
     }

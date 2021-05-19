@@ -2,21 +2,9 @@ package com.satvick.activities;
 
 import android.app.Dialog;
 import android.content.Intent;
-
-import androidx.core.content.ContextCompat;
-import androidx.databinding.DataBindingUtil;
-
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-
-import com.airbnb.lottie.LottieAnimationView;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -25,6 +13,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.satvick.R;
 import com.satvick.adapters.ColorProductDetailAdapter;
@@ -60,12 +58,12 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
     int[] image = {R.drawable.tshirt_yellow, R.drawable.red_tap_shoes, R.drawable.t_shirt_new_photo, R.drawable.t_shirt_new_photo};
 
     private Wishlistproduct wishlistproduct;
-    private List<com.satvick.model.List> wishListArrayList=new ArrayList<>();
+    private List<com.satvick.model.List> wishListArrayList = new ArrayList<>();
 
-    String token ="";
-    String userId="";
+    String token = "";
+    String userId = "";
     int noOfProduct;
-    String mProductId="";
+    String mProductId = "";
 
     private ProductDetailsResponse data;
     List<String> getColor;
@@ -74,16 +72,16 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
     ColorProductDetailAdapter colorProductDetailAdapter;
     SelectSizeProductDetailsAdapter selectSizeProductDetailsAdapter;
 
-    String sizeText=null;
-    String colorText=null;
+    String sizeText = null;
+    String colorText = null;
 
-    String sizeName="";
-    String colorName="";
+    String sizeName = "";
+    String colorName = "";
 
     Button btnSubmit;
     RecyclerView recyclerSize;
     RecyclerView recyclerColor;
-    TextView tvSelectColor,tvSelectSize;
+    TextView tvSelectColor, tvSelectSize;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,7 +90,7 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
         binding.ivBack.setOnClickListener(this);
         binding.ivBag.setOnClickListener(this);
 
-        if (SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false")||
+        if (SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false") ||
                 SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) {
             token = "1";
             userId = "1";
@@ -107,9 +105,9 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
 
 
     private boolean validateForm() {
-        boolean isValidate=true;
+        boolean isValidate = true;
 
-        if(sizeText==null) {
+        if (sizeText == null) {
             Toast.makeText(this, "Please select size", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -125,7 +123,7 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
         String token = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.TOKEN);
         String userId = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.USER_ID);
 
-        final MyDialog myDialog=new MyDialog(this);
+        final MyDialog myDialog = new MyDialog(this);
         myDialog.showDialog();
         Retrofit retrofit = ApiClient.getClient();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
@@ -162,15 +160,15 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void setData(ProductDetailsResponse data) {
-        getColor=data.getProductdetails().getColor();
-        getSize=data.getProductdetails().getSize();
+        getColor = data.getProductdetails().getColor();
+        getSize = data.getProductdetails().getSize();
         setSizeAdapter(getSize);
         setColorAdapter(getColor);
     }
 
 
     private void setSizeAdapter(final List<String> getSize) {
-        if(getSize.size()>0) {
+        if (getSize.size() > 0) {
             selectSizeProductDetailsAdapter = new SelectSizeProductDetailsAdapter(this, getSize);
             recyclerSize.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             recyclerSize.setAdapter(selectSizeProductDetailsAdapter);
@@ -181,14 +179,14 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
                     sizeName = getSize.get(pos);
                 }
             });
-        }else{
+        } else {
             tvSelectSize.setVisibility(View.GONE);
         }
 
     }
 
     private void setColorAdapter(final List<String> getColor) {
-        if(getColor.size()>0) {
+        if (getColor.size() > 0) {
             colorProductDetailAdapter = new ColorProductDetailAdapter(this, getColor);
             recyclerColor.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             recyclerColor.setAdapter(colorProductDetailAdapter);
@@ -199,13 +197,15 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
                     colorName = getColor.get(pos);
                 }
             });
-        }else{ tvSelectColor.setVisibility(View.GONE); }
+        } else {
+            tvSelectColor.setVisibility(View.GONE);
+        }
 
     }
 
     private void callWishListApi() {
 
-        final MyDialog myDialog=new MyDialog(this);
+        final MyDialog myDialog = new MyDialog(this);
         myDialog.showDialog();
         Retrofit retrofit = ApiClient.getClient();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
@@ -220,17 +220,15 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
                     MyWishListResponse data = response.body();
 
                     if (response.body().getStatus().equals(GlobalVariables.SUCCESS)) {
-                        wishListArrayList=data.getWishlistproduct().getList();
-                        wishlistproduct=data.getWishlistproduct();
-                        if(wishlistproduct.getNumOfAddtocart()==0) {
+                        wishListArrayList = data.getWishlistproduct().getList();
+                        wishlistproduct = data.getWishlistproduct();
+                        if (wishlistproduct.getNumOfAddtocart() == 0) {
                             binding.notificationBadge.setVisibility(View.GONE);
-                        }
-                        else
-                        {
+                        } else {
                             binding.notificationBadge.setVisibility(View.VISIBLE);
-                            binding.notificationBadge.setText(""+wishlistproduct.getNumOfAddtocart());
+                            binding.notificationBadge.setText("" + wishlistproduct.getNumOfAddtocart());
                         }
-                        if(wishListArrayList!=null) {
+                        if (wishListArrayList != null) {
                             wishListAdapter = new MyWishListAdapter(MyWishListActivity.this, wishListArrayList);
 
                             // set a GridLayoutManager with 2 number of columns , horizontal gravity and false value for reverseLayout to show the items from start to end
@@ -265,15 +263,13 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
 
 
                             }
-                        }
-                        else
-                        {
+                        } else {
                             binding.tvProductCount.setText("No item");
-                            CommonUtil.CommonMessagePopUp(MyWishListActivity.this,"New Collection Awaited");
+                            CommonUtil.CommonMessagePopUp(MyWishListActivity.this, "New Collection Awaited");
                         }
 
 
-                    } else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)){
+                    } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
                         Toast.makeText(MyWishListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -293,10 +289,13 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
         bottomSheetDialog.getWindow().findViewById(R.id.design_bottom_sheet).setBackgroundResource(android.R.color.transparent);
 
         btnSubmit = view1.findViewById(R.id.btnSubmit);
-        recyclerSize=view1.findViewById(R.id.recyclerSize);
-        recyclerColor=view1.findViewById(R.id.recyclerColor);
+        recyclerSize = view1.findViewById(R.id.recyclerSize);
+        recyclerColor = view1.findViewById(R.id.recyclerColor);
         tvSelectSize = view1.findViewById(R.id.tvSelectSize);
         tvSelectColor = view1.findViewById(R.id.tvSelectColor);
+
+        tvSelectColor.setVisibility(View.GONE);
+        recyclerColor.setVisibility(View.GONE);
 
 //        callProductDeatilsApiToSelectSizeAndColor(mProductId);
 
@@ -304,9 +303,9 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onClick(View v) {
 
-                if(validateForm()){
+                if (validateForm()) {
                     if (HelperClass.showInternetAlert(MyWishListActivity.this)) {
-                        callAddToCartOrBaglistApi(mProductId,pos,binding.mainRl);//hit api
+                        callAddToCartOrBaglistApi(mProductId, pos, binding.mainRl);//hit api
                         bottomSheetDialog.dismiss();
                     }
                 }
@@ -316,19 +315,18 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
         bottomSheetDialog.show();
 
 
-
     }
 
     private void callAddToCartOrBaglistApi(final String productId, final int pos, final View view) {
         String token = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.TOKEN);
         String userId = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.USER_ID);
 
-        final MyDialog myDialog=new MyDialog(this);
+        final MyDialog myDialog = new MyDialog(this);
         myDialog.showDialog();
         Retrofit retrofit = ApiClient.getClient();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 
-        Call<CartListModelResponse> call = apiInterface.getAddToCartResult(token, userId, productId,colorName,sizeName,"1");
+        Call<CartListModelResponse> call = apiInterface.getAddToCartResult(token, userId, productId, colorName, sizeName, "1");
         call.enqueue(new Callback<CartListModelResponse>() {
             @Override
             public void onResponse(Call<CartListModelResponse> call, Response<CartListModelResponse> response) {
@@ -338,55 +336,48 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
                         wishListArrayList.remove(pos);
                         wishListAdapter.notifyDataSetChanged();
 
-                        if(wishlistproduct.getList().size()==0)
-                        {
+                        if (wishlistproduct.getList().size() == 0) {
                             binding.tvProductCount.setText("No Item");
-                        }else if(wishlistproduct.getList().size()==1)
-                        {
+                        } else if (wishlistproduct.getList().size() == 1) {
                             binding.tvProductCount.setText("1 Item");
-                        }else if(wishlistproduct.getList().size()>1)
-                        {
-                            binding.tvProductCount.setText(wishlistproduct.getList().size()+" Items");
+                        } else if (wishlistproduct.getList().size() > 1) {
+                            binding.tvProductCount.setText(wishlistproduct.getList().size() + " Items");
                         }
 
                         binding.notificationBadge.setVisibility(View.VISIBLE);
-                        int count=0;
-                        if(binding.notificationBadge.getText().toString().equalsIgnoreCase("")) {
+                        int count = 0;
+                        if (binding.notificationBadge.getText().toString().equalsIgnoreCase("")) {
 
-                            count=0;
+                            count = 0;
                             binding.notificationBadge.setText("" + (count + 1));
-                        }
-                        else
-                        {
-                            count=Integer.parseInt(binding.notificationBadge.getText().toString());
+                        } else {
+                            count = Integer.parseInt(binding.notificationBadge.getText().toString());
                             binding.notificationBadge.setText("" + (count + 1));
 
                         }
-
-
 
 
                         CommonMessagePopup(response.body().getMessage());
 
 
-                    } else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))  {
+                    } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
                         Toast.makeText(MyWishListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     myDialog.hideDialog();
                     final Snackbar mSnackbar = Snackbar.make(view, R.string.service_error, Snackbar.LENGTH_INDEFINITE);
-                    mSnackbar.setActionTextColor(ContextCompat.getColor(MyWishListActivity.this,R.color.colorWhite));
+                    mSnackbar.setActionTextColor(ContextCompat.getColor(MyWishListActivity.this, R.color.colorWhite));
                     mSnackbar.setAction("RETRY", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
                             callAddToCartOrBaglistApi(productId, pos, view);
-                            Snackbar snackbar=Snackbar.make(view,"Please wait!",Snackbar.LENGTH_LONG);
-                            snackbar.getView().setBackground(ContextCompat.getDrawable(MyWishListActivity.this,R.drawable.drawable_gradient_line));
+                            Snackbar snackbar = Snackbar.make(view, "Please wait!", Snackbar.LENGTH_LONG);
+                            snackbar.getView().setBackground(ContextCompat.getDrawable(MyWishListActivity.this, R.drawable.drawable_gradient_line));
                             snackbar.show();
                         }
                     });
-                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(MyWishListActivity.this,R.drawable.drawable_gradient_line));
+                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(MyWishListActivity.this, R.drawable.drawable_gradient_line));
                     mSnackbar.show();
                 }
             }
@@ -405,14 +396,13 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
         dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.common_mesage_popup);
-        LottieAnimationView lottieAnimationView=dialog.findViewById(R.id.lottieAnimationView);
-        ImageView closeiv=dialog.findViewById(R.id.closeiv);
-        TextView messagetxt=dialog.findViewById(R.id.messagetxt);
+        LottieAnimationView lottieAnimationView = dialog.findViewById(R.id.lottieAnimationView);
+        ImageView closeiv = dialog.findViewById(R.id.closeiv);
+        TextView messagetxt = dialog.findViewById(R.id.messagetxt);
         messagetxt.setText(message);
         lottieAnimationView.setAnimation("done.json");
 
-        Button okbtn=dialog.findViewById(R.id.okbtn);
-
+        Button okbtn = dialog.findViewById(R.id.okbtn);
 
 
         closeiv.setOnClickListener(new View.OnClickListener() {
@@ -437,14 +427,14 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
 
     private void callAddToWishlistApi(final int pos, final View view) {
         String token = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.TOKEN);
-        String userId= SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.USER_ID);
+        String userId = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.USER_ID);
 
-        final MyDialog myDialog=new MyDialog(this);
+        final MyDialog myDialog = new MyDialog(this);
         myDialog.showDialog();
         Retrofit retrofit = ApiClient.getClient();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 
-        Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(token,userId,wishlistproduct.getList().get(pos).getProductId());
+        Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(token, userId, wishlistproduct.getList().get(pos).getProductId());
         call.enqueue(new Callback<MyWishListResponse>() {
             @Override
             public void onResponse(Call<MyWishListResponse> call, Response<MyWishListResponse> response) {
@@ -456,24 +446,24 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
                         wishListArrayList.remove(pos);
                         wishListAdapter.notifyDataSetChanged();
 
-                    } else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)){
+                    } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
                         Toast.makeText(MyWishListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     myDialog.hideDialog();
                     final Snackbar mSnackbar = Snackbar.make(view, R.string.service_error, Snackbar.LENGTH_INDEFINITE);
-                    mSnackbar.setActionTextColor(ContextCompat.getColor(MyWishListActivity.this,R.color.colorWhite));
+                    mSnackbar.setActionTextColor(ContextCompat.getColor(MyWishListActivity.this, R.color.colorWhite));
                     mSnackbar.setAction("RETRY", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
-                            callAddToWishlistApi(pos,view);
-                            Snackbar snackbar=Snackbar.make(view,"Please wait!",Snackbar.LENGTH_LONG);
-                            snackbar.getView().setBackground(ContextCompat.getDrawable(MyWishListActivity.this,R.drawable.drawable_gradient_line));
+                            callAddToWishlistApi(pos, view);
+                            Snackbar snackbar = Snackbar.make(view, "Please wait!", Snackbar.LENGTH_LONG);
+                            snackbar.getView().setBackground(ContextCompat.getDrawable(MyWishListActivity.this, R.drawable.drawable_gradient_line));
                             snackbar.show();
                         }
                     });
-                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(MyWishListActivity.this,R.drawable.drawable_gradient_line));
+                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(MyWishListActivity.this, R.drawable.drawable_gradient_line));
                     mSnackbar.show();
 
                 }
@@ -485,7 +475,6 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
             }
         });
     }
-
 
 
     @Override

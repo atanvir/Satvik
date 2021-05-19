@@ -22,6 +22,7 @@ import com.satvick.model.FilterProductListModel;
 import com.satvick.model.ForgotPasswordModel;
 import com.satvick.model.GenerateOrderIdModel;
 import com.satvick.model.HomeModel;
+import com.satvick.model.HomeResponseModel;
 import com.satvick.model.InnerPagesModel;
 import com.satvick.model.LoginModel;
 import com.satvick.model.MyCurrentDetailsModel;
@@ -177,7 +178,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("homescreenapi")
-    Call<HomeModel> getHomeResult(
+    Call<HomeResponseModel> getHomeResult(
             @Field("user_id") String user_id,
             @Field("token") String token);
 

@@ -28,6 +28,21 @@ public class GenerateOrderIdModel {
         @Expose
         public String orderNumber;
 
+        @Override
+        public String toString() {
+            return "Generateordercode{" +
+                    "orderNumber='" + orderNumber + '\'' +
+                    '}';
+        }
     }
 
+    @Override
+    public String toString() {
+        return "GenerateOrderIdModel{" +
+                "status='" + status + '\'' +
+                ", generateordercode=" + generateordercode +
+                ", message='" + message + '\'' +
+                ", requestKey='" + requestKey + '\'' +
+                '}';
+    }
 }

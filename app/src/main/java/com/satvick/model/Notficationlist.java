@@ -71,4 +71,16 @@ public class Notficationlist {
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
+
+    @Override
+    public String toString() {
+        return "Notficationlist{" +
+                "id=" + id +
+                ", orderId='" + orderId + '\'' +
+                ", orderNumber='" + orderNumber + '\'' +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                '}';
+    }
 }

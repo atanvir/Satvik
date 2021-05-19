@@ -30,7 +30,7 @@ public class IHelpCenterImplementation extends AppCompatActivity implements IHel
 
         ShareCompat.IntentBuilder.from((Activity) context)
                 .setType("message/rfc822")
-                .addEmailTo("testmobulous123@gmail.com")
+                .addEmailTo("customecare@soulahe.com")
                 .setSubject(subject.toUpperCase())
                 .setText("Hi Team,")
                 .setChooserTitle("Send an email")

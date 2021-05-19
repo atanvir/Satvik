@@ -13,46 +13,33 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.satvick.R;
 import com.satvick.activities.MenActivity;
+import com.satvick.databinding.ItemSlidingHome2Binding;
 import com.satvick.model.HomeModel;
+import com.satvick.model.ProductBean;
 
 import java.util.List;
 
 public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapter.ViewHolder> {
 
-    Context context;
-    LayoutInflater inflater;
-    List<HomeModel.Man> list;
+    private Context context;
+    private List<ProductBean> list;
 
 
-    public MainCategoryAdapter(Context context, List<HomeModel.Man> list) {
+    public MainCategoryAdapter(Context context, List<ProductBean> list) {
         this.context = context;
         this.list = list;
-        setHasStableIds(true);
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return position;
-    }
 
     @Override
     public MainCategoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (inflater == null) {
-            inflater = LayoutInflater.from(parent.getContext());
-        }
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sliding_home2, parent, false);
-        return new MainCategoryAdapter.ViewHolder(itemView);
+        return new MainCategoryAdapter.ViewHolder(ItemSlidingHome2Binding.inflate(LayoutInflater.from(context), parent, false));
     }
 
     @Override
     public void onBindViewHolder(MainCategoryAdapter.ViewHolder holder, int position) {
-        Glide.with(context).load(list.get(position).getImage()).into(holder.image);
-        holder.tvProductName.setText(list.get(position).getName());
+        Glide.with(context).load(list.get(position).getImage()).into(holder.binding.image);
+        holder.binding.tvProductName.setText(list.get(position).getName());
     }
 
     @Override
@@ -61,34 +48,30 @@ public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapte
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView image;
-        TextView tvProductName;
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private ItemSlidingHome2Binding binding;
 
-        public ViewHolder(View binding) {
-            super(binding);
-            image = binding.findViewById(R.id.image);
-            tvProductName = binding.findViewById(R.id.tvProductName);
-            binding.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    callingIntent("HomeFragmentAfterLogin", "" + list.get(getAdapterPosition()).getId(), "", list.get(getAdapterPosition()).getSlug());
-
-                }
-            });
+        public ViewHolder(ItemSlidingHome2Binding binding) {
+            super(binding.getRoot());
+            this.binding=binding;
+            binding.rlMain.setOnClickListener(this);
         }
 
 
-        private void callingIntent(String from, String subcatid, String filterType, String category_name) {
-            Intent intent = new Intent(context, MenActivity.class);
-            intent.putExtra("from", "HomeFragmentAfterLoginMen");
-            intent.putExtra("filterData", category_name);
-            intent.putExtra("type", "Category");
-            context.startActivity(intent);
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
 
+                case R.id.rlMain :
+                Intent intent = new Intent(context, MenActivity.class);
+                intent.putExtra("from", "HomeFragmentAfterLoginMen");
+                intent.putExtra("filterData", list.get(getAdapterPosition()).getSlug());
+                intent.putExtra("type", "Category");
+                context.startActivity(intent);
+                break;
 
+            }
         }
-
     }
 }
 

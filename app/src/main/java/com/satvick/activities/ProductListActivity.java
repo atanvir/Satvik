@@ -3,10 +3,6 @@ package com.satvick.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,7 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -32,6 +30,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.satvick.R;
 import com.satvick.adapters.ProductListingAdapter;
@@ -66,13 +65,12 @@ import retrofit2.Retrofit;
 public class ProductListActivity extends AppCompatActivity implements View.OnClickListener {
 
     ActivityProductListBinding binding;
-    HashMap<String,Object> stringObjectHashMap;
+    HashMap<String, Object> stringObjectHashMap;
 
 
-    public static Intent getIntent(Context context, HashMap<String,Object> stringObjectHashMap)
-    {
-        Intent intent= new Intent(context,ProductListActivity.class);
-        intent.putExtra("kdata",stringObjectHashMap);
+    public static Intent getIntent(Context context, HashMap<String, Object> stringObjectHashMap) {
+        Intent intent = new Intent(context, ProductListActivity.class);
+        intent.putExtra("kdata", stringObjectHashMap);
         return intent;
     }
 
@@ -84,14 +82,14 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     String comeFrom = "";
     String type = "";
     String filterData = "";
-    String productName="";
+    String productName = "";
     int noOfProduct;
-    String option="";
-    String commaSeparatedProductId="";
+    String option = "";
+    String commaSeparatedProductId = "";
     String filter_type;
     String filter_data;
 
-    boolean isChecked=true;
+    boolean isChecked = true;
 
 
     //for social logins
@@ -102,18 +100,18 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
 
     /////////////
-    String extraFilterType="";
+    String extraFilterType = "";
 
-    String commaSeparatedSizeNameId ="";
+    String commaSeparatedSizeNameId = "";
 
-    String commaSeparatedColorNameId ="";
-    String commaSeparatedBrandNameId ="";
+    String commaSeparatedColorNameId = "";
+    String commaSeparatedBrandNameId = "";
 
-    String subcatid="",subcatname="",userId="",
-           moreSection="",subsubcatid="",brandname="",
-           defaultcolor="" ,minValue="",
-           maxValue="",flashSale="",search="",search_key="",
-           catid="",filter="",theme_id="",theme="";
+    String subcatid = "", subcatname = "", userId = "",
+            moreSection = "", subsubcatid = "", brandname = "",
+            defaultcolor = "", minValue = "",
+            maxValue = "", flashSale = "", search = "", search_key = "",
+            catid = "", filter = "", theme_id = "", theme = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +122,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         initViews();
 
         commaSeparatedProductId = SharedPreferenceWriter.getInstance(ProductListActivity.this).getString("Ids");
-        callProductListApi("",binding.mainRl);
+        callProductListApi("", binding.mainRl);
         fbRegisterCallBack();
         googleRegister();
 
@@ -132,160 +130,129 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     private void getIntents() {
 
-        comeFrom=getIntent().getStringExtra("from");
-        Log.e("comeFrom",comeFrom);
+        comeFrom = getIntent().getStringExtra("from");
+        Log.e("comeFrom", comeFrom);
         if (getIntent() != null) {
             if (comeFrom.equalsIgnoreCase("FilterProductListActivity")) {
-                filter="Filter";
+                filter = "Filter";
                 commaSeparatedSizeNameId = getIntent().getStringExtra("commaSeparatedSizeNameId");
                 commaSeparatedColorNameId = getIntent().getStringExtra("commaSeparatedColorNameId");
                 commaSeparatedBrandNameId = getIntent().getStringExtra("commaSeparatedBrandNameId");
 
-                minValue=getIntent().getStringExtra(GlobalVariables.minValue);
-                maxValue=getIntent().getStringExtra(GlobalVariables.maxValue);
-                type=getIntent().getStringExtra(GlobalVariables.type);
-                subcatname=getIntent().getStringExtra(GlobalVariables.section_name);
-                subcatid=getIntent().getStringExtra(GlobalVariables.subcatid);
-                subsubcatid=getIntent().getStringExtra(GlobalVariables.subsubcatid);
-                catid=getIntent().getStringExtra(GlobalVariables.catid);
+                minValue = getIntent().getStringExtra(GlobalVariables.minValue);
+                maxValue = getIntent().getStringExtra(GlobalVariables.maxValue);
+                type = getIntent().getStringExtra(GlobalVariables.type);
+                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
+                subcatid = getIntent().getStringExtra(GlobalVariables.subcatid);
+                subsubcatid = getIntent().getStringExtra(GlobalVariables.subsubcatid);
+                catid = getIntent().getStringExtra(GlobalVariables.catid);
 
-            }
-
-            else if (comeFrom.equalsIgnoreCase("ThreeLevelListAdapter")) {
-                filter="Filter";
+            } else if (comeFrom.equalsIgnoreCase("ThreeLevelListAdapter")) {
+                filter = "Filter";
                 commaSeparatedSizeNameId = getIntent().getStringExtra("commaSeparatedSizeNameId");
                 commaSeparatedColorNameId = getIntent().getStringExtra("commaSeparatedColorNameId");
                 commaSeparatedBrandNameId = getIntent().getStringExtra("commaSeparatedBrandNameId");
-                minValue=getIntent().getStringExtra(GlobalVariables.minValue);
-                maxValue=getIntent().getStringExtra(GlobalVariables.maxValue);
-                type=getIntent().getStringExtra(GlobalVariables.type);
-                subcatname=getIntent().getStringExtra(GlobalVariables.section_name);
-                catid=getIntent().getStringExtra(GlobalVariables.catid);
-                subsubcatid=getIntent().getStringExtra(GlobalVariables.subsubcatid);
+                minValue = getIntent().getStringExtra(GlobalVariables.minValue);
+                maxValue = getIntent().getStringExtra(GlobalVariables.maxValue);
+                type = getIntent().getStringExtra(GlobalVariables.type);
+                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
+                catid = getIntent().getStringExtra(GlobalVariables.catid);
+                subsubcatid = getIntent().getStringExtra(GlobalVariables.subsubcatid);
 
-            }
+            } else if (comeFrom.equalsIgnoreCase("HomeFragmentAfterLogin")) {
 
+                subcatid = getIntent().getStringExtra(GlobalVariables.subcatid);
+                subcatname = getIntent().getStringExtra(GlobalVariables.subcatname);
 
-            else if(comeFrom.equalsIgnoreCase("HomeFragmentAfterLogin"))   {
+            } else if (comeFrom.equalsIgnoreCase(GlobalVariables.ProductDetailsActivityFinal)) {
+                moreSection = getIntent().getStringExtra(GlobalVariables.section);
+                subcatname = getIntent().getStringExtra(GlobalVariables.section_name).split("More")[1];
+                if (moreSection.equalsIgnoreCase("moreTextOne")) {
+                    subsubcatid = String.valueOf(getIntent().getIntExtra(GlobalVariables.subsubcatid, 0));
+                    brandname = getIntent().getStringExtra(GlobalVariables.brandname);
 
-                subcatid=getIntent().getStringExtra(GlobalVariables.subcatid);
-                subcatname=getIntent().getStringExtra(GlobalVariables.subcatname);
-
-            }
-            else if(comeFrom.equalsIgnoreCase(GlobalVariables.ProductDetailsActivityFinal))
-            {
-                moreSection=getIntent().getStringExtra(GlobalVariables.section);
-                subcatname=getIntent().getStringExtra(GlobalVariables.section_name).split("More")[1];
-                if(moreSection.equalsIgnoreCase("moreTextOne"))
-                {
-                    subsubcatid= String.valueOf(getIntent().getIntExtra(GlobalVariables.subsubcatid,0));
-                    brandname= getIntent().getStringExtra(GlobalVariables.brandname);
-
-                }
-                else if(moreSection.equalsIgnoreCase("moreTextTwo"))
-                {
-                    subsubcatid= String.valueOf(getIntent().getIntExtra(GlobalVariables.subsubcatid,0));
-                    defaultcolor=getIntent().getStringExtra(GlobalVariables.defaultcolor);
-                }
-                else if(moreSection.equalsIgnoreCase("moreTextThree"))
-                {
-                    subsubcatid= String.valueOf(getIntent().getIntExtra(GlobalVariables.subsubcatid,0));
+                } else if (moreSection.equalsIgnoreCase("moreTextTwo")) {
+                    subsubcatid = String.valueOf(getIntent().getIntExtra(GlobalVariables.subsubcatid, 0));
+                    defaultcolor = getIntent().getStringExtra(GlobalVariables.defaultcolor);
+                } else if (moreSection.equalsIgnoreCase("moreTextThree")) {
+                    subsubcatid = String.valueOf(getIntent().getIntExtra(GlobalVariables.subsubcatid, 0));
                 }
 
-            }
-            else if(comeFrom.equalsIgnoreCase(GlobalVariables.flashSale))
-            {
-                flashSale=GlobalVariables.flashSale;
-                subcatname=getIntent().getStringExtra(GlobalVariables.section_name);
-            }
-
-            else if(comeFrom.equalsIgnoreCase("SearchAdapter"))
-            {
-                filter="Filter";
+            } else if (comeFrom.equalsIgnoreCase(GlobalVariables.flashSale)) {
+                flashSale = GlobalVariables.flashSale;
+                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
+            } else if (comeFrom.equalsIgnoreCase("SearchAdapter")) {
+                filter = "Filter";
                 commaSeparatedSizeNameId = getIntent().getStringExtra("commaSeparatedSizeNameId");
                 commaSeparatedColorNameId = getIntent().getStringExtra("commaSeparatedColorNameId");
                 commaSeparatedBrandNameId = getIntent().getStringExtra("commaSeparatedBrandNameId");
 
-                minValue=getIntent().getStringExtra(GlobalVariables.minValue);
-                maxValue=getIntent().getStringExtra(GlobalVariables.maxValue);
-                type=getIntent().getStringExtra(GlobalVariables.type);
-                subcatname=getIntent().getStringExtra(GlobalVariables.section_name);
-                subcatid=getIntent().getStringExtra(GlobalVariables.subcatid);
-                catid=getIntent().getStringExtra(GlobalVariables.catid);
-                subsubcatid= getIntent().getStringExtra(GlobalVariables.subsubcatid);
-                extraFilterType=getIntent().getStringExtra(GlobalVariables.filter_data);
+                minValue = getIntent().getStringExtra(GlobalVariables.minValue);
+                maxValue = getIntent().getStringExtra(GlobalVariables.maxValue);
+                type = getIntent().getStringExtra(GlobalVariables.type);
+                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
+                subcatid = getIntent().getStringExtra(GlobalVariables.subcatid);
+                catid = getIntent().getStringExtra(GlobalVariables.catid);
+                subsubcatid = getIntent().getStringExtra(GlobalVariables.subsubcatid);
+                extraFilterType = getIntent().getStringExtra(GlobalVariables.filter_data);
 
-            }
-            else if(comeFrom.equalsIgnoreCase("BrandInFocusAdapter"))
-            {
-                filter="filter";
-                subcatname=getIntent().getStringExtra(GlobalVariables.section_name);
-                commaSeparatedBrandNameId=subcatname;
+            } else if (comeFrom.equalsIgnoreCase("BrandInFocusAdapter")) {
+                filter = "filter";
+                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
+                commaSeparatedBrandNameId = subcatname;
 
-            }
-            else if(comeFrom.equalsIgnoreCase("FilteredBrandInFocus"))
-            {
-                filter="filter";
-                subcatname=getIntent().getStringExtra(GlobalVariables.section_name);
+            } else if (comeFrom.equalsIgnoreCase("FilteredBrandInFocus")) {
+                filter = "filter";
+                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
                 commaSeparatedColorNameId = getIntent().getStringExtra("commaSeparatedColorNameId");
-                commaSeparatedBrandNameId=getIntent().getStringExtra("commaSeparatedBrandNameId");
-                minValue=getIntent().getStringExtra(GlobalVariables.minValue);
-                maxValue=getIntent().getStringExtra(GlobalVariables.maxValue);
-            }
-            else if(comeFrom.equalsIgnoreCase("ShopByThemeAdapter"))
-            {
-                minValue=getIntent().getStringExtra(GlobalVariables.minValue);
-                maxValue=getIntent().getStringExtra(GlobalVariables.maxValue);
+                commaSeparatedBrandNameId = getIntent().getStringExtra("commaSeparatedBrandNameId");
+                minValue = getIntent().getStringExtra(GlobalVariables.minValue);
+                maxValue = getIntent().getStringExtra(GlobalVariables.maxValue);
+            } else if (comeFrom.equalsIgnoreCase("ShopByThemeAdapter")) {
+                minValue = getIntent().getStringExtra(GlobalVariables.minValue);
+                maxValue = getIntent().getStringExtra(GlobalVariables.maxValue);
                 commaSeparatedSizeNameId = getIntent().getStringExtra("commaSeparatedSizeNameId");
                 commaSeparatedColorNameId = getIntent().getStringExtra("commaSeparatedColorNameId");
                 commaSeparatedBrandNameId = getIntent().getStringExtra("commaSeparatedBrandNameId");
-                theme_id=getIntent().getStringExtra(GlobalVariables.subcatid);
-                theme=getIntent().getStringExtra(GlobalVariables.theme);
-                subcatname=getIntent().getStringExtra(GlobalVariables.section_name);
-                filter=getIntent().getStringExtra(GlobalVariables.filter_data);
-            }
-            else if(comeFrom.equalsIgnoreCase("MenSectionShopByOccassionAdapter"))
-            {
+                theme_id = getIntent().getStringExtra(GlobalVariables.subcatid);
+                theme = getIntent().getStringExtra(GlobalVariables.theme);
+                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
+                filter = getIntent().getStringExtra(GlobalVariables.filter_data);
+            } else if (comeFrom.equalsIgnoreCase("MenSectionShopByOccassionAdapter")) {
 
-                subsubcatid=getIntent().getStringExtra(GlobalVariables.subsubcatid);
-                subcatname=getIntent().getStringExtra(GlobalVariables.section_name);
-                filter=getIntent().getStringExtra(GlobalVariables.filter_data);
+                subsubcatid = getIntent().getStringExtra(GlobalVariables.subsubcatid);
+                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
+                filter = getIntent().getStringExtra(GlobalVariables.filter_data);
                 commaSeparatedSizeNameId = getIntent().getStringExtra("commaSeparatedSizeNameId");
                 commaSeparatedColorNameId = getIntent().getStringExtra("commaSeparatedColorNameId");
                 commaSeparatedBrandNameId = getIntent().getStringExtra("commaSeparatedBrandNameId");
-                minValue=getIntent().getStringExtra(GlobalVariables.minValue);
-                maxValue=getIntent().getStringExtra(GlobalVariables.maxValue);
+                minValue = getIntent().getStringExtra(GlobalVariables.minValue);
+                maxValue = getIntent().getStringExtra(GlobalVariables.maxValue);
 
-            }else if(comeFrom.equalsIgnoreCase("AutoSlideViewPagerBannerAdapter"))
-            {
-                subsubcatid=getIntent().getStringExtra(GlobalVariables.subsubcatid);
-                subcatname=getIntent().getStringExtra(GlobalVariables.section_name);
-                filter=getIntent().getStringExtra(GlobalVariables.filter_data);
+            } else if (comeFrom.equalsIgnoreCase("AutoSlideViewPagerBannerAdapter")) {
+                subsubcatid = getIntent().getStringExtra(GlobalVariables.subsubcatid);
+                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
+                filter = getIntent().getStringExtra(GlobalVariables.filter_data);
                 commaSeparatedSizeNameId = getIntent().getStringExtra("commaSeparatedSizeNameId");
                 commaSeparatedColorNameId = getIntent().getStringExtra("commaSeparatedColorNameId");
                 commaSeparatedBrandNameId = getIntent().getStringExtra("commaSeparatedBrandNameId");
-                minValue=getIntent().getStringExtra(GlobalVariables.minValue);
-                maxValue=getIntent().getStringExtra(GlobalVariables.maxValue);
+                minValue = getIntent().getStringExtra(GlobalVariables.minValue);
+                maxValue = getIntent().getStringExtra(GlobalVariables.maxValue);
 
-            }
-
-            else if(comeFrom.equalsIgnoreCase(MyFirebaseMessagingService.class.getSimpleName())){
-               subsubcatid= getIntent().getStringExtra(GlobalVariables.subsubcatid);
-                subcatname=getIntent().getStringExtra(GlobalVariables.section_name);
-                filter=getIntent().getStringExtra(GlobalVariables.filter_data);
+            } else if (comeFrom.equalsIgnoreCase(MyFirebaseMessagingService.class.getSimpleName())) {
+                subsubcatid = getIntent().getStringExtra(GlobalVariables.subsubcatid);
+                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
+                filter = getIntent().getStringExtra(GlobalVariables.filter_data);
                 commaSeparatedSizeNameId = getIntent().getStringExtra("commaSeparatedSizeNameId");
                 commaSeparatedColorNameId = getIntent().getStringExtra("commaSeparatedColorNameId");
                 commaSeparatedBrandNameId = getIntent().getStringExtra("commaSeparatedBrandNameId");
-                minValue=getIntent().getStringExtra(GlobalVariables.minValue);
-                maxValue=getIntent().getStringExtra(GlobalVariables.maxValue);
+                minValue = getIntent().getStringExtra(GlobalVariables.minValue);
+                maxValue = getIntent().getStringExtra(GlobalVariables.maxValue);
 
-            }
-
-            else
-            {
-                subsubcatid=getIntent().getStringExtra(GlobalVariables.subsubcatid);
-                subcatid=getIntent().getStringExtra(GlobalVariables.subcatid);
-                subcatname=getIntent().getStringExtra(GlobalVariables.section_name);
+            } else {
+                subsubcatid = getIntent().getStringExtra(GlobalVariables.subsubcatid);
+                subcatid = getIntent().getStringExtra(GlobalVariables.subcatid);
+                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
 
             }
 
@@ -338,10 +305,10 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                         String name = object.optString("name");
                         String fbid = object.optString("id");
                         String email = object.optString("email");
-                        String profilePhoto = "https://graph.facebook.com/"+fbid+"/picture?type=large";
+                        String profilePhoto = "https://graph.facebook.com/" + fbid + "/picture?type=large";
 
                         if (HelperClass.showInternetAlert(ProductListActivity.this)) {
-                            callLoginApiForSocial(name,fbid,email,profilePhoto,binding.mainRl,"Facebook");
+                            callLoginApiForSocial(name, fbid, email, profilePhoto, binding.mainRl, "Facebook");
                         }
                     }
                 });
@@ -353,25 +320,24 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     private void callProductListApi(final String sortBy, final View view) {
 
-        final MyDialog myDialog=new MyDialog(this);
+        final MyDialog myDialog = new MyDialog(this);
         myDialog.showDialog();
         Retrofit retrofit = ApiClient.getClient();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 
-        if(minValue==null || maxValue==null)
-        {
-            minValue="100";
-            maxValue="10000";
-        }
+        if (minValue == null || maxValue == null) {
+            minValue = "100";
+            maxValue = "10000";
+        } else if (minValue.equalsIgnoreCase("") || maxValue.equalsIgnoreCase("")) {
 
-        else if(minValue.equalsIgnoreCase("") || maxValue.equalsIgnoreCase("")){
-
-            minValue="100";
-            maxValue="10000";
+            minValue = "100";
+            maxValue = "10000";
         }
 
 
-        Call<ProductListingResponse> call= apiInterface.getProductListResult(userId,brandname,defaultcolor,subcatid,subsubcatid,catid,filter,commaSeparatedSizeNameId,commaSeparatedColorNameId,commaSeparatedBrandNameId,flashSale,search,search_key,minValue,maxValue,sortBy,theme,theme_id);
+        Call<ProductListingResponse> call = apiInterface.getProductListResult(userId, brandname, defaultcolor, subcatid, subsubcatid, catid, filter, commaSeparatedSizeNameId, commaSeparatedColorNameId, commaSeparatedBrandNameId, flashSale, search, search_key, minValue, maxValue, sortBy, theme, theme_id);
+
+        Log.d("OnGetProDetaisl:", call.request().toString());
         call.enqueue(new Callback<ProductListingResponse>() {
             @Override
             public void onResponse(Call<ProductListingResponse> call, Response<ProductListingResponse> response) {
@@ -381,19 +347,13 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                     ProductListingResponse data = response.body();
 
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
-                        productListingResponseList =data.getMoreproductlist();
-                        if(productListingResponseList.size()>0)
-                        {
+                        productListingResponseList = data.getMoreproductlist();
+                        if (productListingResponseList.size() > 0) {
                             setProductCount(productListingResponseList);
                             setProductListingAdapter(productListingResponseList);
+                        } else {
+                            CommonUtil.CommonMessagePopUp(ProductListActivity.this, "New Collection Awaited");
                         }
-                        else
-                        {
-                            CommonUtil.CommonMessagePopUp(ProductListActivity.this,"New Collection Awaited");
-                        }
-
-
-
 
 
                     } else {
@@ -402,18 +362,18 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 } else {
                     myDialog.hideDialog();
                     final Snackbar mSnackbar = Snackbar.make(view, R.string.service_error, Snackbar.LENGTH_INDEFINITE);
-                    mSnackbar.setActionTextColor(ContextCompat.getColor(ProductListActivity.this,R.color.colorWhite));
+                    mSnackbar.setActionTextColor(ContextCompat.getColor(ProductListActivity.this, R.color.colorWhite));
                     mSnackbar.setAction("RETRY", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
-                            callProductListApi(sortBy,view);
-                            Snackbar snackbar=Snackbar.make(view,"Please wait!",Snackbar.LENGTH_LONG);
-                            snackbar.getView().setBackground(ContextCompat.getDrawable(ProductListActivity.this,R.drawable.drawable_gradient_line));
+                            callProductListApi(sortBy, view);
+                            Snackbar snackbar = Snackbar.make(view, "Please wait!", Snackbar.LENGTH_LONG);
+                            snackbar.getView().setBackground(ContextCompat.getDrawable(ProductListActivity.this, R.drawable.drawable_gradient_line));
                             snackbar.show();
                         }
                     });
-                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(ProductListActivity.this,R.drawable.drawable_gradient_line));
+                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(ProductListActivity.this, R.drawable.drawable_gradient_line));
                     mSnackbar.show();
 
                 }
@@ -427,38 +387,33 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void setProductCount(List<Moreproductlist> productListingResponseList) {
-        noOfProduct= productListingResponseList.size();
-        if(noOfProduct==0)
-        {
+        noOfProduct = productListingResponseList.size();
+        if (noOfProduct == 0) {
             binding.tvProductCount.setText("No Item");
-        }
-        else if(noOfProduct==1)
-        {
-            binding.tvProductCount.setText(noOfProduct+" Item");
-        }
-        else if(noOfProduct>1)
-        {
-            binding.tvProductCount.setText(noOfProduct+" Items");
+        } else if (noOfProduct == 1) {
+            binding.tvProductCount.setText(noOfProduct + " Item");
+        } else if (noOfProduct > 1) {
+            binding.tvProductCount.setText(noOfProduct + " Items");
         }
     }
 
     private void setProductListingAdapter(final List<Moreproductlist> productListingResponseList) {
 
 
-        listingAdapter = new ProductListingAdapter(ProductListActivity.this, productListingResponseList,productId);
+        listingAdapter = new ProductListingAdapter(ProductListActivity.this, productListingResponseList, productId);
         binding.productListRecycler.setLayoutManager(new GridLayoutManager(ProductListActivity.this, 2));
         binding.productListRecycler.setAdapter(listingAdapter);
 
         listingAdapter.setListener(new ProductListingAdapter.ProductListItemClickListener() {
             @Override
             public void onProductItemClick(View view, int pos) {
-                startActivity(new Intent(ProductListActivity.this,ProductDetailsActivityFinal.class).putExtra("product_id",productListingResponseList.get(pos).getProductId()));
+                startActivity(new Intent(ProductListActivity.this, ProductDetailsActivityFinal.class).putExtra("product_id", productListingResponseList.get(pos).getProductId()));
             }
 
             @Override
             public void onIvItemClick(View view, int pos) {
-                 productId=productListingResponseList.get(pos).getProductId();
-                 callAddToWishlistApi(binding.mainRl);
+                productId = productListingResponseList.get(pos).getProductId();
+                callAddToWishlistApi(binding.mainRl);
             }
 
         });
@@ -521,12 +476,12 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         chbSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isChecked){
-                    isChecked=false;
+                if (isChecked) {
+                    isChecked = false;
                     chbSelect.setButtonDrawable(ContextCompat.getDrawable(ProductListActivity.this, R.drawable.sale_box));
 
-                }else {
-                    isChecked=true;
+                } else {
+                    isChecked = true;
                     chbSelect.setButtonDrawable(ContextCompat.getDrawable(ProductListActivity.this, R.drawable.new_rect));
                 }
             }
@@ -545,15 +500,13 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         binding.tvProductName.setText(subcatname);
 
 
-        if(SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false")||
+        if (SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false") ||
                 SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) {
 
-            userId="";
+            userId = "";
 
-        }
-        else
-        {
-            userId=SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.USER_ID);
+        } else {
+            userId = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.USER_ID);
         }
     }
 
@@ -568,7 +521,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         LoginManager.getInstance().setLoginBehavior(LoginBehavior.NATIVE_WITH_FALLBACK);
         //it will not take cache Email
         LoginManager.getInstance().logOut(); //log out
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList( "public_profile", "email"));
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
     }
 
     @Override
@@ -591,13 +544,13 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     private void handleSignInResult(Task<GoogleSignInAccount> task) {
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
-            String profilePhoto=account.getPhotoUrl().toString();
+            String profilePhoto = account.getPhotoUrl().toString();
             String email = account.getEmail();
             String gid = account.getId();
             String name = account.getGivenName();
 
             if (HelperClass.showInternetAlert(ProductListActivity.this)) {
-                callLoginApiForSocial(name, gid, email,profilePhoto,binding.mainRl,"Google");
+                callLoginApiForSocial(name, gid, email, profilePhoto, binding.mainRl, "Google");
             }
 
             // Signed in successfully,show authenticated UI.
@@ -608,15 +561,15 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    private void callLoginApiForSocial(final String name, final String fbid, final String email,final String profilePhoto,final View view,final String socialType) {
+    private void callLoginApiForSocial(final String name, final String fbid, final String email, final String profilePhoto, final View view, final String socialType) {
         String deviceToken = SharedPreferenceWriter.getInstance(ProductListActivity.this).getString(SharedPreferenceKey.DEVICE_TOKEN);
 
-        final MyDialog myDialog=new MyDialog(ProductListActivity.this);
+        final MyDialog myDialog = new MyDialog(ProductListActivity.this);
         myDialog.showDialog();
         Retrofit retrofit = ApiClient.getClient();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 
-        Call<SocialLoginModel> call = apiInterface.socialLogin(fbid, socialType,deviceToken,"android", name, email,profilePhoto,"",
+        Call<SocialLoginModel> call = apiInterface.socialLogin(fbid, socialType, deviceToken, "android", name, email, profilePhoto, "",
                 SharedPreferenceWriter.getInstance(ProductListActivity.this).getString(GlobalVariables.product_id),
                 SharedPreferenceWriter.getInstance(ProductListActivity.this).getString(GlobalVariables.color_name),
                 SharedPreferenceWriter.getInstance(ProductListActivity.this).getString(GlobalVariables.quantity),
@@ -646,11 +599,10 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                             finish();
+                        } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
+                            CommonUtil.setUpSnackbarMessage(binding.mainRl, response.body().getMessage(), ProductListActivity.this);
                         }
-                        else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
-                            CommonUtil.setUpSnackbarMessage(binding.mainRl,response.body().getMessage(),ProductListActivity.this);
-                        }
-                } else {
+                    } else {
                         myDialog.hideDialog();
                         final Snackbar mSnackbar = Snackbar.make(view, R.string.service_error, Snackbar.LENGTH_INDEFINITE);
                         mSnackbar.setActionTextColor(ContextCompat.getColor(ProductListActivity.this, R.color.colorWhite));
@@ -658,7 +610,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                             @Override
                             public void onClick(View view) {
 
-                                callLoginApiForSocial(name, fbid, email, profilePhoto,view, socialType);
+                                callLoginApiForSocial(name, fbid, email, profilePhoto, view, socialType);
                                 Snackbar snackbar = Snackbar.make(view, "Please wait!", Snackbar.LENGTH_LONG);
                                 snackbar.getView().setBackground(ContextCompat.getDrawable(ProductListActivity.this, R.drawable.drawable_gradient_line));
                                 snackbar.show();
@@ -667,7 +619,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                         mSnackbar.getView().setBackground(ContextCompat.getDrawable(ProductListActivity.this, R.drawable.drawable_gradient_line));
                         mSnackbar.show();
 
-                    }}
+                    }
+                }
             }
 
             @Override
@@ -681,52 +634,31 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onBackPressed() {
 
-        Log.e("comeFrom",comeFrom);
+        Log.e("comeFrom", comeFrom);
 
 
-        if(type.equalsIgnoreCase(GlobalVariables.flashSale))
-        {
-           finish();
-           startActivity(new Intent(this,MenActivity.class).putExtra("filterData",SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.section_name)).putExtra("from",getIntent().getStringExtra(GlobalVariables.section_name)));
-        }
-        else if (comeFrom.equalsIgnoreCase("FilterProductListActivity"))
-        {
+        if (type.equalsIgnoreCase(GlobalVariables.flashSale)) {
+            finish();
+            startActivity(new Intent(this, MenActivity.class).putExtra("filterData", SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.section_name)).putExtra("from", getIntent().getStringExtra(GlobalVariables.section_name)));
+        } else if (comeFrom.equalsIgnoreCase("FilterProductListActivity")) {
             startActivity(new Intent(this, MainActivity.class).putExtra("from", "HomeFragment"));
-        }
-        else if(comeFrom.equalsIgnoreCase(GlobalVariables.ProductDetailsActivityFinal))
-        {
+        } else if (comeFrom.equalsIgnoreCase(GlobalVariables.ProductDetailsActivityFinal)) {
             finish();
-        }
-        else if(comeFrom.equalsIgnoreCase("ThreeLevelListAdapter"))
-        {
+        } else if (comeFrom.equalsIgnoreCase("ThreeLevelListAdapter")) {
             finish();
-        }
-        else if(comeFrom.equalsIgnoreCase("MenBannerAdapter"))
-        {
+        } else if (comeFrom.equalsIgnoreCase("MenBannerAdapter")) {
             finish();
-        }
-        else if(comeFrom.equalsIgnoreCase("MenSectionShopByOccassionAdapter"))
-        {
+        } else if (comeFrom.equalsIgnoreCase("MenSectionShopByOccassionAdapter")) {
             finish();
-        }
-        else if(comeFrom.equalsIgnoreCase("MenActivity"))
-        {
+        } else if (comeFrom.equalsIgnoreCase("MenActivity")) {
             finish();
-        }
-        else if(comeFrom.equalsIgnoreCase(GlobalVariables.flashSale))
-        {
+        } else if (comeFrom.equalsIgnoreCase(GlobalVariables.flashSale)) {
             finish();
-        }
-        else if(comeFrom.equalsIgnoreCase("ShopByThemeAdapter"))
-        {
+        } else if (comeFrom.equalsIgnoreCase("ShopByThemeAdapter")) {
             finish();
-        }
-        else if(comeFrom.equalsIgnoreCase(GlobalVariables.ProductDetailsActivityFinal))
-        {
+        } else if (comeFrom.equalsIgnoreCase(GlobalVariables.ProductDetailsActivityFinal)) {
             finish();
-        }
-        else
-        {
+        } else {
             startActivity(new Intent(this, MainActivity.class).putExtra("from", "HomeFragment"));
         }
     }
@@ -734,14 +666,14 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     private void callAddToWishlistApi(final View view) {
 
         String token = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.TOKEN);
-        String userId= SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.USER_ID);
+        String userId = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.USER_ID);
 
-        final MyDialog myDialog=new MyDialog(this);
+        final MyDialog myDialog = new MyDialog(this);
         myDialog.showDialog();
         Retrofit retrofit = ApiClient.getClient();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 
-        Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(token,userId,productId);
+        Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(token, userId, productId);
         call.enqueue(new Callback<MyWishListResponse>() {
             @Override
             public void onResponse(Call<MyWishListResponse> call, Response<MyWishListResponse> response) {
@@ -750,25 +682,25 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                     myDialog.hideDialog();
                     if (response.body().getStatus().equals("SUCCESS")) {
 
-                        callProductListApi("",binding.mainRl);
-                    } else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
+                        callProductListApi("", binding.mainRl);
+                    } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
                         Toast.makeText(ProductListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     myDialog.hideDialog();
                     final Snackbar mSnackbar = Snackbar.make(view, R.string.service_error, Snackbar.LENGTH_INDEFINITE);
-                    mSnackbar.setActionTextColor(ContextCompat.getColor(ProductListActivity.this,R.color.colorWhite));
+                    mSnackbar.setActionTextColor(ContextCompat.getColor(ProductListActivity.this, R.color.colorWhite));
                     mSnackbar.setAction("RETRY", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
                             callAddToWishlistApi(view);
-                            Snackbar snackbar=Snackbar.make(view,"Please wait!",Snackbar.LENGTH_LONG);
-                            snackbar.getView().setBackground(ContextCompat.getDrawable(ProductListActivity.this,R.drawable.drawable_gradient_line));
+                            Snackbar snackbar = Snackbar.make(view, "Please wait!", Snackbar.LENGTH_LONG);
+                            snackbar.getView().setBackground(ContextCompat.getDrawable(ProductListActivity.this, R.drawable.drawable_gradient_line));
                             snackbar.show();
                         }
                     });
-                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(ProductListActivity.this,R.drawable.drawable_gradient_line));
+                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(ProductListActivity.this, R.drawable.drawable_gradient_line));
                     mSnackbar.show();
                 }
             }
@@ -800,8 +732,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
             case R.id.ivWishList:
 
-                if (SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false")||
-                    SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) {
+                if (SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false") ||
+                        SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) {
 
                     openLoginSignUpBottomSheetWhenUserNotLogedIn();
 
@@ -822,19 +754,19 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         bottomSheetDialog.setContentView(view);
         bottomSheetDialog.getWindow().findViewById(R.id.bottom_sheet).setBackgroundResource(android.R.color.transparent);
 
-        TextView tvWhatsNew=view.findViewById(R.id.tvWhatsNew);
-        TextView tvPopularity=view.findViewById(R.id.tvPopularity);
-        TextView tvDiscount=view.findViewById(R.id.tvDiscount);
-        TextView tvLowToHigh=view.findViewById(R.id.tvLowToHigh);
-        TextView tvHighToLow=view.findViewById(R.id.tvHighToLow);
-        TextView tvDeliveryTime=view.findViewById(R.id.tvDeliveryTime);
+        TextView tvWhatsNew = view.findViewById(R.id.tvWhatsNew);
+        TextView tvPopularity = view.findViewById(R.id.tvPopularity);
+        TextView tvDiscount = view.findViewById(R.id.tvDiscount);
+        TextView tvLowToHigh = view.findViewById(R.id.tvLowToHigh);
+        TextView tvHighToLow = view.findViewById(R.id.tvHighToLow);
+        TextView tvDeliveryTime = view.findViewById(R.id.tvDeliveryTime);
 
         tvWhatsNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                sortBy="new";
-                callProductListApi(sortBy,binding.mainRl);
+                sortBy = "new";
+                callProductListApi(sortBy, binding.mainRl);
                 bottomSheetDialog.dismiss();
             }
         });
@@ -844,8 +776,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onClick(View view) {
 
-                sortBy="popularity";
-                callProductListApi(sortBy,binding.mainRl);
+                sortBy = "popularity";
+                callProductListApi(sortBy, binding.mainRl);
                 bottomSheetDialog.dismiss();
             }
         });
@@ -855,8 +787,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onClick(View view) {
 
-                sortBy="discount";
-                callProductListApi(sortBy,binding.mainRl);
+                sortBy = "discount";
+                callProductListApi(sortBy, binding.mainRl);
                 bottomSheetDialog.dismiss();
             }
         });
@@ -866,8 +798,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onClick(View view) {
 
-                sortBy="low_to_high";
-                callProductListApi(sortBy,binding.mainRl);
+                sortBy = "low_to_high";
+                callProductListApi(sortBy, binding.mainRl);
                 bottomSheetDialog.dismiss();
             }
         });
@@ -877,8 +809,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onClick(View view) {
 
-                sortBy="high_to_low";
-                callProductListApi(sortBy,binding.mainRl);
+                sortBy = "high_to_low";
+                callProductListApi(sortBy, binding.mainRl);
                 bottomSheetDialog.dismiss();
             }
         });
@@ -888,8 +820,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onClick(View view) {
 
-                sortBy="delivery_time";
-                callProductListApi(sortBy,binding.mainRl);
+                sortBy = "delivery_time";
+                callProductListApi(sortBy, binding.mainRl);
                 bottomSheetDialog.dismiss();
             }
         });
@@ -898,98 +830,75 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void filterProduct() {
-        String types="";
-        if(comeFrom.equalsIgnoreCase(GlobalVariables.flashSale) || type.equalsIgnoreCase(GlobalVariables.flashSale))
-        {
-            subcatid="0";
-            types=GlobalVariables.flashSale;
-            callingIntent("ProductListActivity",binding.tvProductName.getText().toString(),subcatid,types);
-        }
-        else if(comeFrom.equalsIgnoreCase("ThreeLevelListAdapter")) {
-            subcatid=subsubcatid;
-            types="subsubcat";
-            callingIntent("ThreeLevelListAdapter",binding.tvProductName.getText().toString(),subcatid,types);
-        }
-        else if(comeFrom.equalsIgnoreCase("SearchAdapter"))
-        {
-            subcatid=subsubcatid;
-            types="subsubcat";
-            callingIntent(comeFrom,binding.tvProductName.getText().toString(),subcatid,types);
-        }
-        else if(comeFrom.equalsIgnoreCase("BrandInFocusAdapter"))
-        {
-            subcatid="";
-            types=subcatname;
-            callingIntent(comeFrom,binding.tvProductName.getText().toString(),subcatid,types);
+        String types = "";
+        if (comeFrom.equalsIgnoreCase(GlobalVariables.flashSale) || type.equalsIgnoreCase(GlobalVariables.flashSale)) {
+            subcatid = "0";
+            types = GlobalVariables.flashSale;
+            callingIntent("ProductListActivity", binding.tvProductName.getText().toString(), subcatid, types);
+        } else if (comeFrom.equalsIgnoreCase("ThreeLevelListAdapter")) {
+            subcatid = subsubcatid;
+            types = "subsubcat";
+            callingIntent("ThreeLevelListAdapter", binding.tvProductName.getText().toString(), subcatid, types);
+        } else if (comeFrom.equalsIgnoreCase("SearchAdapter")) {
+            subcatid = subsubcatid;
+            types = "subsubcat";
+            callingIntent(comeFrom, binding.tvProductName.getText().toString(), subcatid, types);
+        } else if (comeFrom.equalsIgnoreCase("BrandInFocusAdapter")) {
+            subcatid = "";
+            types = subcatname;
+            callingIntent(comeFrom, binding.tvProductName.getText().toString(), subcatid, types);
 
-        }else if(comeFrom.equalsIgnoreCase("FilteredBrandInFocus"))
-        {
-            subcatid="";
-            types=subcatname;
-            callingIntent("BrandInFocusAdapter",binding.tvProductName.getText().toString(),subcatid,types);
+        } else if (comeFrom.equalsIgnoreCase("FilteredBrandInFocus")) {
+            subcatid = "";
+            types = subcatname;
+            callingIntent("BrandInFocusAdapter", binding.tvProductName.getText().toString(), subcatid, types);
 
-        }
-        else if(comeFrom.equalsIgnoreCase(GlobalVariables.ProductDetailsActivityFinal))
-        {
+        } else if (comeFrom.equalsIgnoreCase(GlobalVariables.ProductDetailsActivityFinal)) {
 
-            types="subcat";
-            callingIntent(comeFrom,binding.tvProductName.getText().toString(),subcatid,types);
-        }else if(comeFrom.equalsIgnoreCase("ShopByThemeAdapter"))
-        {
-            types="theme";
-            subcatid=theme_id;
-            callingIntent(comeFrom,binding.tvProductName.getText().toString(),subcatid,types);
+            types = "subcat";
+            callingIntent(comeFrom, binding.tvProductName.getText().toString(), subcatid, types);
+        } else if (comeFrom.equalsIgnoreCase("ShopByThemeAdapter")) {
+            types = "theme";
+            subcatid = theme_id;
+            callingIntent(comeFrom, binding.tvProductName.getText().toString(), subcatid, types);
 
-        }
-        else if(comeFrom.equalsIgnoreCase("MenSectionShopByOccassionAdapter"))
-        {
-            types="subsubcat";
-            callingIntent("MenSectionShopByOccassionAdapter",binding.tvProductName.getText().toString(),subsubcatid,types);
-        }
-        else if(comeFrom.equalsIgnoreCase("AutoSlideViewPagerBannerAdapter"))
-        {
-            types="subsubcat";
-            callingIntent("AutoSlideViewPagerBannerAdapter",binding.tvProductName.getText().toString(),subsubcatid,types);
-        }else if(comeFrom.equalsIgnoreCase(MyFirebaseMessagingService.class.getSimpleName()))
-        {
-            types="subsubcat";
-            callingIntent(MyFirebaseMessagingService.class.getSimpleName(),binding.tvProductName.getText().toString(),subsubcatid,types);
+        } else if (comeFrom.equalsIgnoreCase("MenSectionShopByOccassionAdapter")) {
+            types = "subsubcat";
+            callingIntent("MenSectionShopByOccassionAdapter", binding.tvProductName.getText().toString(), subsubcatid, types);
+        } else if (comeFrom.equalsIgnoreCase("AutoSlideViewPagerBannerAdapter")) {
+            types = "subsubcat";
+            callingIntent("AutoSlideViewPagerBannerAdapter", binding.tvProductName.getText().toString(), subsubcatid, types);
+        } else if (comeFrom.equalsIgnoreCase(MyFirebaseMessagingService.class.getSimpleName())) {
+            types = "subsubcat";
+            callingIntent(MyFirebaseMessagingService.class.getSimpleName(), binding.tvProductName.getText().toString(), subsubcatid, types);
 
-        }
-        else {
-            types="subcat";
-            callingIntent("ProductListActivity",binding.tvProductName.getText().toString(),subcatid,types);
+        } else {
+            types = "subcat";
+            callingIntent("ProductListActivity", binding.tvProductName.getText().toString(), subcatid, types);
         }
 
     }
 
-    private void callingIntent(String from, String section_name, String subcatid,String type) {
-        Intent intent=new Intent(this,FilterProductListActivity.class);
-        intent.putExtra("from",from);
-        intent.putExtra(GlobalVariables.section_name,section_name);
-        intent.putExtra(GlobalVariables.subcatid,subcatid);
-        Log.e("type:",type);
-        intent.putExtra(GlobalVariables.type,type);
-        if(from.equalsIgnoreCase("SearchAdapter"))
-        {
-            intent.putExtra(GlobalVariables.catid,catid);
-            intent.putExtra(GlobalVariables.filter_data,getIntent().getStringExtra(GlobalVariables.filter_data));
+    private void callingIntent(String from, String section_name, String subcatid, String type) {
+        Intent intent = new Intent(this, FilterProductListActivity.class);
+        intent.putExtra("from", from);
+        intent.putExtra(GlobalVariables.section_name, section_name);
+        intent.putExtra(GlobalVariables.subcatid, subcatid);
+        Log.e("type:", type);
+        intent.putExtra(GlobalVariables.type, type);
+        if (from.equalsIgnoreCase("SearchAdapter")) {
+            intent.putExtra(GlobalVariables.catid, catid);
+            intent.putExtra(GlobalVariables.filter_data, getIntent().getStringExtra(GlobalVariables.filter_data));
 
-        }
-        else if(comeFrom.equalsIgnoreCase("ShopByThemeAdapter"))
-        {
-            intent.putExtra(GlobalVariables.theme,theme);
+        } else if (comeFrom.equalsIgnoreCase("ShopByThemeAdapter")) {
+            intent.putExtra(GlobalVariables.theme, theme);
 
-        }
-        else if(comeFrom.equalsIgnoreCase("MenSectionShopByOccassionAdapter"))
-        {
-            intent.putExtra(GlobalVariables.subsubcatid,subsubcatid);
-        }else if(comeFrom.equalsIgnoreCase("AutoSlideViewPagerBannerAdapter"))
-        {
-            intent.putExtra(GlobalVariables.subsubcatid,subsubcatid);
-        }else if(comeFrom.equalsIgnoreCase(MyFirebaseMessagingService.class.getSimpleName()))
-        {
-            intent.putExtra(GlobalVariables.subsubcatid,subcatid);
+        } else if (comeFrom.equalsIgnoreCase("MenSectionShopByOccassionAdapter")) {
+            intent.putExtra(GlobalVariables.subsubcatid, subsubcatid);
+        } else if (comeFrom.equalsIgnoreCase("AutoSlideViewPagerBannerAdapter")) {
+            intent.putExtra(GlobalVariables.subsubcatid, subsubcatid);
+        } else if (comeFrom.equalsIgnoreCase(MyFirebaseMessagingService.class.getSimpleName())) {
+            intent.putExtra(GlobalVariables.subsubcatid, subcatid);
         }
         startActivity(intent);
 

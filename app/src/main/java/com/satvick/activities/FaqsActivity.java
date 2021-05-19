@@ -29,7 +29,7 @@ public class FaqsActivity extends AppCompatActivity implements View.OnClickListe
         webView = findViewById(R.id.webview);
         ivBack = findViewById(R.id.ivBack);
 
-        url = "http://mobuloustech.com/yodapi/faq1";
+        url = "https://soulahe.com/faq1";
 
         webView.setWebViewClient(new CustomWebViewClient());
         WebSettings webSetting = webView.getSettings();

@@ -51,4 +51,14 @@ public class NotificationListResponse {
     public void setRequestKey(String requestKey) {
         this.requestKey = requestKey;
     }
+
+    @Override
+    public String toString() {
+        return "NotificationListResponse{" +
+                "status='" + status + '\'' +
+                ", message='" + message + '\'' +
+                ", requestKey='" + requestKey + '\'' +
+                ", notficationlist=" + notficationlist +
+                '}';
+    }
 }

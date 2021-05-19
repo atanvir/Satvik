@@ -8,7 +8,7 @@
 
     <color name="colorBlue">#003D78</color>
     <color name="colorWhite">#ffffff</color>
-    <color name="colorBlack">#0e433e </color>
+    <color name="colorBlack">#0e433e</color>
     <color name="colorLightGrey">#D6D6D6</color>
     <color name="colorLightGrey2">#5CD6D6D6</color>
     <color name="colorLoginButtonEnd">#0e433e</color>
@@ -25,6 +25,8 @@
     <color name="background">#f4f4f4</color>
     <color name="categoriesText">#303030</color>
     <color name="colorPureBlack">#c0896d</color>
+    <color name="odd_cat_color">#c0896d</color>
+
     <color name="colorForgotPass">#525252</color>
     <color name="colorExremeLite">#8F9090</color>
     <color name="colorLoginSignupText">#4b4c4d</color>
@@ -40,7 +42,6 @@
 
 
     // appbar color white
-
 
 
 </resources>

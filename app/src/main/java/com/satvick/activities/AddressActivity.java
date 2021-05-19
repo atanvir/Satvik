@@ -31,9 +31,7 @@ import retrofit2.Retrofit;
 
 public class AddressActivity extends AppCompatActivity implements View.OnClickListener {
     ActivityAddNewAddressBinding binding;
-
     List<ViewAddressModel.Viewaddress> viewAddressModelList = new ArrayList<>();
-
     AddNewAddressAdapter addNewAddressAdapter;
 
     @Override

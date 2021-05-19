@@ -62,9 +62,9 @@
                             android:src="@drawable/savedicon8" />
 
                         <RelativeLayout
-                            android:layout_toRightOf="@+id/ivWishlist"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/ivWishlist">
 
                             <ImageView
                                 android:id="@+id/ivAddToBagOrCart"
@@ -74,16 +74,16 @@
                                 android:src="@drawable/bag_icon" />
 
                             <TextView
-                                android:visibility="gone"
                                 android:id="@+id/notification_badge"
                                 android:layout_width="@dimen/dp_16"
                                 android:layout_height="@dimen/dp_16"
-                                android:gravity="center"
                                 android:layout_marginLeft="@dimen/dp_20"
                                 android:background="@drawable/drawable_solid_circle_red"
+                                android:gravity="center"
                                 android:padding="@dimen/dp_0"
                                 android:textColor="@color/colorWhite"
                                 android:textSize="10sp"
+                                android:visibility="gone"
                                 tools:text="9+" />
                         </RelativeLayout>
 
@@ -104,11 +104,11 @@
 
 
         <ScrollView
-            android:layout_below="@+id/layout"
             android:id="@+id/scrollView"
-            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@+id/layout"
+            android:visibility="gone">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -125,6 +125,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_400"
                         android:layout_marginTop="@dimen/dp_2" />
+
 
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/indicator"
@@ -168,6 +169,7 @@
                         app:font="@{`lato_regular`}" />
 
                     <LinearLayout
+                        android:id="@+id/pro_price_lbl"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/dp_4"
@@ -202,6 +204,18 @@
                             android:textSize="14dp"
                             app:font="@{`lato_regular`}" />
                     </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/pro_price_lbl"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:text="MORE INFORMATION"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        app:font="@{`lato_regular`}" />
+
+
                     <!--<TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -285,18 +299,18 @@
                     android:id="@+id/rlT"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:visibility="visible"
                     android:layout_below="@+id/product_detail_view22"
                     android:layout_marginStart="@dimen/dp_10"
-                    android:layout_marginEnd="@dimen/dp_10">
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:visibility="visible">
 
                     <ImageView
                         android:id="@+id/ivOffers"
                         android:layout_width="4dp"
                         android:layout_height="@dimen/dp_80"
-                        android:visibility="gone"
-                        android:src="@drawable/drawable_rectangle_logout_solid_btn" />
+                        android:src="@drawable/drawable_rectangle_logout_solid_btn"
+                        android:visibility="gone" />
 
                     <RelativeLayout
                         android:id="@+id/rlOffer"
@@ -327,14 +341,12 @@
                             android:gravity="start">
 
 
-
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/offerRV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                                android:orientation="vertical">
-
+                                android:orientation="vertical"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
 
 
                             </androidx.recyclerview.widget.RecyclerView>
@@ -348,95 +360,94 @@
                 <!--//offers-->
 
 
-
                 <!--<RelativeLayout-->
-                    <!--android:id="@+id/rld"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_below="@+id/product_detail_view22"-->
-                    <!--android:layout_marginLeft="@dimen/dp_10"-->
-                    <!--android:layout_marginTop="@dimen/dp_10"-->
-                    <!--android:layout_marginRight="@dimen/dp_10">-->
+                <!--android:id="@+id/rld"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/product_detail_view22"-->
+                <!--android:layout_marginLeft="@dimen/dp_10"-->
+                <!--android:layout_marginTop="@dimen/dp_10"-->
+                <!--android:layout_marginRight="@dimen/dp_10">-->
 
-                    <!--<LinearLayout-->
-                        <!--android:id="@+id/ll"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:orientation="horizontal">-->
+                <!--<LinearLayout-->
+                <!--android:id="@+id/ll"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
 
-                        <!--<TextView-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:text="Offer:"-->
-                            <!--android:textColor="@color/colorLogOut"-->
-                            <!--android:textSize="14dp"-->
-                            <!--app:font="@{`lato_regular`}" />-->
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Offer:"-->
+                <!--android:textColor="@color/colorLogOut"-->
+                <!--android:textSize="14dp"-->
+                <!--app:font="@{`lato_regular`}" />-->
 
-                        <!--<TextView-->
-                            <!--android:id="@+id/offerOneText"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:text="Lorem Ipsum is simply dummy text of the"-->
-                            <!--android:textColor="@color/colorBlack"-->
-                            <!--android:textSize="14dp"-->
-                            <!--app:font="@{`lato_regular`}" />-->
+                <!--<TextView-->
+                <!--android:id="@+id/offerOneText"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Lorem Ipsum is simply dummy text of the"-->
+                <!--android:textColor="@color/colorBlack"-->
+                <!--android:textSize="14dp"-->
+                <!--app:font="@{`lato_regular`}" />-->
 
-                    <!--</LinearLayout>-->
+                <!--</LinearLayout>-->
 
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/ll"-->
-                        <!--android:visibility="gone"-->
-                        <!--android:text="printing and typesetting industry"-->
-                        <!--android:textColor="@color/colorBlack"-->
-                        <!--android:textSize="14dp"-->
-                        <!--app:font="@{`lato_regular`}" />-->
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/ll"-->
+                <!--android:visibility="gone"-->
+                <!--android:text="printing and typesetting industry"-->
+                <!--android:textColor="@color/colorBlack"-->
+                <!--android:textSize="14dp"-->
+                <!--app:font="@{`lato_regular`}" />-->
                 <!--</RelativeLayout>-->
 
                 <!--<RelativeLayout-->
-                    <!--android:id="@+id/rlll"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_below="@+id/rld"-->
-                    <!--android:layout_marginLeft="@dimen/dp_10"-->
-                    <!--android:layout_marginTop="@dimen/dp_10"-->
-                    <!--android:layout_marginRight="@dimen/dp_10">-->
+                <!--android:id="@+id/rlll"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/rld"-->
+                <!--android:layout_marginLeft="@dimen/dp_10"-->
+                <!--android:layout_marginTop="@dimen/dp_10"-->
+                <!--android:layout_marginRight="@dimen/dp_10">-->
 
-                    <!--<LinearLayout-->
-                        <!--android:id="@+id/llc"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:orientation="horizontal">-->
+                <!--<LinearLayout-->
+                <!--android:id="@+id/llc"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
 
-                        <!--<TextView-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:text="Offer:"-->
-                            <!--android:textColor="@color/colorLogOut"-->
-                            <!--android:textSize="14dp"-->
-                            <!--app:font="@{`lato_regular`}" />-->
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Offer:"-->
+                <!--android:textColor="@color/colorLogOut"-->
+                <!--android:textSize="14dp"-->
+                <!--app:font="@{`lato_regular`}" />-->
 
-                        <!--<TextView-->
-                            <!--android:id="@+id/offerTwoText"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:text="Lorem Ipsum is simply dummy text of the"-->
-                            <!--android:textColor="@color/colorBlack"-->
-                            <!--android:textSize="14dp"-->
-                            <!--app:font="@{`lato_regular`}" />-->
+                <!--<TextView-->
+                <!--android:id="@+id/offerTwoText"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Lorem Ipsum is simply dummy text of the"-->
+                <!--android:textColor="@color/colorBlack"-->
+                <!--android:textSize="14dp"-->
+                <!--app:font="@{`lato_regular`}" />-->
 
-                    <!--</LinearLayout>-->
+                <!--</LinearLayout>-->
 
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/llc"-->
-                        <!--android:text="printing and typesetting industry"-->
-                        <!--android:visibility="gone"-->
-                        <!--android:textColor="@color/colorBlack"-->
-                        <!--android:textSize="14dp"-->
-                        <!--app:font="@{`lato_regular`}" />-->
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/llc"-->
+                <!--android:text="printing and typesetting industry"-->
+                <!--android:visibility="gone"-->
+                <!--android:textColor="@color/colorBlack"-->
+                <!--android:textSize="14dp"-->
+                <!--app:font="@{`lato_regular`}" />-->
                 <!--</RelativeLayout>-->
                 <!--//offers-->
 
@@ -531,9 +542,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="SIZE CHART"
-                            android:visibility="gone"
                             android:textColor="@color/colorLogOut"
                             android:textSize="14dp"
+                            android:visibility="gone"
                             app:font="@{`lato_regular`}" />
 
                     </LinearLayout>
@@ -543,20 +554,20 @@
                         android:id="@+id/recyclerSize"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:layout_marginTop="@dimen/dp_10"
-                        android:layout_marginBottom="@dimen/dp_10"/>
+                        android:layout_marginBottom="@dimen/dp_10"
+                        android:orientation="horizontal" />
 
 
                     <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:gravity="center"-->
-                        <!--android:text="Color"-->
-                        <!--android:textAllCaps="true"-->
-                        <!--android:textColor="@color/colorBlack"-->
-                        <!--android:textSize="14dp"-->
-                        <!--app:font="@{`lato_regular`}" />-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="Color"-->
+                    <!--android:textAllCaps="true"-->
+                    <!--android:textColor="@color/colorBlack"-->
+                    <!--android:textSize="14dp"-->
+                    <!--app:font="@{`lato_regular`}" />-->
 
                     <LinearLayout
                         android:id="@+id/llQuantity"
@@ -573,8 +584,7 @@
                             android:text="Color"
                             android:textColor="@color/colorBlack"
                             android:textSize="14dp"
-                            app:font="@{`lato_regular`}"/>
-
+                            app:font="@{`lato_regular`}" />
 
 
                     </LinearLayout>
@@ -583,9 +593,9 @@
                         android:id="@+id/recyclerColor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:layout_marginTop="@dimen/dp_10"
-                        android:layout_marginBottom="@dimen/dp_10"/>
+                        android:layout_marginBottom="@dimen/dp_10"
+                        android:orientation="horizontal" />
 
 
                     <LinearLayout
@@ -598,8 +608,8 @@
                             android:id="@+id/selectQtyText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Select Quantity "
                             android:layout_marginTop="@dimen/dp_10"
+                            android:text="Select Quantity "
                             android:textColor="@color/colorBlack"
                             android:textSize="14dp"
                             app:font="@{`lato_regular`}" />
@@ -628,10 +638,7 @@
                         </LinearLayout>
 
 
-
-
                     </LinearLayout>
-
 
 
                     <!--wish list add to bag-->
@@ -713,9 +720,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/layout_productdetail4"
-                    android:text="Expected Delivery In 4 To 7 Days"
                     android:layout_marginStart="@dimen/dp_12"
                     android:layout_marginTop="@dimen/dp_12"
+                    android:text="Expected Delivery In 4 To 7 Days"
                     android:textColor="@color/colorLogOut"
                     android:textSize="14dp"
                     app:font="@{`lato_bold`}" />
@@ -734,34 +741,32 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/dp_10"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         android:orientation="vertical"
-                        />
-
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 
                     <View
                         android:id="@+id/view21"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:visibility="gone"
+                        android:layout_below="@+id/productDesRv"
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="@dimen/_14sdp"
-                        android:layout_below="@+id/productDesRv"
-                        android:background="@color/colorLightGrey" />
+                        android:background="@color/colorLightGrey"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/text_productdetail_6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_14sdp"
-                        android:layout_marginBottom="@dimen/_10sdp"
                         android:layout_marginStart="@dimen/_14sdp"
+                        android:layout_marginTop="@dimen/_14sdp"
                         android:layout_marginEnd="@dimen/_14sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
                         android:text="VIEW SIMILAR"
-                        android:visibility="gone"
                         android:textColor="@color/colorPureBlack"
                         android:textSize="14dp"
+                        android:visibility="gone"
                         app:font="@{`lato_bold`}" />
 
 
@@ -773,10 +778,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/layout_product_detail5"
-                    android:layout_marginBottom="@dimen/dp_10"
                     android:layout_marginStart="@dimen/dp_10"
-                    android:visibility="gone"
-                    android:orientation="vertical">
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -785,17 +790,17 @@
                         android:layout_height="wrap_content" />
 
 
-
                 </LinearLayout>
+
                 <View
                     android:id="@+id/view12"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:visibility="visible"
                     android:layout_below="@+id/layout_product_detail6"
                     android:layout_marginStart="@dimen/dp_12"
                     android:layout_marginEnd="@dimen/dp_12"
-                    android:background="@color/colorLightGrey" />
+                    android:background="@color/colorLightGrey"
+                    android:visibility="visible" />
 
                 <LinearLayout
                     android:id="@+id/layout_product_detail7"
@@ -803,10 +808,10 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/layout_product_detail6"
                     android:layout_marginStart="14dp"
-                    android:visibility="gone"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:layout_marginEnd="14dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -843,9 +848,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/layout_product_detail7"
-                    android:visibility="gone"
                     android:layout_margin="14dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -881,11 +886,11 @@
                     android:id="@+id/layout_product_detail9"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     android:layout_below="@+id/layout_product_detail8"
                     android:layout_marginStart="14dp"
                     android:layout_marginEnd="@dimen/dp_12"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -931,9 +936,9 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/dp_12"
                         android:text="CUSTOMER ALSO LIKED"
-                        android:visibility="gone"
                         android:textColor="@color/colorBlack"
                         android:textSize="14dp"
+                        android:visibility="gone"
                         app:font="@{`lato_bold`}" />
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -952,22 +957,13 @@
                     android:layout_marginBottom="@dimen/dp_10"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp_12"
-                        android:layout_marginEnd="@dimen/dp_12"
-                        android:text="MORE INFORMATION"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="14dp"
-                        app:font="@{`lato_regular`}" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/dp_12"
-                        android:layout_marginEnd="@dimen/dp_12"
-                        android:layout_marginTop="@dimen/dp_5">
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:layout_marginEnd="@dimen/dp_12">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -991,8 +987,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/dp_12"
-                        android:layout_marginEnd="@dimen/dp_12"
-                        android:layout_marginTop="@dimen/dp_5">
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:layout_marginEnd="@dimen/dp_12">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -1024,19 +1020,19 @@
             android:id="@+id/llButtonStart"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:visibility="visible"
+            android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_marginRight="@dimen/dp_10"
             android:background="@color/colorWhite"
-            android:layout_alignParentBottom="true">
+            android:visibility="visible">
 
             <LinearLayout
                 android:id="@+id/llAddToWishList"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/drawable_rectangle_grey_corner_1dp"
                 android:layout_marginEnd="@dimen/dp_10"
                 android:layout_weight="1"
+                android:background="@drawable/drawable_rectangle_grey_corner_1dp"
                 android:gravity="center">
 
                 <LinearLayout
@@ -1066,8 +1062,8 @@
                 android:id="@+id/llAddToBagOrCart"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/drawable_gradient_line_with_radius"
                 android:layout_weight="1"
+                android:background="@drawable/drawable_gradient_line_with_radius"
                 android:gravity="center">
 
                 <LinearLayout

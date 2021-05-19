@@ -34,4 +34,14 @@ public class CheckPhoneModel {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "CheckPhoneModel{" +
+                "requestKey='" + requestKey + '\'' +
+                ", message='" + message + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }
+

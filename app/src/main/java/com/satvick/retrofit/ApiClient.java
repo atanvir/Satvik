@@ -18,7 +18,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 //    public static final String BASE_URL = "https://mobuloustech.com/yodapi/api/";
-    public static final String BASE_URL = "http://54.237.193.27/api/";
+    //public static final String BASE_URL = "http://54.237.193.27/api/";
+    public static final String BASE_URL = "https://soulahe.com/api/";
+
 
     private static Retrofit retrofit = null;
 

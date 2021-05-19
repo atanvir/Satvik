@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.satvick.model.BannerBean;
 import com.squareup.picasso.Picasso;
 import com.satvick.R;
 import com.satvick.activities.ProductListActivity;
@@ -19,19 +20,15 @@ import com.satvick.utils.GlobalVariables;
 import java.util.List;
 
 public class AutoSlideViewPagerBannerAdapter extends PagerAdapter {
-
     private Context context;
-    List<HomeModel.Banner> bannersList;
-
-    public AutoSlideViewPagerBannerAdapter(Context context, List<HomeModel.Banner> bannersList) {
+    private List<BannerBean> list;
+    public AutoSlideViewPagerBannerAdapter(Context context, List<BannerBean> list) {
         this.context = context;
-        this.bannersList = bannersList;
+        this.list = list;
     }
 
     @Override
-    public int getCount() {
-        return bannersList.size();
-    }
+    public int getCount() { return list!=null?list.size():0; }
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
@@ -43,8 +40,7 @@ public class AutoSlideViewPagerBannerAdapter extends PagerAdapter {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.item_slider, null);
         ImageView linearLayout = view.findViewById(R.id.image_view_slider);
-
-        String imgUrl = bannersList.get(position).getImage();
+        String imgUrl = list.get(position).getImage();
         if (imgUrl != null && imgUrl.length() > 0) {
             Picasso.with(context).load(imgUrl).into(linearLayout);
         }
@@ -54,7 +50,7 @@ public class AutoSlideViewPagerBannerAdapter extends PagerAdapter {
 
                 Intent intent=new Intent(context,ProductListActivity.class);
                 intent.putExtra("from","AutoSlideViewPagerBannerAdapter");
-                intent.putExtra(GlobalVariables.subsubcatid,bannersList.get(position).getFilterData());
+                intent.putExtra(GlobalVariables.subsubcatid,list.get(position).getFilterData());
                 intent.putExtra(GlobalVariables.section_name,"Items");
                 context.startActivity(intent);
             }

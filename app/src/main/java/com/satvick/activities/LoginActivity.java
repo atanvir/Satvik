@@ -6,13 +6,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import javax.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.databinding.DataBindingUtil;
-
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -21,6 +14,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -69,6 +67,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Nullable;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -79,22 +79,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     ActivityLoginCustomBinding binding;
 
     String mEmailPhone = "", mPassword = "";
-    String regex ="^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*()\\-     _=+{}|?>.<,:;~`’]{6,}$";
+    String regex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*()\\-     _=+{}|?>.<,:;~`’]{6,}$";
 
     private FirebaseAuth mAuth;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallback;
     private String verificationCode = "";
     private PhoneAuthProvider.ForceResendingToken mResendToken;
 
-    private String comeFrom="";
-    private String commaSeparatedProductId="";
+    private String comeFrom = "";
+    private String commaSeparatedProductId = "";
 
     //for social login
     CallbackManager callbackManager;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 901;
-    String name="",fbid="",email="";
-
+    String name = "", fbid = "", email = "";
 
 
     @Override
@@ -138,7 +137,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         Intent intent = getIntent();
         if (intent != null) {
-            comeFrom=getIntent().getStringExtra("from");
+            comeFrom = getIntent().getStringExtra("from");
         }
     }
 
@@ -184,14 +183,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Log.v("response", response.toString());
                         // Application code
 
-                         name = object.optString("name");
-                         fbid = object.optString("id");
-                         email = object.optString("email");
+                        name = object.optString("name");
+                        fbid = object.optString("id");
+                        email = object.optString("email");
 
-                         String profilePhoto = "https://graph.facebook.com/"+fbid+"/picture?type=large";
+                        String profilePhoto = "https://graph.facebook.com/" + fbid + "/picture?type=large";
 
                         if (HelperClass.showInternetAlert(LoginActivity.this)) {
-                            callLoginApiForSocial(name,fbid,email,profilePhoto,binding.mainSv,"Facebook");
+                            callLoginApiForSocial(name, fbid, email, profilePhoto, binding.mainSv, "Facebook");
                         }
                     }
                 });
@@ -203,19 +202,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         request.executeAsync();
     }
 
-    private void callLoginApiForSocial(final String name, final String fbid, final String email,final String profilePhoto,final View view,final String socialType) {
+    private void callLoginApiForSocial(final String name, final String fbid, final String email, final String profilePhoto, final View view, final String socialType) {
 
         String deviceToken = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.DEVICE_TOKEN);
 
-        final MyDialog myDialog=new MyDialog(LoginActivity.this);
+        final MyDialog myDialog = new MyDialog(LoginActivity.this);
         myDialog.showDialog();
         Retrofit retrofit = ApiClient.getClient();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-        Call<SocialLoginModel> call = apiInterface.socialLogin(fbid, socialType,deviceToken,"android", name, email,profilePhoto,"",
-                                                                SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.product_id),
-                                                                SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.color_name),
-                                                                SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.quantity),
-                                                                SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.size));
+        Call<SocialLoginModel> call = apiInterface.socialLogin(fbid, socialType, deviceToken, "android", name, email, profilePhoto, "",
+                SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.product_id),
+                SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.color_name),
+                SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.quantity),
+                SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.size));
 
 
         call.enqueue(new Callback<SocialLoginModel>() {
@@ -241,25 +240,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
-                    }
-                     else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
-                        CommonUtil.setUpSnackbarMessage(binding.mainSv,response.body().getMessage(),LoginActivity.this);
+                    } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
+                        CommonUtil.setUpSnackbarMessage(binding.mainSv, response.body().getMessage(), LoginActivity.this);
                     }
                 } else {
                     myDialog.hideDialog();
                     final Snackbar mSnackbar = Snackbar.make(view, R.string.service_error, Snackbar.LENGTH_INDEFINITE);
-                    mSnackbar.setActionTextColor(ContextCompat.getColor(LoginActivity.this,R.color.colorWhite));
+                    mSnackbar.setActionTextColor(ContextCompat.getColor(LoginActivity.this, R.color.colorWhite));
                     mSnackbar.setAction("RETRY", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
-                            callLoginApiForSocial(name, fbid, email, profilePhoto,view,socialType);
-                            Snackbar snackbar=Snackbar.make(view,"Please wait!",Snackbar.LENGTH_LONG);
-                            snackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this,R.drawable.drawable_gradient_line));
+                            callLoginApiForSocial(name, fbid, email, profilePhoto, view, socialType);
+                            Snackbar snackbar = Snackbar.make(view, "Please wait!", Snackbar.LENGTH_LONG);
+                            snackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this, R.drawable.drawable_gradient_line));
                             snackbar.show();
                         }
                     });
-                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this,R.drawable.drawable_gradient_line));
+                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this, R.drawable.drawable_gradient_line));
                     mSnackbar.show();
 
                 }
@@ -272,18 +270,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
     }
 
-    private void callSignupApi(final String name,final String email,final String fbid,final View view) {
-        final MyDialog myDialog=new MyDialog(LoginActivity.this);
+    private void callSignupApi(final String name, final String email, final String fbid, final View view) {
+        final MyDialog myDialog = new MyDialog(LoginActivity.this);
         myDialog.showDialog();
         Retrofit retrofit = ApiClient.getClient();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 
-        Call<SignUpModel> call = apiInterface.getSignUpResult(name, email, "","","", "Android",SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.DEVICE_TOKEN),"",
-                                                            SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.product_id),
-                                                            SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.color_name),
-                                                            SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.quantity),
-                                                            SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.size));
-
+        Call<SignUpModel> call = apiInterface.getSignUpResult(name, email, "", "", "", "Android", SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.DEVICE_TOKEN), "",
+                SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.product_id),
+                SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.color_name),
+                SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.quantity),
+                SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.size));
 
 
         call.enqueue(new Callback<SignUpModel>() {
@@ -295,7 +292,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         //to get all response here,
                         Toast.makeText(LoginActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 
-                        SignUpModel signUpModel=response.body();
+                        SignUpModel signUpModel = response.body();
 
                         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(SharedPreferenceKey.FULL_NAME, signUpModel.getSignup().getName());
                         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(SharedPreferenceKey.CONTACT_NUMBER, signUpModel.getSignup().getPhone());
@@ -321,18 +318,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 } else {
                     myDialog.hideDialog();
                     final Snackbar mSnackbar = Snackbar.make(view, R.string.service_error, Snackbar.LENGTH_INDEFINITE);
-                    mSnackbar.setActionTextColor(ContextCompat.getColor(LoginActivity.this,R.color.colorWhite));
+                    mSnackbar.setActionTextColor(ContextCompat.getColor(LoginActivity.this, R.color.colorWhite));
                     mSnackbar.setAction("RETRY", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
                             callSignupApi(name, fbid, email, view);
-                            Snackbar snackbar=Snackbar.make(view,"Please wait!",Snackbar.LENGTH_LONG);
-                            snackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this,R.drawable.drawable_gradient_line));
+                            Snackbar snackbar = Snackbar.make(view, "Please wait!", Snackbar.LENGTH_LONG);
+                            snackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this, R.drawable.drawable_gradient_line));
                             snackbar.show();
                         }
                     });
-                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this,R.drawable.drawable_gradient_line));
+                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this, R.drawable.drawable_gradient_line));
                     mSnackbar.show();
                 }
             }
@@ -375,13 +372,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } else if (mPassword.length() == 0) {
             Toast.makeText(this, R.string.please_enter_password, Toast.LENGTH_SHORT).show();
             return false;
-        }
-        else if (!mPassword.matches(regex)) {
+        } else if (!mPassword.matches(regex)) {
             Toast.makeText(LoginActivity.this, "Please ensure that password must contain one capital , one small and numeric number", Toast.LENGTH_SHORT).show();
             return false;
-        }
-
-        else if (mPassword.length() < 6 && mPassword.length() >= 10) {
+        } else if (mPassword.length() < 6 && mPassword.length() >= 10) {
             Toast.makeText(LoginActivity.this, R.string.password_should_not_more_than_10_character, Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -399,7 +393,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 if (validateForm()) {
                     if (HelperClass.showInternetAlert(LoginActivity.this)) {
-                        commaSeparatedProductId= SharedPreferenceWriter.getInstance(this).getString("Ids");
+                        commaSeparatedProductId = SharedPreferenceWriter.getInstance(this).getString("Ids");
                         callLoginApi(binding.mainSv);//hit api
                     }
                 }
@@ -428,7 +422,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             case R.id.tvLoginUsingOTP:
 
-                comeFrom="LoginUsingOTP";
+                comeFrom = "LoginUsingOTP";
 
                 final BottomSheetDialog bottomSheetDialogg = new BottomSheetDialog(LoginActivity.this);
                 final View vieww = LoginActivity.this.getLayoutInflater().inflate(R.layout.pop_up_enter_phone_number, null);
@@ -437,15 +431,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 Button submitButtonOtp = vieww.findViewById(R.id.btnSubmitResendOtp);
                 final EditText edtPhonee = vieww.findViewById(R.id.edtPhone);
-                final CountryCodePicker ccpSinUpp=vieww.findViewById(R.id.ccpSinUp);
+                final CountryCodePicker ccpSinUpp = vieww.findViewById(R.id.ccpSinUp);
 
                 submitButtonOtp.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        if(checkValidation(vieww.findViewById(R.id.mainRl),edtPhonee,vieww.getContext())){
+                        if (checkValidation(vieww.findViewById(R.id.mainRl), edtPhonee, vieww.getContext())) {
                             if (HelperClass.showInternetAlert(LoginActivity.this)) {
-                                callCheckPhoneApi(edtPhonee.getText().toString(),ccpSinUpp,vieww.findViewById(R.id.mainRl),bottomSheetDialogg);
+                                callCheckPhoneApi(edtPhonee.getText().toString(), ccpSinUpp, vieww.findViewById(R.id.mainRl), bottomSheetDialogg);
                             }
                         }
                     }
@@ -457,7 +451,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
             case R.id.tvForgotPass:
-                comeFrom="ForgotPass";
+                comeFrom = "ForgotPass";
                 final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
                 final View view1 = this.getLayoutInflater().inflate(R.layout.pop_up_forgot_password, null);
                 bottomSheetDialog.setContentView(view1);
@@ -465,16 +459,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 Button submitButton = view1.findViewById(R.id.btnSubmitForgotPass);
                 final EditText edtPhone = view1.findViewById(R.id.edtPhone);
-                final CountryCodePicker ccpSinUp=view1.findViewById(R.id.ccpSinUp);
+                final CountryCodePicker ccpSinUp = view1.findViewById(R.id.ccpSinUp);
 
                 submitButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(checkValidation(view1.findViewById(R.id.mainRl),edtPhone,view1.getContext())){
+                        if (checkValidation(view1.findViewById(R.id.mainRl), edtPhone, view1.getContext())) {
                             if (HelperClass.showInternetAlert(LoginActivity.this)) {
-                                callCheckPhoneApi(edtPhone.getText().toString(),ccpSinUp,binding.mainSv,bottomSheetDialog);
+                                callCheckPhoneApi(edtPhone.getText().toString(), ccpSinUp, binding.mainSv, bottomSheetDialog);
                             }
-                        }else {
+                        } else {
                             Toast.makeText(LoginActivity.this, "Please enter phone number", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -486,31 +480,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private boolean checkValidation(View viewById, EditText edtPhonee, Context context) {
-        boolean  ret=true;
+        boolean ret = true;
 
-        if(edtPhonee.getText().toString().isEmpty())
-        {
-            ret=false;
+        if (edtPhonee.getText().toString().isEmpty()) {
+            ret = false;
             edtPhonee.setError("Please enter phone number");
             edtPhonee.setFocusable(true);
             edtPhonee.requestFocus();
 
-        }else if(edtPhonee.getText().length()>10)
-        {
-            ret=false;
+        } else if (edtPhonee.getText().length() > 10) {
+            ret = false;
             edtPhonee.setError("Please enter valid phone number");
             edtPhonee.setFocusable(true);
             edtPhonee.requestFocus();
 
-        }else if(edtPhonee.getText().toString().contains("+"))
-        {
-            ret=false;
+        } else if (edtPhonee.getText().toString().contains("+")) {
+            ret = false;
             edtPhonee.setError("Please enter valid phone number");
             edtPhonee.setFocusable(true);
             edtPhonee.requestFocus();
         }
 
-        return  ret;
+        return ret;
     }
 
     private void googleSignIn() {
@@ -523,7 +514,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void facebookLogin() {
         LoginManager.getInstance().setLoginBehavior(LoginBehavior.NATIVE_WITH_FALLBACK);
         LoginManager.getInstance().logOut(); //log out
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList( "public_profile", "email"));
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
     }
 
     @Override
@@ -532,7 +523,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onActivityResult(requestCode, resultCode, data);
 
 
-        Log.e("aa","yes");
+        Log.e("aa", "yes");
         // for google
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
@@ -547,7 +538,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             GoogleSignInAccount account = task.getResult(ApiException.class);
 
 
-
             String userProfile = account.getPhotoUrl().toString();
             String email = account.getEmail();
             String gid = account.getId();
@@ -555,14 +545,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
             if (HelperClass.showInternetAlert(LoginActivity.this)) {
-                callLoginApiForSocial(name, gid, email,userProfile,binding.mainSv,"Google");
+                callLoginApiForSocial(name, gid, email, userProfile, binding.mainSv, "Google");
             }
-
 
 
             // Signed in successfully,show authenticated UI.
         } catch (ApiException e) {
-            Log.e("errpr",e.getMessage());
+            Log.e("errpr", e.getMessage());
 
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -571,8 +560,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private void callCheckPhoneApi(final String phone, final CountryCodePicker ccpSinUp,final View view,final BottomSheetDialog bottomSheetDialogg) {
-        final MyDialog myDialog=new MyDialog(LoginActivity.this);
+    private void callCheckPhoneApi(final String phone, final CountryCodePicker ccpSinUp, final View view, final BottomSheetDialog bottomSheetDialogg) {
+        final MyDialog myDialog = new MyDialog(LoginActivity.this);
         myDialog.showDialog();
         Retrofit retrofit = ApiClient.getClient();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
@@ -582,35 +571,34 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         call.enqueue(new Callback<CheckPhoneModel>() {
             @Override
             public void onResponse(Call<CheckPhoneModel> call, Response<CheckPhoneModel> response) {
-
+                Log.d("OnResForgetPss", response.body().toString());
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
                         myDialog.hideDialog();
                         Toast.makeText(LoginActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                    else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)){
+                    } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
                         myDialog.hideDialog();
                         bottomSheetDialogg.dismiss();
-                        SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(SharedPreferenceKey.PHONE,phone);
-                        fireBaseAction(phone,ccpSinUp);
+                        SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(SharedPreferenceKey.PHONE, phone);
+                        fireBaseAction(phone, ccpSinUp);
                         openBottomSheetPopUpForOTP();
 
                     }
                 } else {
                     myDialog.hideDialog();
                     final Snackbar mSnackbar = Snackbar.make(view, R.string.service_error, Snackbar.LENGTH_INDEFINITE);
-                    mSnackbar.setActionTextColor(ContextCompat.getColor(LoginActivity.this,R.color.colorWhite));
+                    mSnackbar.setActionTextColor(ContextCompat.getColor(LoginActivity.this, R.color.colorWhite));
                     mSnackbar.setAction("RETRY", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
-                            callCheckPhoneApi(phone, ccpSinUp, view,bottomSheetDialogg);
-                            Snackbar snackbar=Snackbar.make(view,"Please wait!",Snackbar.LENGTH_LONG);
-                            snackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this,R.drawable.drawable_gradient_line));
+                            callCheckPhoneApi(phone, ccpSinUp, view, bottomSheetDialogg);
+                            Snackbar snackbar = Snackbar.make(view, "Please wait!", Snackbar.LENGTH_LONG);
+                            snackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this, R.drawable.drawable_gradient_line));
                             snackbar.show();
                         }
                     });
-                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this,R.drawable.drawable_gradient_line));
+                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this, R.drawable.drawable_gradient_line));
                     mSnackbar.show();
                 }
             }
@@ -626,11 +614,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void fireBaseAction(String phone, CountryCodePicker ccpSinUp) {
         StartFireBaseLogin();
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                ccpSinUp.getFullNumberWithPlus()+phone,// Phone number to verify
-                60,                // Timeout duration
+                ccpSinUp.getFullNumberWithPlus() + phone,// Phone number to verify
+                60L,                // Timeout duration
                 TimeUnit.SECONDS,   // Unit of timeout
                 this,      // Activity (for callback binding)
                 mCallback);// OnVerificationStateChangedCallback
+
     }
 
     private void StartFireBaseLogin() {
@@ -638,22 +627,52 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
                 String otp = phoneAuthCredential.getSmsCode();
-                Log.d("", "" + otp);
+                Log.d("OnOtpRec:", "" + otp);
             }
+
             @Override
             public void onVerificationFailed(FirebaseException e) {
+                Log.d("OnVrfctnFail:", e.getMessage());
                 Toast.makeText(LoginActivity.this, "Number verification failed!", Toast.LENGTH_SHORT).show();
             }
+
             @Override
             public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(s, forceResendingToken);
                 verificationCode = s;
                 mResendToken = forceResendingToken;
-                Log.e("OTP Code", s);
+                Log.d("OnOtpRec:", "" + s);
 
             }
         };
     }
+
+    private void verifyVerificationCode(String edtCode, MyDialog myDialog, BottomSheetDialog dialog) {
+        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, edtCode);
+        SignInWithPhone(credential, myDialog, dialog);
+    }
+
+    private void SignInWithPhone(PhoneAuthCredential credential, final MyDialog myDialog, final BottomSheetDialog dialog) {
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            dialog.dismiss();
+                            myDialog.hideDialog();
+                            if (comeFrom.equalsIgnoreCase("ForgotPass")) {
+                                openPopUpChangePass();
+                            } else {
+                                callCheckPhoneDataApiForLoginUsingOTP(binding.mainSv);
+                            }
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Incorrect OTP", Toast.LENGTH_SHORT).show();
+                            myDialog.hideDialog();
+                        }
+                    }
+                });
+    }
+
 
     private void openBottomSheetPopUpForOTP() {
 
@@ -666,18 +685,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         Button submitButtonOtp = view2.findViewById(R.id.btnSubmitResendOtp);
 
-        final EditText edtCode=view2.findViewById(R.id.edtCode);
+        final EditText edtCode = view2.findViewById(R.id.edtCode);
 
         submitButtonOtp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if(!edtCode.getText().toString().isEmpty()) {
+                if (!edtCode.getText().toString().isEmpty()) {
                     MyDialog myDialog = new MyDialog(LoginActivity.this);
                     myDialog.showDialog();
-                    verifyVerificationCode(edtCode.getText().toString(),myDialog,bottomSheetDialog);
+                    verifyVerificationCode(edtCode.getText().toString(), myDialog, bottomSheetDialog);
 
-                }else {
+                } else {
                     Toast.makeText(LoginActivity.this, "Please enter otp", Toast.LENGTH_SHORT).show();
 
                 }
@@ -688,41 +707,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private void verifyVerificationCode(String edtCode, MyDialog myDialog,BottomSheetDialog dialog) {
-
-        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, edtCode);
-        SignInWithPhone(credential,myDialog,dialog);
-    }
-
-        private void SignInWithPhone(PhoneAuthCredential credential, final MyDialog myDialog,final BottomSheetDialog dialog) {
-            mAuth.signInWithCredential(credential)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                dialog.dismiss();
-                                myDialog.hideDialog();
-                                if(comeFrom.equalsIgnoreCase("ForgotPass")){
-                                    openPopUpChangePass();
-                                }else {
-                                    callCheckPhoneDataApiForLoginUsingOTP(binding.mainSv);
-                                }
-                            } else {
-                                Toast.makeText(LoginActivity.this, "Incorrect OTP", Toast.LENGTH_SHORT).show();
-                                myDialog.hideDialog();
-                            }
-                        }
-                    });
-        }
-
     private void callCheckPhoneDataApiForLoginUsingOTP(final View view) {
-        final MyDialog myDialog=new MyDialog(LoginActivity.this);
+        final MyDialog myDialog = new MyDialog(LoginActivity.this);
         myDialog.showDialog();
         Retrofit retrofit = ApiClient.getClient();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 
         Call<CheckPhoneDataModel> call = apiInterface.getCheckPhoneDataForLoginUsingOTPResult(SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.PHONE),
-                SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.DEVICE_TOKEN),"android");
+                SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.DEVICE_TOKEN), "android");
 
         call.enqueue(new Callback<CheckPhoneDataModel>() {
             @Override
@@ -732,7 +724,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     myDialog.hideDialog();
                     if (response.body().getStatus().equals("SUCCESS")) {
 
-                        CheckPhoneDataModel checkPhoneDataModel=response.body();
+                        CheckPhoneDataModel checkPhoneDataModel = response.body();
 
                         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(SharedPreferenceKey.FULL_NAME, checkPhoneDataModel.getCheckphonedata().getName());
                         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(SharedPreferenceKey.CONTACT_NUMBER, checkPhoneDataModel.getCheckphonedata().getPhone());
@@ -741,8 +733,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(SharedPreferenceKey.TOKEN, checkPhoneDataModel.getCheckphonedata().getToken());
                         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(SharedPreferenceKey.CURRENT_LOGIN, "true");
 
-                        Intent intent=new Intent(LoginActivity.this, MainActivity.class);
-                        intent.putExtra("from","LoginButton");
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("from", "LoginButton");
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
 
@@ -752,18 +744,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 } else {
                     myDialog.hideDialog();
                     final Snackbar mSnackbar = Snackbar.make(view, R.string.service_error, Snackbar.LENGTH_INDEFINITE);
-                    mSnackbar.setActionTextColor(ContextCompat.getColor(LoginActivity.this,R.color.colorWhite));
+                    mSnackbar.setActionTextColor(ContextCompat.getColor(LoginActivity.this, R.color.colorWhite));
                     mSnackbar.setAction("RETRY", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
                             callSignupApi(name, fbid, email, view);
-                            Snackbar snackbar=Snackbar.make(view,"Please wait!",Snackbar.LENGTH_LONG);
-                            snackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this,R.drawable.drawable_gradient_line));
+                            Snackbar snackbar = Snackbar.make(view, "Please wait!", Snackbar.LENGTH_LONG);
+                            snackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this, R.drawable.drawable_gradient_line));
                             snackbar.show();
                         }
                     });
-                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this,R.drawable.drawable_gradient_line));
+                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this, R.drawable.drawable_gradient_line));
                     mSnackbar.show();
                 }
             }
@@ -777,53 +769,53 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void openPopUpChangePass() {
 
-                final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(LoginActivity.this);
-                View view3 = LoginActivity.this.getLayoutInflater().inflate(R.layout.pop_up_reset_password, null);
-                bottomSheetDialog.setContentView(view3);
-                bottomSheetDialog.getWindow().findViewById(R.id.design_bottom_sheet).setBackgroundResource(android.R.color.transparent);
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(LoginActivity.this);
+        View view3 = LoginActivity.this.getLayoutInflater().inflate(R.layout.pop_up_reset_password, null);
+        bottomSheetDialog.setContentView(view3);
+        bottomSheetDialog.getWindow().findViewById(R.id.design_bottom_sheet).setBackgroundResource(android.R.color.transparent);
 
-                bottomSheetDialog.dismiss();
+        bottomSheetDialog.dismiss();
 
-                Button btnResetPassword = view3.findViewById(R.id.btnResetPassword);
+        Button btnResetPassword = view3.findViewById(R.id.btnResetPassword);
 
-                final EditText edtNewPass = view3.findViewById(R.id.edtNewPassword);
+        final EditText edtNewPass = view3.findViewById(R.id.edtNewPassword);
 
-                final EditText edtConfirmPass = view3.findViewById(R.id.edtConfirmPassword);
+        final EditText edtConfirmPass = view3.findViewById(R.id.edtConfirmPassword);
 
-                btnResetPassword.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+        btnResetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-                        if (edtNewPass.getText().toString().equals("")) {
-                            Toast.makeText(LoginActivity.this, R.string.please_enter_new_password, Toast.LENGTH_LONG).show();
-                        } else if (edtConfirmPass.getText().toString().equals("")) {
-                            Toast.makeText(LoginActivity.this, R.string.please_enter_confirm_password, Toast.LENGTH_LONG).show();
-                        }else {
-                            if (edtNewPass.getText().toString().equals(edtNewPass.getText().toString())){
-                                  callChangePasswordByPhoneApi(edtNewPass.getText().toString(),binding.mainSv);
-                                } else {
-                                   Toast.makeText(LoginActivity.this, "Please enter same new password and confirm password", Toast.LENGTH_LONG).show();
-                            }
-                        }
+                if (edtNewPass.getText().toString().equals("")) {
+                    Toast.makeText(LoginActivity.this, R.string.please_enter_new_password, Toast.LENGTH_LONG).show();
+                } else if (edtConfirmPass.getText().toString().equals("")) {
+                    Toast.makeText(LoginActivity.this, R.string.please_enter_confirm_password, Toast.LENGTH_LONG).show();
+                } else {
+                    if (edtNewPass.getText().toString().equals(edtNewPass.getText().toString())) {
+                        callChangePasswordByPhoneApi(edtNewPass.getText().toString(), binding.mainSv);
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Please enter same new password and confirm password", Toast.LENGTH_LONG).show();
                     }
-                });
+                }
+            }
+        });
 
         bottomSheetDialog.show();
     }
 
-    private void callChangePasswordByPhoneApi(String edtNewPass,final View view) {
+    private void callChangePasswordByPhoneApi(String edtNewPass, final View view) {
 
-        final MyDialog myDialog=new MyDialog(LoginActivity.this);
+        final MyDialog myDialog = new MyDialog(LoginActivity.this);
         myDialog.showDialog();
         Retrofit retrofit = ApiClient.getClient();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 
-        Call<ForgotPasswordModel> call = apiInterface.getChangePassByPhoneResult(SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.PHONE),edtNewPass);
+        Call<ForgotPasswordModel> call = apiInterface.getChangePassByPhoneResult(SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.PHONE), edtNewPass);
 
         call.enqueue(new Callback<ForgotPasswordModel>() {
             @Override
             public void onResponse(Call<ForgotPasswordModel> call, Response<ForgotPasswordModel> response) {
-
+                Log.d("OnNewPssCallApi:", response.body().toString());
                 if (response.isSuccessful()) {
                     myDialog.hideDialog();
                     if (response.body().getStatus().equals("SUCCESS")) {
@@ -838,18 +830,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 } else {
                     myDialog.hideDialog();
                     final Snackbar mSnackbar = Snackbar.make(view, R.string.service_error, Snackbar.LENGTH_INDEFINITE);
-                    mSnackbar.setActionTextColor(ContextCompat.getColor(LoginActivity.this,R.color.colorWhite));
+                    mSnackbar.setActionTextColor(ContextCompat.getColor(LoginActivity.this, R.color.colorWhite));
                     mSnackbar.setAction("RETRY", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
                             callSignupApi(name, fbid, email, view);
-                            Snackbar snackbar=Snackbar.make(view,"Please wait!",Snackbar.LENGTH_LONG);
-                            snackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this,R.drawable.drawable_gradient_line));
+                            Snackbar snackbar = Snackbar.make(view, "Please wait!", Snackbar.LENGTH_LONG);
+                            snackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this, R.drawable.drawable_gradient_line));
                             snackbar.show();
                         }
                     });
-                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this,R.drawable.drawable_gradient_line));
+                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this, R.drawable.drawable_gradient_line));
                     mSnackbar.show();
 
                 }
@@ -866,16 +858,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void callLoginApi(final View view) {
         String deviceToken = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.DEVICE_TOKEN);
 
-        final MyDialog myDialog=new MyDialog(LoginActivity.this);
+        final MyDialog myDialog = new MyDialog(LoginActivity.this);
         myDialog.showDialog();
         Retrofit retrofit = ApiClient.getClient();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 
         Call<LoginModel> call = apiInterface.getLoginResult(mEmailPhone, mPassword, "android", deviceToken,
-                                                            SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.product_id),
-                                                            SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.color_name),
-                                                            SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.quantity),
-                                                            SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.size));
+                SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.product_id),
+                SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.color_name),
+                SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.quantity),
+                SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.size));
         call.enqueue(new Callback<LoginModel>() {
             @Override
             public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
@@ -887,8 +879,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Toast.makeText(LoginActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                         //blank cart items
                         // SharedPreferenceWriter.getInstance(LoginActivity.this).getString(SharedPreferenceKey.COMMA_SEPARATED_PRODUCT_ID, "");
-                        SharedPreferenceWriter.getInstance(LoginActivity.this).getString("commaSeparatedProductId","");
-                        SharedPreferenceWriter.getInstance(LoginActivity.this).getString(SharedPreferenceKey.BATCH_COUNT,"");
+                        SharedPreferenceWriter.getInstance(LoginActivity.this).getString("commaSeparatedProductId", "");
+                        SharedPreferenceWriter.getInstance(LoginActivity.this).getString(SharedPreferenceKey.BATCH_COUNT, "");
 
                         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(SharedPreferenceKey.FULL_NAME, response.body().getLoginResponse().getName());
                         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(SharedPreferenceKey.CONTACT_NUMBER, response.body().getLoginResponse().getPhone());
@@ -913,18 +905,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 } else {
                     myDialog.hideDialog();
                     final Snackbar mSnackbar = Snackbar.make(view, R.string.service_error, Snackbar.LENGTH_INDEFINITE);
-                    mSnackbar.setActionTextColor(ContextCompat.getColor(LoginActivity.this,R.color.colorWhite));
+                    mSnackbar.setActionTextColor(ContextCompat.getColor(LoginActivity.this, R.color.colorWhite));
                     mSnackbar.setAction("RETRY", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
                             callSignupApi(name, fbid, email, view);
-                            Snackbar snackbar=Snackbar.make(view,"Please wait!",Snackbar.LENGTH_LONG);
-                            snackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this,R.drawable.drawable_gradient_line));
+                            Snackbar snackbar = Snackbar.make(view, "Please wait!", Snackbar.LENGTH_LONG);
+                            snackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this, R.drawable.drawable_gradient_line));
                             snackbar.show();
                         }
                     });
-                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this,R.drawable.drawable_gradient_line));
+                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(LoginActivity.this, R.drawable.drawable_gradient_line));
                     mSnackbar.show();
                 }
             }
@@ -940,7 +932,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onBackPressed() {
         super.onBackPressed();
         finishAffinity();
-       // startActivity(new Intent(this,MainActivity.class));
+        // startActivity(new Intent(this,MainActivity.class));
     }
 
 
