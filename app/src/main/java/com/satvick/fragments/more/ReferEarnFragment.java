@@ -1,4 +1,4 @@
-package com.satvick.fragments;
+package com.satvick.fragments.more;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -37,7 +37,7 @@ import retrofit2.Retrofit;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
-public class ReferAndEarnFragment extends Fragment implements View.OnClickListener {
+public class ReferEarnFragment extends Fragment implements View.OnClickListener {
 
     View rootView;
     FragmentReferAndEarnBinding binding;

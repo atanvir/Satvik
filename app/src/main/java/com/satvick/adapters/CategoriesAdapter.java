@@ -11,11 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.satvick.R;
-import com.satvick.activities.MenActivity;
+import com.satvick.activities.InternalActivity;
 import com.satvick.activities.ProductListActivity;
 import com.satvick.databinding.AdapterCategoriesBinding;
 import com.satvick.model.CategoriesBeans;
-import com.satvick.model.CategoryModel;
 import com.satvick.utils.GlobalVariables;
 
 import java.util.List;
@@ -38,11 +37,17 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.My
 
     @Override
     public void onBindViewHolder(@NonNull CategoriesAdapter.MyViewHolder holder, int position) {
-        holder.binding.tvCategoryName.setText(list.get(position).category);
-        if(!list.get(position).viewAll) holder.binding.tvViewAll.setVisibility(View.VISIBLE);
-        else holder.binding.tvViewAll.setVisibility(View.GONE);
-        holder.binding.rvProducts.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false));
-        holder.binding.rvProducts.setAdapter(new ProductAdapter(context,list.get(position).getCategory_slug(),list.get(position).getProducts()));
+        if(list.get(position).getProducts().size()>0){
+            holder.binding.tvCategoryName.setText(list.get(position).category);
+            if(!list.get(position).viewAll) holder.binding.tvViewAll.setVisibility(View.VISIBLE);
+            else holder.binding.tvViewAll.setVisibility(View.GONE);
+            holder.binding.rvProducts.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false));
+            holder.binding.rvProducts.setAdapter(new ProductAdapter(context,list.get(position).getCategory_slug(),list.get(position).getProducts()));
+        }else{
+            holder.binding.tvViewAll.setVisibility(View.GONE);
+            holder.binding.tvCategoryName.setVisibility(View.GONE);
+            holder.binding.rvProducts.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -70,7 +75,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.My
                     context.startActivity(intent);
 
                 }else {
-                    Intent intent = new Intent(context, MenActivity.class);
+                    Intent intent = new Intent(context, InternalActivity.class);
                     intent.putExtra("from", "HomeFragmentAfterLogin");
                     intent.putExtra("filterData", list.get(getAdapterPosition()).getCategory_slug());
                     intent.putExtra("type", list.get(getAdapterPosition()).getCategory_slug());

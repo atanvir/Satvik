@@ -1,4 +1,4 @@
-package com.satvick.fragments;
+package com.satvick.fragments.more;
 
 import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -15,7 +15,7 @@ import com.satvick.activities.MyReferralsListAdapter;
 import com.satvick.databinding.FragmentMyreferralsBinding;
 import com.satvick.model.ReferalListModel;
 
-public class MyReferralsFragment extends Fragment {
+public class ReferralFragment extends Fragment {
 
     View rootView;
     FragmentMyreferralsBinding binding;
@@ -33,7 +33,7 @@ public class MyReferralsFragment extends Fragment {
     }
 
 
-    public MyReferralsFragment(ReferalListModel.ReferalList referlist)
+    public ReferralFragment(ReferalListModel.ReferalList referlist)
     {
         this.referlist=referlist;
     }

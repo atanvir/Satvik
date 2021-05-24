@@ -5,31 +5,31 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.satvick.R;
-import com.satvick.activities.MenActivity;
+import com.satvick.activities.InternalActivity;
+import com.satvick.activities.LifeActivity;
+import com.satvick.activities.MainActivity;
 import com.satvick.databinding.ItemSlidingHome2Binding;
-import com.satvick.model.HomeModel;
 import com.satvick.model.ProductBean;
 
 import java.util.List;
+
 
 public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapter.ViewHolder> {
 
     private Context context;
     private List<ProductBean> list;
 
-
     public MainCategoryAdapter(Context context, List<ProductBean> list) {
         this.context = context;
         this.list = list;
     }
-
 
     @Override
     public MainCategoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -38,7 +38,8 @@ public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapte
 
     @Override
     public void onBindViewHolder(MainCategoryAdapter.ViewHolder holder, int position) {
-        Glide.with(context).load(list.get(position).getImage()).into(holder.binding.image);
+        if(list.get(position).getName().equalsIgnoreCase("Satvik Life")) holder.binding.image.setImageResource(R.drawable.lifea);
+        else Glide.with(context).load(list.get(position).getImage()).into(holder.binding.image);
         holder.binding.tvProductName.setText(list.get(position).getName());
     }
 
@@ -63,13 +64,18 @@ public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapte
             switch (v.getId()){
 
                 case R.id.rlMain :
-                Intent intent = new Intent(context, MenActivity.class);
-                intent.putExtra("from", "HomeFragmentAfterLoginMen");
-                intent.putExtra("filterData", list.get(getAdapterPosition()).getSlug());
-                intent.putExtra("type", "Category");
-                context.startActivity(intent);
+                if(getAdapterPosition()==0){
+                    Intent intent=new Intent(context, LifeActivity.class);
+                    intent.putExtra("title","Satvik Life");
+                    context.startActivity(intent);
+                }else {
+                    Intent intent = new Intent(context, InternalActivity.class);
+                    intent.putExtra("from", "HomeFragmentAfterLoginMen");
+                    intent.putExtra("filterData", list.get(getAdapterPosition()).getSlug());
+                    intent.putExtra("type", "Category");
+                    context.startActivity(intent);
+                }
                 break;
-
             }
         }
     }

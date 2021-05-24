@@ -18,6 +18,25 @@ public class ProductBean {
     public String updated_at;
     public String like_Status;
 
+    public ProductBean(String product_id, String image, String name, String brand, String sp, String mrp, String percentage, String id, String slug, String category_id, String status, String occasion_status, String deleteStatus, String created_at, String updated_at, String like_Status) {
+        this.product_id = product_id;
+        this.image = image;
+        this.name = name;
+        this.brand = brand;
+        this.sp = sp;
+        this.mrp = mrp;
+        this.percentage = percentage;
+        this.id = id;
+        this.slug = slug;
+        this.category_id = category_id;
+        this.status = status;
+        this.occasion_status = occasion_status;
+        this.deleteStatus = deleteStatus;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
+        this.like_Status = like_Status;
+    }
+
     public String getSlug() {
         return slug;
     }

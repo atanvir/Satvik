@@ -24,6 +24,7 @@ import com.satvick.model.GenerateOrderIdModel;
 import com.satvick.model.HomeModel;
 import com.satvick.model.HomeResponseModel;
 import com.satvick.model.InnerPagesModel;
+import com.satvick.model.LifeResponseModel;
 import com.satvick.model.LoginModel;
 import com.satvick.model.MyCurrentDetailsModel;
 import com.satvick.model.MyOrderDetailsModel;
@@ -483,4 +484,10 @@ public interface ApiInterface {
 
     @GET("getRSAPublicKey")
     Call<RSAResponseModel> getRSAPublicKey();
+
+    @GET("appsatvicklife")
+    Call<LifeResponseModel> appsatvicklife();
+
+    @GET("appsatvicklifeblog/{id}")
+    Call<LifeResponseModel> lifeCategoryApi(@Path("id") String id);
 }

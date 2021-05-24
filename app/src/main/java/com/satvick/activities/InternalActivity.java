@@ -41,7 +41,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class MenActivity extends AppCompatActivity implements View.OnClickListener {
+public class InternalActivity extends AppCompatActivity implements View.OnClickListener {
 
     ActivityMenBinding binding;
 
@@ -106,14 +106,14 @@ public class MenActivity extends AppCompatActivity implements View.OnClickListen
 
         binding.tvTitle.setText(filterData);
 
-        if (SharedPreferenceWriter.getInstance(MenActivity.this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false")||
-                SharedPreferenceWriter.getInstance(MenActivity.this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) {
+        if (SharedPreferenceWriter.getInstance(InternalActivity.this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false")||
+                SharedPreferenceWriter.getInstance(InternalActivity.this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) {
             userId = "1";
         } else {
-            userId = SharedPreferenceWriter.getInstance(MenActivity.this).getString(SharedPreferenceKey.USER_ID);
+            userId = SharedPreferenceWriter.getInstance(InternalActivity.this).getString(SharedPreferenceKey.USER_ID);
         }
 
-        if (HelperClass.showInternetAlert(MenActivity.this)) {
+        if (HelperClass.showInternetAlert(InternalActivity.this)) {
             callInnerPagesApi(binding.mainRl);//hit api
         }
 
@@ -245,23 +245,23 @@ public class MenActivity extends AppCompatActivity implements View.OnClickListen
                         setDressesAndJumpSuitsRecyclerView(otherData2);
                         setGymTeesMenAdapter(otherData3);
                     } else {
-                        Toast.makeText(MenActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InternalActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     myDialog.hideDialog();
                     final Snackbar mSnackbar = Snackbar.make(view, R.string.service_error, Snackbar.LENGTH_INDEFINITE);
-                    mSnackbar.setActionTextColor(ContextCompat.getColor(MenActivity.this,R.color.colorWhite));
+                    mSnackbar.setActionTextColor(ContextCompat.getColor(InternalActivity.this,R.color.colorWhite));
                     mSnackbar.setAction("RETRY", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
                             callInnerPagesApi(view);
                             Snackbar snackbar=Snackbar.make(view,"Please wait!",Snackbar.LENGTH_LONG);
-                            snackbar.getView().setBackground(ContextCompat.getDrawable(MenActivity.this,R.drawable.drawable_gradient_line));
+                            snackbar.getView().setBackground(ContextCompat.getDrawable(InternalActivity.this,R.drawable.drawable_gradient_line));
                             snackbar.show();
                         }
                     });
-                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(MenActivity.this,R.drawable.drawable_gradient_line));
+                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(InternalActivity.this,R.drawable.drawable_gradient_line));
                     mSnackbar.show();
                     return;
                 }
@@ -276,11 +276,11 @@ public class MenActivity extends AppCompatActivity implements View.OnClickListen
     private void setBanner(List<InnerPagesModel.Bannerlist> bannerList) {
         int banner_size=bannerList.size();
 
-        Glide.with(MenActivity.this).load(bannerList.get(0).getImage()).into(binding.ivBanner2);
+        Glide.with(InternalActivity.this).load(bannerList.get(0).getImage()).into(binding.ivBanner2);
         if(banner_size==2)
         {
             binding.ivBanner3.setVisibility(View.VISIBLE);
-          Glide.with(MenActivity.this).load(bannerList.get(1).getImage()).into(binding.ivBanner3);
+          Glide.with(InternalActivity.this).load(bannerList.get(1).getImage()).into(binding.ivBanner3);
         }
          else
             {
@@ -408,11 +408,11 @@ public class MenActivity extends AppCompatActivity implements View.OnClickListen
                 break;
 
             case R.id.ivSearch:
-                startActivity(new Intent(MenActivity.this,SearchScreenActivity.class));
+                startActivity(new Intent(InternalActivity.this,SearchScreenActivity.class));
                 break;
 
             case R.id.tvFlashSaleViewAll:
-                Intent intent=new Intent(MenActivity.this,ProductListActivity.class);
+                Intent intent=new Intent(InternalActivity.this,ProductListActivity.class);
                 intent.putExtra("from",GlobalVariables.flashSale);
                 intent.putExtra(GlobalVariables.section_name,"Flash Sale");
                 startActivity(intent);
@@ -460,14 +460,14 @@ public class MenActivity extends AppCompatActivity implements View.OnClickListen
                 break;
 
             case R.id.ivSave:
-                startActivity(new Intent(MenActivity.this, MyWishListActivity.class));
+                startActivity(new Intent(InternalActivity.this, MyWishListActivity.class));
                 break;
 
         }
     }
 
     private void callIntent(String subcatid,String section_name) {
-        Intent intent=new Intent(MenActivity.this,ProductListActivity.class);
+        Intent intent=new Intent(InternalActivity.this,ProductListActivity.class);
         intent.putExtra("from","MenActivity");
         intent.putExtra(GlobalVariables.subcatid,subcatid);
         intent.putExtra(GlobalVariables.section_name,section_name);

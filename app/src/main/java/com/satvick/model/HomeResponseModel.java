@@ -73,7 +73,7 @@ public class HomeResponseModel {
         private String flashSaleStatus;
         @SerializedName("flash_sale_time")
         @Expose
-        private Long flashSaleTime;
+        private String flashSaleTime;
         @SerializedName("categories_with_products")
         @Expose
         private List<CategoriesBeans> categoriesWithProducts = null;
@@ -131,11 +131,11 @@ public class HomeResponseModel {
             this.flashSaleStatus = flashSaleStatus;
         }
 
-        public Long getFlashSaleTime() {
+        public String getFlashSaleTime() {
             return flashSaleTime;
         }
 
-        public void setFlashSaleTime(Long flashSaleTime) {
+        public void setFlashSaleTime(String flashSaleTime) {
             this.flashSaleTime = flashSaleTime;
         }
 

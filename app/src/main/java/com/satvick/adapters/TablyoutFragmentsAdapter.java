@@ -7,8 +7,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.satvick.fragments.MyReferralsFragment;
-import com.satvick.fragments.TermAndCondFrag;
+import com.satvick.fragments.more.ReferralFragment;
+import com.satvick.fragments.more.TermConditionFragment;
 import com.satvick.model.ReferalListModel;
 
 public class TablyoutFragmentsAdapter extends  FragmentPagerAdapter{
@@ -27,12 +27,12 @@ public class TablyoutFragmentsAdapter extends  FragmentPagerAdapter{
     public Fragment getItem(int position) {
         switch (position)
         {
-            case 0: return new TermAndCondFrag();
-            case 1:return new MyReferralsFragment(referlist);
+            case 0: return new TermConditionFragment();
+            case 1:return new ReferralFragment(referlist);
             default: break;
         }
 
-        return new TermAndCondFrag();
+        return new TermConditionFragment();
     }
 
     @Override

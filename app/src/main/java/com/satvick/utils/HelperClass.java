@@ -26,15 +26,27 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Pair;
+import android.util.TypedValue;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.satvick.R;
+import com.satvick.database.SharedPreferenceKey;
+import com.satvick.database.SharedPreferenceWriter;
 
 import org.json.JSONObject;
 
@@ -597,5 +609,50 @@ public class HelperClass {
                 deviceDensity = "Not found";
         }
         return deviceDensity;
+    }
+
+    public static TextView findNotificationBadge(Context context, BottomNavigationView navigation)  {
+        BottomNavigationMenuView bottomNavigationMenuView = (BottomNavigationMenuView) navigation.getChildAt(0);
+
+        View v = bottomNavigationMenuView.getChildAt(4);
+        BottomNavigationItemView itemView = (BottomNavigationItemView) v;
+
+        View badge = LayoutInflater.from(context).inflate(R.layout.unread_message_layout, bottomNavigationMenuView, false);
+
+
+        itemView.addView(badge);
+
+        for (int i = 0; i < bottomNavigationMenuView.getChildCount(); i++) {
+            final View iconView = bottomNavigationMenuView.getChildAt(i).findViewById(R.id.icon);
+            final ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
+            final DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+            if (i == 1) {
+                layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, displayMetrics);
+                // set your width here
+                layoutParams.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 64, displayMetrics);
+            } else {
+                // set your height here
+                layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, displayMetrics);
+                // set your width here
+                layoutParams.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, displayMetrics);
+            }
+            iconView.setLayoutParams(layoutParams);
+        }
+
+        return badge.findViewById(R.id.notification_badge);
+    }
+
+    public static Pair<String, String>  getCacheData(Activity activity) {
+        Pair<String, String> data ;
+        if((SharedPreferenceWriter.getInstance(activity).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false") || SharedPreferenceWriter.getInstance(activity).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase(""))){
+            data=getValue("1","1");
+        }else{
+            data=getValue(SharedPreferenceWriter.getInstance(activity).getString(SharedPreferenceKey.TOKEN),SharedPreferenceWriter.getInstance(activity).getString(SharedPreferenceKey.USER_ID));
+        }
+        return data;
+    }
+
+    public static Pair<String, String>  getValue(String token, String _id){
+        return new Pair<String, String>(token, _id);
     }
 }

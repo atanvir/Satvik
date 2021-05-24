@@ -1,4 +1,4 @@
-package com.satvick.fragments;
+package com.satvick.fragments.main;
 
 import android.content.Intent;
 
@@ -239,11 +239,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 SharedPreferenceWriter.getInstance(getActivity()).writeStringValue("Ids","");
 
                 getActivity().finish();
-
-                if (MainActivity.instance != null) {
-                    MainActivity.instance.finish();
-                }
-
 
 
                 break;

@@ -1,4 +1,4 @@
-package com.satvick.fragments;
+package com.satvick.fragments.main;
 
 import android.content.Intent;
 

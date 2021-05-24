@@ -1,4 +1,4 @@
-package com.satvick.fragments;
+package com.satvick.fragments.main;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -7,19 +7,14 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
@@ -33,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -48,38 +42,23 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.satvick.R;
 import com.satvick.activities.LoginActivity;
 import com.satvick.activities.MainActivity;
-import com.satvick.activities.MenActivity;
 import com.satvick.activities.MyWishListActivity;
 import com.satvick.activities.NotificationActivity;
-import com.satvick.activities.ProductListActivity;
 import com.satvick.activities.SearchScreenActivity;
 import com.satvick.activities.SignUpActivity;
 import com.satvick.adapters.AutoSlideViewPagerBannerAdapter;
-import com.satvick.adapters.BrandInFocusAdapter;
 import com.satvick.adapters.CategoriesAdapter;
-import com.satvick.adapters.CategoryAdapter;
-import com.satvick.adapters.FlashSaleAdapter;
-import com.satvick.adapters.GymAdapter;
-import com.satvick.adapters.HandPickedAdapter;
-import com.satvick.adapters.MainCategoriesAdapter;
-import com.satvick.adapters.HotDealAdapter;
 import com.satvick.adapters.MainCategoryAdapter;
-import com.satvick.adapters.ShopByThemeAdapter;
-import com.satvick.adapters.ShopCollectionAdapter;
-import com.satvick.adapters.StyleFeedAdapter;
 import com.satvick.database.SharedPreferenceKey;
 import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.FragmentHomeAfterLoginBinding;
 import com.satvick.fcm.MyFirebaseMessagingService;
 import com.satvick.model.CategoriesBeans;
-import com.satvick.model.CategoryItemResponse;
-import com.satvick.model.HomeModel;
 import com.satvick.model.HomeResponseModel;
-import com.satvick.model.HomeSlidingProductResponse;
+import com.satvick.model.ProductBean;
 import com.satvick.model.SocialLoginModel;
 import com.satvick.retrofit.ApiClient;
 import com.satvick.retrofit.ApiInterface;
@@ -105,7 +84,9 @@ import static com.satvick.utils.HelperClass.showInternetAlert;
 
 public class HomeFragment extends Fragment implements View.OnClickListener, MyFirebaseMessagingService.ShowDot, FacebookCallback<LoginResult> {
 
+
     private int lay_height = 0;
+    private TextView tvBadge;
     int height = 0;
     int sc = 0;
     boolean isDialogOpen = true;
@@ -125,6 +106,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 901;
     private  FragmentHomeAfterLoginBinding binding;
+
+    public HomeFragment(){
+
+    }
+
+    public HomeFragment(TextView tvBadge){
+        this.tvBadge=tvBadge;
+    }
 
 
     @Override
@@ -158,13 +147,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
         if (isFirstTime) loginBottomSheet();
         mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
         commaSeparatedProductId = SharedPreferenceWriter.getInstance(getActivity()).getString("Ids");
-        if (SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false") || SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) {
-            token = "1";
-            userId = "1";
-        } else {
-            token = SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.TOKEN);
-            userId = SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.USER_ID);
-        }
+        token = HelperClass.getCacheData(requireActivity()).first;
+        userId =HelperClass.getCacheData(requireActivity()).second;
     }
 
     @Override
@@ -193,8 +177,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
 
 
     private void getBasicProfile(LoginResult loginResult) {
-        GraphRequest request = GraphRequest.newMeRequest(
-                loginResult.getAccessToken(),
+        GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
@@ -202,7 +185,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
                         String fbid = object.optString("id");
                         String email = object.optString("email");
                         String profilePhoto = "https://graph.facebook.com/"+fbid+"/picture?type=large";
-
                         if (showInternetAlert(getActivity())) {
                             callLoginApiForSocial(name, fbid, email,profilePhoto,"Facebook");
                         }
@@ -296,6 +278,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
 
             @Override
             public void onFailure(Call<HomeResponseModel> call, Throwable t) {
+                Log.e("exception",""+t.getLocalizedMessage());
                 myDialog.hideDialog();
                 CommonUtil.setUpSnackbarMessage(binding.mainRl,t.getMessage(),requireActivity());
             }
@@ -304,10 +287,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
 
     private void setDataToUI(HomeResponseModel model) {
 
-     //     <------------ Main Category ---------------->
-        if(!model.getHomescreenapi().getCatgories().isEmpty()) {
-        binding.rvMainCategory.setLayoutManager(new LinearLayoutManager(requireActivity(),LinearLayoutManager.HORIZONTAL,false));
-        binding.rvMainCategory.setAdapter(new MainCategoryAdapter(requireActivity(),model.getHomescreenapi().getCatgories()));
+        if (model.getHomescreenapi().getNumOfAddtocart() > 0) {
+            tvBadge.setVisibility(View.VISIBLE);
+            tvBadge.setText("" + model.getHomescreenapi().getNumOfAddtocart());
+        }
+
+        //     <------------ Main Category ---------------->
+        List<ProductBean> categoryList = model.getHomescreenapi().getCatgories();
+        categoryList.add(0, getSatvikLiveTab());
+        if (!categoryList.isEmpty()) {
+            binding.rvMainCategory.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
+            binding.rvMainCategory.setAdapter(new MainCategoryAdapter(requireActivity(),categoryList));
         }
 
      //     <------------ Sub Category ---------------->
@@ -320,7 +310,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
 
 
 
-    //     <------------ Top Banner ---------------->
+    //     <------------ Banner ---------------->
         if(!model.getHomescreenapi().getBanners().isEmpty())
         {
             binding.vpBanner.setAdapter(new AutoSlideViewPagerBannerAdapter(getActivity(), model.getHomescreenapi().getBanners()));
@@ -332,7 +322,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
 
     }
 
-
+    private ProductBean getSatvikLiveTab() {
+        return new ProductBean("","","Satvik Life","","","","","","","","","","","","","");
+    }
 
 
     private void loginBottomSheet() {
@@ -355,7 +347,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
                                    isDialogOpen=false;
                                }
                            }
-                        }
+                           }
                     }
                 });
             }
@@ -516,10 +508,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
                   getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (binding.vpBanner.getCurrentItem() < binding.vpBanner.getAdapter().getCount() - 1) {
-                        binding.vpBanner.setCurrentItem(binding.vpBanner.getCurrentItem() + 1);
-                    } else {
-                        binding.vpBanner.setCurrentItem(0);
+                    if(binding.vpBanner.getAdapter()!=null) {
+                        if (binding.vpBanner.getCurrentItem() < binding.vpBanner.getAdapter().getCount() - 1) {
+                            binding.vpBanner.setCurrentItem(binding.vpBanner.getCurrentItem() + 1);
+                        } else {
+                            binding.vpBanner.setCurrentItem(0);
+                        }
                     }
                 }
             });

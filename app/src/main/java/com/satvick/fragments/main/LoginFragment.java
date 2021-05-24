@@ -1,4 +1,4 @@
-package com.satvick.fragments;
+package com.satvick.fragments.main;
 
 import android.content.Intent;
 import androidx.databinding.DataBindingUtil;
@@ -14,7 +14,7 @@ import com.satvick.activities.SignUpActivity;
 import com.satvick.databinding.FragmentLoginSignupForProfileBinding;
 
 
-public class LoginSignupForProfileFragment extends Fragment implements View.OnClickListener {
+public class LoginFragment extends Fragment implements View.OnClickListener {
 
     View rootView;
     FragmentLoginSignupForProfileBinding binding;

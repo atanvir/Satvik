@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorWhite"
-        tools:context=".fragments.BagFragment">
+        tools:context=".fragments.main.BagFragment">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/my_toolbar"

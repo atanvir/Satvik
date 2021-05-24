@@ -1,4 +1,4 @@
-package com.satvick.fragments;
+package com.satvick.fragments.more;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.satvick.R;
 
-public class TermAndCondFrag extends Fragment {
+public class TermConditionFragment extends Fragment {
 
     View view;
     @Override

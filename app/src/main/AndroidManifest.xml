@@ -21,7 +21,7 @@
         android:required="false" />
 
     <application
-        android:name="com.satvick.application.YODApplication"
+        android:name=".application.YODApplication"
         android:allowBackup="true"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name"
@@ -30,14 +30,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name="com.satvick.activities.SizeChartActivity"></activity>
+        <activity android:name=".activities.LifeCategoryActivity"></activity>
+        <activity android:name=".activities.SizeChartActivity" />
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
         <activity
-            android:name="com.satvick.activities.SplashActivity"
+            android:name=".activities.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
             <intent-filter>
@@ -60,205 +61,205 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.satvick.activities.LoginActivity"
+            android:name=".activities.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="adjustNothing" />
         <activity
-            android:name="com.satvick.activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.satvick.activities.SignUpActivity"
+            android:name=".activities.SignUpActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.SearchScreenActivity"
+            android:name=".activities.SearchScreenActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name="com.satvick.activities.MyWishListActivity"
+            android:name=".activities.MyWishListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.NotificationActivity"
+            android:name=".activities.NotificationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.ProductListActivity"
+            android:name=".activities.ProductListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.PlaceOrderAddressActivity"
+            android:name=".activities.PlaceOrderAddressActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.EditProfileActivity"
+            android:name=".activities.EditProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.satvick.activities.MyOrderActivity"
+            android:name=".activities.MyOrderActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.ReturnOrderActivity"
+            android:name=".activities.ReturnOrderActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.RequestForExchangeProductActivity"
+            android:name=".activities.RequestForExchangeProductActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.HelpCenterActivity"
+            android:name=".activities.HelpCenterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite" />
         <activity
-            android:name="com.satvick.activities.PaymentRefundActivity"
+            android:name=".activities.PaymentRefundActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite" />
         <activity
-            android:name="com.satvick.activities.OffersDiscountsCouponsActivity"
+            android:name=".activities.OffersDiscountsCouponsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite" />
         <activity
-            android:name="com.satvick.activities.ManageYourAccountActivity"
+            android:name=".activities.ManageYourAccountActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite" />
         <activity
-            android:name="com.satvick.activities.AddressActivity"
+            android:name=".activities.AddressActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite" />
         <activity
-            android:name="com.satvick.activities.EditAddressActivity"
+            android:name=".activities.EditAddressActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.OtherActivity"
+            android:name=".activities.OtherActivity"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.CouponsActivity"
+            android:name=".activities.CouponsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.SavedCardActivity"
+            android:name=".activities.SavedCardActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.AddNewAddressClickActivity"
+            android:name=".activities.AddNewAddressClickActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.PaymentActivity"
+            android:name=".activities.PaymentActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.PaymentActivityAfterSelect"
+            android:name=".activities.PaymentActivityAfterSelect"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.AddNewAddressActivityPlaceOrderActivity"
+            android:name=".activities.AddNewAddressActivityPlaceOrderActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.ReturnItemActivity"
+            android:name=".activities.ReturnItemActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.MyOrderTrackActivity"
+            android:name=".activities.MyOrderTrackActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.CancelOrderActivity"
+            android:name=".activities.CancelOrderActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.ReturnOrderCancelActivity"
+            android:name=".activities.ReturnOrderCancelActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.ShopByThemeActivity"
+            android:name=".activities.ShopByThemeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.FilterProductListActivity"
+            android:name=".activities.FilterProductListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.AccessoriesActivity"
+            android:name=".activities.AccessoriesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.MenActivity"
+            android:name=".activities.InternalActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.ProductDetailsActivityFinal"
+            android:name=".activities.ProductDetailsActivityFinal"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.ReferAndEarnActivity"
+            android:name=".activities.ReferAndEarnActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.AboutActivity"
+            android:name=".activities.AboutActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.FaqsActivity"
+            android:name=".activities.FaqsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.TermsOfUseActivity"
+            android:name=".activities.TermsOfUseActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.activities.ApplyCouponActivity"
+            android:name=".activities.ApplyCouponActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.satvick.ccavenue.WebViewActivity"
+            android:name=".ccavenue.WebViewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name="com.satvick.utils.TakePhoto" />
+        <activity android:name=".utils.TakePhoto" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -282,14 +283,18 @@
                     tools:ignore="ManifestResource" />
             </intent-filter>
         </activity>
-        <activity android:name="com.satvick.Interfaces.IHelpCenterImplementation" />
-        <activity android:name="com.satvick.utils.TakeImage" />
+        <activity android:name=".Interfaces.IHelpCenterImplementation" />
+        <activity android:name=".utils.TakeImage" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
+        <activity android:name=".activities.LifeActivity"
+            android:configChanges="screenSize|locale"
+
+            />
 
         <service
-            android:name="com.satvick.fcm.MyFirebaseMessagingService"
+            android:name=".fcm.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

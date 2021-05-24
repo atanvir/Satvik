@@ -639,7 +639,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
         if (type.equalsIgnoreCase(GlobalVariables.flashSale)) {
             finish();
-            startActivity(new Intent(this, MenActivity.class).putExtra("filterData", SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.section_name)).putExtra("from", getIntent().getStringExtra(GlobalVariables.section_name)));
+            startActivity(new Intent(this, InternalActivity.class).putExtra("filterData", SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.section_name)).putExtra("from", getIntent().getStringExtra(GlobalVariables.section_name)));
         } else if (comeFrom.equalsIgnoreCase("FilterProductListActivity")) {
             startActivity(new Intent(this, MainActivity.class).putExtra("from", "HomeFragment"));
         } else if (comeFrom.equalsIgnoreCase(GlobalVariables.ProductDetailsActivityFinal)) {

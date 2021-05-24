@@ -1,4 +1,4 @@
-package com.satvick.fragments;
+package com.satvick.fragments.main;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -87,7 +88,6 @@ public class BagFragment extends Fragment implements View.OnClickListener {
     String token = "";
     String userId = "";
     String commaSeparatedProductId = "";
-    ProductDetailsActivityFinal.OnDataPass listener;
     private Double couponDiscount = 0.0;
     boolean isChecked = true;
     double totalPrice = 0.0;
@@ -107,6 +107,14 @@ public class BagFragment extends Fragment implements View.OnClickListener {
     private Double convertedPrice;
     private String coponCode = "";
     String productIds = "", colorNames = "", sizes = "", quantities = "", giftwrap2 = "0";
+    private TextView tvBadge;
+    public BagFragment(){
+
+    }
+
+    public BagFragment(TextView tvBadge){
+        this.tvBadge=tvBadge;
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -305,15 +313,15 @@ public class BagFragment extends Fragment implements View.OnClickListener {
                             binding.scrollView.setVisibility(View.GONE);
                             binding.llBagListEmpty.setVisibility(View.VISIBLE);
                             binding.tvPlaceOrder.setVisibility(View.GONE);
-                            ((MainActivity) getActivity()).tv.setVisibility(View.GONE);
+                            tvBadge.setVisibility(View.GONE);
                             SharedPreferenceWriter.getInstance(getActivity()).clearPreferenceValue(SharedPreferenceKey.gift_wrapup_status, "no");
                             SharedPreferenceWriter.getInstance(getActivity()).writeBooleanValue(GlobalVariables.COUPON_APPLIED, false);
 
                         } else {
                             binding.tvPlaceOrder.setVisibility(View.VISIBLE);
                             binding.scrollView.setVisibility(View.VISIBLE);
-                            ((MainActivity) getActivity()).tv.setVisibility(View.VISIBLE);
-                            ((MainActivity) getActivity()).tv.setText(String.valueOf(cartListModelList.size()));
+                            tvBadge.setVisibility(View.VISIBLE);
+                            tvBadge.setText(String.valueOf(cartListModelList.size()));
                         }
 
                         setOffersText(data.getMessage());
@@ -321,12 +329,12 @@ public class BagFragment extends Fragment implements View.OnClickListener {
 
                         if (cartListModelList.size() == 0) {
                             if (getActivity() != null) {
-                                ((MainActivity) getActivity()).tv.setVisibility(View.GONE);
+                                tvBadge.setVisibility(View.GONE);
                             }
                         } else {
                             if (getActivity() != null) {
-                                ((MainActivity) getActivity()).tv.setVisibility(View.VISIBLE);
-                                ((MainActivity) getActivity()).tv.setText(String.valueOf(cartListModelList.size()));
+                                tvBadge.setVisibility(View.VISIBLE);
+                                tvBadge.setText(String.valueOf(cartListModelList.size()));
                             }
                         }
 
@@ -335,12 +343,12 @@ public class BagFragment extends Fragment implements View.OnClickListener {
 
                             if (cartListModelList.size() == 0) {
                                 if (getActivity() != null) {
-                                    ((MainActivity) getActivity()).tv.setVisibility(View.GONE);
+                                    tvBadge.setVisibility(View.GONE);
                                 }
                             } else {
                                 if (getActivity() != null) {
-                                    ((MainActivity) getActivity()).tv.setVisibility(View.VISIBLE);
-                                    ((MainActivity) getActivity()).tv.setText(String.valueOf(cartListModelList.size()));
+                                    tvBadge.setVisibility(View.VISIBLE);
+                                    tvBadge.setText(String.valueOf(cartListModelList.size()));
                                 }
                             }
                         }
@@ -587,12 +595,12 @@ public class BagFragment extends Fragment implements View.OnClickListener {
                 binding.scrollView.setVisibility(View.GONE);
                 binding.llBagListEmpty.setVisibility(View.VISIBLE);
                 binding.tvPlaceOrder.setVisibility(View.GONE);
-                ((MainActivity) getActivity()).tv.setVisibility(View.GONE);
+                tvBadge.setVisibility(View.GONE);
 
             }
             else
             {
-                ((MainActivity) getActivity()).tv.setText(""+details.size());
+                tvBadge.setText(""+details.size());
             }
 
             try{
@@ -996,14 +1004,5 @@ public class BagFragment extends Fragment implements View.OnClickListener {
 
 
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        listener= (ProductDetailsActivityFinal.OnDataPass) getActivity();
-    }
-
-    public interface OnDataPass {
-        void onSuccess(String str);
-    }
 
 }

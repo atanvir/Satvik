@@ -14,6 +14,35 @@ public class BannerBean {
     @SerializedName("image")
     @Expose
     private String image;
+    @SerializedName("desc")
+    @Expose
+    private String desc;
+    @SerializedName("writter")
+    private String writter;
+
+    public BannerBean(String filterData, String type, String image, String desc, String writter) {
+        this.filterData = filterData;
+        this.type = type;
+        this.image = image;
+        this.desc = desc;
+        this.writter = writter;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public String getWritter() {
+        return writter;
+    }
+
+    public void setWritter(String writter) {
+        this.writter = writter;
+    }
 
     public String getFilterData() {
         return filterData;
