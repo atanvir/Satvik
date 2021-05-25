@@ -5,7 +5,8 @@
 
 
 <androidx.cardview.widget.CardView
-    android:layout_width="@dimen/dp_300"
+    android:id="@+id/cvMain"
+    android:layout_width="@dimen/dp_260"
     android:layout_height="wrap_content"
     app:cardElevation="2dp"
     app:cardUseCompatPadding="true"
@@ -14,7 +15,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="370dp">
+        android:layout_height="340dp">
 
         <ImageView
             android:id="@+id/ivProfile"
@@ -31,11 +32,12 @@
             android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:maxLines="2"
             android:text="Satvick is the be.jhsdjhsdjhdfjsdfjsdjsjsdjjsdjsdjsdsjhhshhhh"
             android:textAlignment="center"
-            android:textColor="@color/colorBlack"
+            android:textColor="@android:color/black"
             android:textSize="@dimen/dp_17"
             app:font="@{`lato_bold`}"
             app:layout_constraintEnd_toEndOf="parent"
@@ -51,11 +53,10 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:ellipsize="end"
-            android:maxLines="3"
+            android:maxLines="2"
             android:text="Satvick Life is the practice of maintaining a pure and balanced diet, conscious and
 positive thinking, and which reflects in confident actions."
             android:textAlignment="center"
-            android:textColor="@color/colorBlack"
             android:textSize="@dimen/dp_15"
             app:font="@{`lato_bold`}"
             app:layout_constraintEnd_toEndOf="parent"
@@ -64,11 +65,13 @@ positive thinking, and which reflects in confident actions."
 
         <Button
             android:id="@+id/btnPaymentMode"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_50"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_40"
             android:layout_gravity="center_horizontal"
+            android:layout_marginStart="45dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="45dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/drawable_gradient_solid_corner"
             android:padding="@dimen/dp_0"
             android:text="@string/log_in"

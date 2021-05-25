@@ -3,10 +3,14 @@ package com.satvick.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.youtube.player.YouTubeBaseActivity;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
 import com.satvick.R;
 import com.satvick.adapters.LifeCommonCategoryAdapter;
 import com.satvick.databinding.ActivityLifeCategoryBinding;
@@ -31,9 +35,10 @@ import retrofit2.Retrofit;
 
 import static com.satvick.utils.HelperClass.showInternetAlert;
 
-public class LifeCategoryActivity extends AppCompatActivity implements View.OnClickListener {
+public class LifeCategoryActivity extends YouTubeBaseActivity implements View.OnClickListener, YouTubePlayer.OnInitializedListener, YouTubePlayer.PlayerStateChangeListener {
 
     private ActivityLifeCategoryBinding binding;
+    private YouTubePlayer youTubePlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +50,15 @@ public class LifeCategoryActivity extends AppCompatActivity implements View.OnCl
         if(showInternetAlert(this)) lifeCategoryApi();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (youTubePlayer == null) binding.playerView.initialize(getString(R.string.youtube_api), this);
+        else youTubePlayer.cueVideo(getString(R.string.video_id),0);
+    }
+
     public void init(){
-        getLifecycle().addObserver(binding.playerView);
+        binding.playerView.initialize(getString(R.string.youtube_api), this);
         binding.toolbar.tvTitle.setText(getIntent().getStringExtra("title"));
     }
 
@@ -97,12 +109,12 @@ public class LifeCategoryActivity extends AppCompatActivity implements View.OnCl
         List<LifeTabBean> list=new ArrayList<>();
         for(int i=0;i<randomBlogs.size();i++){
             list.add(new LifeTabBean(randomBlogs.get(i).getId(),
-                    randomBlogs.get(i).getImage(),
-                    randomBlogs.get(i).getTitle(),
-                    randomBlogs.get(i).getSlug(),
-                    randomBlogs.get(i).getPaymentMode(),
-                    randomBlogs.get(i).getPrice(),
-                    randomBlogs.get(i).getShortDesc()));
+                                     randomBlogs.get(i).getImage(),
+                                     randomBlogs.get(i).getTitle(),
+                                     randomBlogs.get(i).getSlug(),
+                                     randomBlogs.get(i).getPaymentMode(),
+                                     randomBlogs.get(i).getPrice(),
+                                     randomBlogs.get(i).getShortDesc()));
         }
         return list;
     }
@@ -115,4 +127,59 @@ public class LifeCategoryActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
+    @Override
+    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
+        if (!b) {
+            this.youTubePlayer=youTubePlayer;
+            this.youTubePlayer.cueVideo(getString(R.string.video_id));
+            this.youTubePlayer.setPlayerStateChangeListener(this);
+        }
+
+    }
+
+    @Override
+    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+
+    }
+
+    @Override
+    public void onLoading() {
+
+    }
+
+    @Override
+    public void onLoaded(String s) {
+
+    }
+
+    @Override
+    public void onAdStarted() {
+
+    }
+
+    @Override
+    public void onVideoStarted() {
+
+    }
+
+    @Override
+    public void onVideoEnded() {
+        youTubePlayer.seekToMillis(0);
+
+    }
+
+    @Override
+    public void onError(YouTubePlayer.ErrorReason errorReason) {
+
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+    }
+
+    @Override
+    public void onBackPressed() {
+//        youTubePlayer.release();
+        super.onBackPressed();
+    }
 }

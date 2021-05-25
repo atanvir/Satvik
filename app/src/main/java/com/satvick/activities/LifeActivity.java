@@ -11,9 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener;
+import com.google.android.youtube.player.YouTubeBaseActivity;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
 import com.satvick.R;
 import com.satvick.adapters.LifeCategoryTabAdapter;
 import com.satvick.adapters.LifeCommonCategoryAdapter;
@@ -40,8 +40,9 @@ import retrofit2.Retrofit;
 
 import static com.satvick.utils.HelperClass.showInternetAlert;
 
-public class LifeActivity extends AppCompatActivity implements View.OnClickListener {
+public class LifeActivity extends YouTubeBaseActivity implements View.OnClickListener, YouTubePlayer.OnInitializedListener, YouTubePlayer.PlayerStateChangeListener {
     private ActivityLifeTabBinding binding;
+    private YouTubePlayer youTubePlayer;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,10 +53,14 @@ public class LifeActivity extends AppCompatActivity implements View.OnClickListe
         if(showInternetAlert(this)) lifeApi();
     }
 
-    public void init(){
-        getLifecycle().addObserver(binding.playerView);
-        binding.playerView.enableBackgroundPlayback(false);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (youTubePlayer == null) binding.playerView.initialize(getString(R.string.youtube_api), this);
+        else youTubePlayer.cueVideo(getString(R.string.video_id),0);
+       }
 
+    public void init(){
         binding.toolbar.tvTitle.setText(getIntent().getStringExtra("title"));
     }
 
@@ -99,7 +104,7 @@ public class LifeActivity extends AppCompatActivity implements View.OnClickListe
     private void setDataToUI(LifeResponseModel body) {
         // Tabs
         binding.rvTabs.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
-        binding.rvTabs.setAdapter(new LifeCategoryTabAdapter(this,body.getAppsatvicklife().getCategory(),binding.playerView));
+        binding.rvTabs.setAdapter(new LifeCategoryTabAdapter(this,body.getAppsatvicklife().getCategory()));
 
         binding.tvLabel.setText(Html.fromHtml(body.getAppsatvicklife().getPageContent()));
 
@@ -143,7 +148,58 @@ public class LifeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        binding.playerView.release();
+
+    }
+
+    @Override
+    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
+        if (!b) {
+            this.youTubePlayer=youTubePlayer;
+            this.youTubePlayer.cueVideo(getString(R.string.video_id));
+            this.youTubePlayer.setPlayerStateChangeListener(this);
+        }
+
+    }
+
+    @Override
+    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+
+    }
+
+    @Override
+    public void onBackPressed() {
+//        youTubePlayer.release();
+        super.onBackPressed();
+    }
+
+    @Override
+    public void onLoading() {
+
+    }
+
+    @Override
+    public void onLoaded(String s) {
+
+
+    }
+
+    @Override
+    public void onAdStarted() {
+
+    }
+
+    @Override
+    public void onVideoStarted() {
+
+    }
+
+    @Override
+    public void onVideoEnded() {
+        youTubePlayer.seekToMillis(0);
+    }
+
+    @Override
+    public void onError(YouTubePlayer.ErrorReason errorReason) {
 
     }
 }

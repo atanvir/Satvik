@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
+
 import com.satvick.R;
 import com.satvick.activities.LifeCategoryActivity;
 import com.satvick.databinding.AdapterLifeCategoryTabBinding;
@@ -19,13 +19,11 @@ import java.util.List;
 public class LifeCategoryTabAdapter extends RecyclerView.Adapter<LifeCategoryTabAdapter.MyViewHolder> {
     private Context context;
     private List<LifeResponseModel.Category> list;
-    private YouTubePlayerView youTubePlayerView;
 
 
-    public LifeCategoryTabAdapter(Context context, List<LifeResponseModel.Category> list, YouTubePlayerView youTubePlayerView){
+    public LifeCategoryTabAdapter(Context context, List<LifeResponseModel.Category> list){
         this.context=context;
         this.list=list;
-        this.youTubePlayerView=youTubePlayerView;
     }
 
 

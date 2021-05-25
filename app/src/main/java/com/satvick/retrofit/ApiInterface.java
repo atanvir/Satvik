@@ -490,4 +490,8 @@ public interface ApiInterface {
 
     @GET("appsatvicklifeblog/{id}")
     Call<LifeResponseModel> lifeCategoryApi(@Path("id") String id);
+
+
+    @GET("appsatvicklifecontent/{id}")
+    Call<LifeResponseModel> lifeContentApi(@Path("id") String id);
 }

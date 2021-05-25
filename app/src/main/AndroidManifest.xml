@@ -30,7 +30,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.LifeCategoryActivity"></activity>
+        <activity android:name=".activities.LifeDescriptionActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            ></activity>
+        <activity
+            android:name=".activities.LifeCategoryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
         <activity android:name=".activities.SizeChartActivity" />
 
         <uses-library
@@ -288,10 +295,10 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name=".activities.LifeActivity"
-            android:configChanges="screenSize|locale"
-
-            />
+        <activity
+            android:name=".activities.LifeActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".fcm.MyFirebaseMessagingService"
