@@ -1,0 +1,21 @@
+com/amar/library/ui/interfaces/IScrollViewListener.java
+ com.amar.library.ui.interfaces.IScrollViewListener
+com/amar/library/ui/presenter/StickyScrollPresenter.java
+ com.amar.library.ui.presenter.StickyScrollPresenter
+com/amar/library/ui/PropertySetter.java
+ com.amar.library.ui.PropertySetter
+com/amar/library/ui/presentation/IStickyScrollPresentation.java
+ com.amar.library.ui.presentation.IStickyScrollPresentation
+com/amar/library/ui/StickyScrollView.java
+ com.amar.library.ui.StickyScrollView
+ com.amar.library.ui.StickyScrollView$1
+com/amar/library/provider/interfaces/IScreenInfoProvider.java
+ com.amar.library.provider.interfaces.IScreenInfoProvider
+com/amar/library/provider/ResourceProvider.java
+ com.amar.library.provider.ResourceProvider
+com/amar/library/BuildConfig.java
+ com.amar.library.BuildConfig
+com/amar/library/provider/interfaces/IResourceProvider.java
+ com.amar.library.provider.interfaces.IResourceProvider
+com/amar/library/provider/ScreenInfoProvider.java
+ com.amar.library.provider.ScreenInfoProvider
