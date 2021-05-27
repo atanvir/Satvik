@@ -79,7 +79,7 @@ public class LifeCategoryActivity extends YouTubeBaseActivity implements View.On
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setDataToUI(response.body());
                     else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(), LifeCategoryActivity.this);
                 }
-                else CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(), LifeCategoryActivity.this);
+                else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error", LifeCategoryActivity.this);
 
             }
 

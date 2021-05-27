@@ -271,7 +271,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, MainActivity.class).putExtra("from", "addAddress"));
+        super.onBackPressed();
         //finish();
     }
 }

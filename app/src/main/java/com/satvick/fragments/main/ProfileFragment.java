@@ -2,6 +2,8 @@ package com.satvick.fragments.main;
 
 import android.content.Intent;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -12,7 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
+import com.satvick.adapters.SubscriptionAdapter;
+import com.satvick.fragments.more.SubscriptionFragment;
+import com.satvick.model.ViewProfileResponse;
 import com.squareup.picasso.Picasso;
 import com.satvick.R;
 import com.satvick.activities.AddressActivity;
@@ -42,211 +48,143 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class ProfileFragment extends Fragment implements View.OnClickListener {
-    View rootView;
-    // FragmentProfileBinding binding;
-    // FragmentProfileConstraintBinding binding;
-    FragmentProfileNewBinding binding;
-    private String mUserId = "";
-    private String token = "";
-    private String mUserImage = "";
-    private String mFullName = "";
-    private String mEmail = "";
-    private String mPhone = "";
-    private String mGender = "";
-    private String mDob = "";
-    private MyDialog myDialog;
+import static com.satvick.utils.HelperClass.getCacheData;
+
+public class ProfileFragment extends Fragment implements View.OnClickListener, Callback<ViewProfileModel> {
+    private FragmentProfileNewBinding binding;
+    private ViewProfileResponse data;
+    private String token,userId;
+    private MyDialog dialog;
+    private SubscriptionFragment subscriptionFragment= new SubscriptionFragment();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile_new, container, false);
-        rootView = binding.getRoot();
-        init();
-
-        if (HelperClass.showInternetAlert(getActivity())) {
-            callViewProfileApi(binding.mainCl);//hit api
-        }
-
-        return rootView;
+        return binding.getRoot();
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        init();
+        initCtrl();
+        if (HelperClass.showInternetAlert(getActivity())) callViewProfileApi();
+    }
+
+
 
     private void init() {
-        myDialog=new MyDialog(getActivity());
+        dialog=new MyDialog(requireActivity());
+        token= getCacheData(requireActivity()).first;
+        userId=getCacheData(requireActivity()).second;
+    }
 
-        binding.tvMyOrders.setOnClickListener(this);
-        binding.tvWishList.setOnClickListener(this);
-        binding.tvAddress.setOnClickListener(this);
-        binding.tvProfileDetails.setOnClickListener(this);
-        binding.tvNotification.setOnClickListener(this);
-        binding.tvHelpCenter.setOnClickListener(this);
+    private void initCtrl(){
+        binding.LLOrders.setOnClickListener(this);
+        binding.LLWishList.setOnClickListener(this);
+        binding.LLAddress.setOnClickListener(this);
+        binding.LLArticles.setOnClickListener(this);
+        binding.LLProfileDetails.setOnClickListener(this);
+        binding.LLNotification.setOnClickListener(this);
+        binding.LLHelpCenter.setOnClickListener(this);
+        binding.LLCoupon.setOnClickListener(this);
+        binding.LLSetting.setOnClickListener(this);
+        binding.LLRefer.setOnClickListener(this);
         binding.tvLogOut.setOnClickListener(this);
-        binding.tvCoupons.setOnClickListener(this);
-        binding.tvSavedCard.setOnClickListener(this);
-        binding.tvSettings.setOnClickListener(this);
-        binding.textView82.setOnClickListener(this);
-
-        if (SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false") ||
-                SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("") ) {
-            token = "1";
-            mUserId = "1";
-        } else if(SharedPreferenceWriter.getInstance(getActivity()).
-                getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("true")){
-            token = SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.TOKEN);
-            mUserId = SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.USER_ID);
-        }
     }
 
 
-    private void callViewProfileApi(final View view) {
-        myDialog.showDialog();
+    private void callViewProfileApi() {
+        dialog.showDialog();
         Retrofit retrofit = ApiClient.getClient();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-
-        Call<ViewProfileModel> call = apiInterface.getViewProfileResult(token, mUserId);
-
-        call.enqueue(new Callback<ViewProfileModel>() {
-            @Override
-            public void onResponse(Call<ViewProfileModel> call, Response<ViewProfileModel> response) {
-                if (response.isSuccessful()) {
-                    myDialog.hideDialog();
-                    ViewProfileModel data = response.body();
-                    if (data.getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
-                        setUI(data);//set data
-                    } else if(data.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)){
-                        Toast.makeText(getActivity(), "Another Device has logged-in", Toast.LENGTH_SHORT).show();
-                        Intent intent=new Intent(getActivity(),LoginActivity.class);
-                        startActivity(intent);
-                    }
-                }
-                else
-                {
-
-                    myDialog.hideDialog();
-                    final Snackbar mSnackbar = Snackbar.make(view, R.string.service_error, Snackbar.LENGTH_INDEFINITE);
-                    mSnackbar.setActionTextColor(ContextCompat.getColor(getActivity(),R.color.colorWhite));
-                    mSnackbar.setAction("RETRY", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                            callViewProfileApi(view);
-                            Snackbar snackbar=Snackbar.make(view,"Please wait!",Snackbar.LENGTH_LONG);
-                            snackbar.getView().setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.drawable_gradient_line));
-                            snackbar.show();
-                        }
-                    });
-                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.drawable_gradient_line));
-                    mSnackbar.show();
-                }
-            }
-
-
-            @Override
-            public void onFailure(Call<ViewProfileModel> call, Throwable t) {
-                myDialog.hideDialog();
-            }
-        });
-
+        Call<ViewProfileModel> call = apiInterface.getViewProfileResult(token, userId);
+        call.enqueue(this);
     }
 
 
     private void setUI(ViewProfileModel data) {
-
-        mUserImage = data.getViewProfileResponse().getImage();
-        mFullName = data.getViewProfileResponse().getName();
-        mEmail = data.getViewProfileResponse().getEmail();
-        mPhone = data.getViewProfileResponse().getPhone();
-        mDob =data.getViewProfileResponse().getDob();
-        mGender=data.getViewProfileResponse().getGender();
-
-
-//        if (!mUserImage.isEmpty() && mUserImage != null && !mUserImage.equals("null") && !mUserImage.equals("")) {
-//            Picasso.with(getActivity()).load(mUserImage).into(binding.imageView15);
-//        }
-
-        if (mUserImage != null) {
-            if(mUserImage.contains("https://graph.facebook.com/")) {
-            mUserImage=mUserImage.replace("http://mobuloustech.com/yodapi/public", "");
-            }
-            Picasso.with(getActivity()).load(mUserImage).into(binding.imageView15);
-        }
-
-        if (!mFullName.isEmpty() && mFullName != null && !mFullName.equals("null") && !mUserImage.equals("")) {
-            binding.textView79.setText(mFullName);
-        }
-
+        this.data=data.getViewProfileResponse();
+        Glide.with(requireActivity()).load(this.data.getImage()).into(binding.imageView15);
+        binding.tvName.setText(this.data.getName());
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-
-            case R.id.tvMyOrders:
-                startActivity(new Intent(getActivity(), MyOrderActivity.class).putExtra("from", "CancelOrderActivity"));
-                break;
-
-            case R.id.tvWishList:
-                startActivity(new Intent(getActivity(), MyWishListActivity.class));
-                break;
-
-            case R.id.tvAddress:
-                startActivity(new Intent(getActivity(), AddressActivity.class));
-                break;
-
-            case R.id.tvProfileDetails:
-                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("email", mEmail);
-                bundle.putString("name", mFullName);
-                bundle.putString("phone", mPhone);
-                bundle.putString("image", mUserImage);
-                bundle.putString("dob", mDob);
-                bundle.putString("gender", mGender);
-                intent.putExtras(bundle);
-                startActivity(intent);
-                break;
-
-            case R.id.tvNotification:
-                startActivity(new Intent(getActivity(), NotificationActivity.class));
-                break;
-
-            case R.id.tvHelpCenter:
-                startActivity(new Intent(getActivity(), HelpCenterActivity.class).putExtra("from", "ProfileFrag"));
-                break;
-
-            case R.id.tvCoupons:
-                startActivity(new Intent(getActivity(), CouponsActivity.class));
-                break;
-
-            case R.id.tvSavedCard:
-                startActivity(new Intent(getActivity(), SavedCardActivity.class));
-                break;
-
-            case R.id.tvSettings:
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
-                break;
-
-            case R.id.tvLogOut:
-                //1 way
-                Intent intent1 = new Intent(getActivity(),LoginActivity.class);
-                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent1);
-
-                SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.CURRENT_LOGIN, "false");
-                SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.CURRENT_LOGIN, "");
-                SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.TOKEN, "");
-                SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.USER_ID, "");
-                SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.BATCH_COUNT, "");
-                SharedPreferenceWriter.getInstance(getActivity()).writeStringValue("Ids","");
-
-                getActivity().finish();
-
-
-                break;
-
-            case R.id.textView82:
-                startActivity(new Intent(getActivity(), ReferAndEarnActivity.class));
-                break;
-
+            case R.id.LLOrders: startNewActivity(MyOrderActivity.class,"CancelOrderActivity"); break;
+            case R.id.LLWishList: startNewActivity(MyWishListActivity.class); break;
+            case R.id.LLAddress: startNewActivity(AddressActivity.class); break;
+            case R.id.LLArticles :  requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content, subscriptionFragment).commit(); break;
+            case R.id.LLProfileDetails: loadProfileDetail(); break;
+            case R.id.LLNotification: startNewActivity(NotificationActivity.class); break;
+            case R.id.LLHelpCenter: startNewActivity(HelpCenterActivity.class,"ProfileFrag"); break;
+            case R.id.LLCoupon: startNewActivity(CouponsActivity.class); break;
+            case R.id.LLSetting: startNewActivity(SettingsActivity.class); break;
+            case R.id.tvLogOut: logout(); break;
+            case R.id.LLRefer: startNewActivity(ReferAndEarnActivity.class); break;
         }
+    }
+
+    public void startNewActivity(Class className){
+        Intent intent=new Intent(requireActivity(),className);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+
+    public void startNewActivity(Class className,String from){
+        Intent intent=new Intent(requireActivity(),className);
+        intent.putExtra("from", from);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+
+    private void loadProfileDetail() {
+        if(data!=null) {
+            Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("email", data.getEmail());
+            bundle.putString("name", data.getName());
+            bundle.putString("phone", data.getPhone());
+            bundle.putString("image", data.getImage());
+            bundle.putString("dob", data.getDob());
+            bundle.putString("gender", data.getGender());
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
+    }
+
+    private void logout() {
+        Intent intent1 = new Intent(getActivity(),LoginActivity.class);
+        intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent1);
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.CURRENT_LOGIN, "false");
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.CURRENT_LOGIN, "");
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.TOKEN, "");
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.USER_ID, "");
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.BATCH_COUNT, "");
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue("Ids","");
+        getActivity().finish();
+    }
+
+    @Override
+    public void onResponse(Call<ViewProfileModel> call, Response<ViewProfileModel> response) {
+        dialog.hideDialog();
+        if (response.isSuccessful()) {
+            ViewProfileModel data = response.body();
+            if (data.getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) { setUI(data); }
+            else Toast.makeText(requireActivity(), data.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(requireActivity(), "Internal Server Error", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    @Override
+    public void onFailure(Call<ViewProfileModel> call, Throwable t) {
+        dialog.hideDialog();
+        Toast.makeText(requireActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
     }
 }

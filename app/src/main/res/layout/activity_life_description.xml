@@ -104,16 +104,41 @@
                         app:layout_constraintTop_toBottomOf="@+id/constraintLayout13" />
 
 
+
+                    <ImageView
+                        android:id="@+id/ivVideoThumbNail"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_250"
+                        android:adjustViewBounds="true"
+                        android:scaleType="center"
+                        android:layout_marginTop="16dp"
+                        android:visibility="visible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvDate"
+                        />
+
+
+                    <ImageView
+                        android:id="@+id/ivPlay"
+                        android:layout_width="@dimen/dp_45"
+                        android:layout_height="@dimen/dp_45"
+                        android:visibility="gone"
+                        android:src="@drawable/play_icon"
+                        app:layout_constraintBottom_toBottomOf="@id/ivVideoThumbNail"
+                        app:layout_constraintEnd_toEndOf="@+id/ivVideoThumbNail"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/ivVideoThumbNail" />
                     <com.potyvideo.library.AndExoPlayerView
                         android:id="@+id/videoview"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_250"
-                        android:layout_marginTop="16dp"
-                        android:visibility="gone"
-                        app:andexo_aspect_ratio="aspect_16_9"
-                        app:andexo_full_screen="true"
+                        app:andexo_play_when_ready="false"
+                        app:andexo_aspect_ratio="aspect_match"
                         app:andexo_show_controller="true"
-                        app:andexo_resize_mode="Fit"
+                        android:layout_marginTop="16dp"
+                        android:visibility="invisible"
+                        android:elevation="5dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvDate" />
@@ -138,6 +163,9 @@
                     <TextView
                         android:id="@+id/tvDescription"
                         android:layout_width="0dp"
+                        android:clickable="true"
+                        android:autoLink="all"
+                        android:linksClickable="true"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="16dp"

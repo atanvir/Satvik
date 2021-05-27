@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.satvick.ccavenue.RSAResponseModel;
 import com.satvick.model.AddAddressModel;
 import com.satvick.model.ApplyCouponModel;
+import com.satvick.model.ArticleModel;
 import com.satvick.model.CODAvailableModel;
 import com.satvick.model.CancelCouponModel;
 import com.satvick.model.CartListModel;
@@ -492,6 +493,15 @@ public interface ApiInterface {
     Call<LifeResponseModel> lifeCategoryApi(@Path("id") String id);
 
 
-    @GET("appsatvicklifecontent/{id}")
-    Call<LifeResponseModel> lifeContentApi(@Path("id") String id);
+    @FormUrlEncoded
+    @POST("appsatvicklifecontent")
+    Call<LifeResponseModel> lifeContentApi(@Field("life_id") String id,@Field("user_id") String user_id);
+
+    @FormUrlEncoded
+    @POST("myarticles")
+    Call<ArticleModel> articlesApi(@Field("token") String token, @Field("user_id") String user_id);
+
+    @FormUrlEncoded
+    @POST("placelifeorder")
+    Call<LifeResponseModel> placeLifeOrder(@Field("token") String token,@Field("user_id") String user_id,@Field("life_id") String life_id,@Field("order_id") String order_id,@Field("tracking_id") String tracking_id);
 }

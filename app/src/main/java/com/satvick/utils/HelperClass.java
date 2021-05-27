@@ -45,8 +45,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.satvick.R;
+import com.satvick.activities.LifeDescriptionActivity;
+import com.satvick.activities.PlaceOrderAddressActivity;
+import com.satvick.ccavenue.AvenuesParams;
+import com.satvick.ccavenue.WebViewActivity;
 import com.satvick.database.SharedPreferenceKey;
 import com.satvick.database.SharedPreferenceWriter;
+import com.satvick.databinding.SatvikLifeBinding;
 
 import org.json.JSONObject;
 
@@ -67,7 +72,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.TimeZone;
+import java.util.UUID;
 
 /**
  * Created by anurag on 7/23/2016.
@@ -655,4 +662,55 @@ public class HelperClass {
     public static Pair<String, String>  getValue(String token, String _id){
         return new Pair<String, String>(token, _id);
     }
+    public static String createUniqueId() {
+        return UUID.randomUUID().toString();
+    }
+
+    public static void showSatvikLifeArticle(Context context,String amount,String id) {
+        Dialog dialog = new Dialog(context, android.R.style.Theme_Black);
+        Objects.requireNonNull(dialog.getWindow()).requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        SatvikLifeBinding binding=SatvikLifeBinding.inflate(LayoutInflater.from(context));
+        dialog.setContentView(binding.getRoot());
+        binding.messagetxt.setText("Are you sure wants to buy this article");
+
+
+        binding.closeiv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               dialog.dismiss();
+            }
+        });
+
+        binding.okbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                Intent intent = new Intent(context, WebViewActivity.class);
+                intent.putExtra("cameFrom",context.getClass().getSimpleName());
+                intent.putExtra(AvenuesParams.ACCESS_CODE, context.getString(R.string.access_code_key));
+                intent.putExtra(AvenuesParams.MERCHANT_ID, context.getString(R.string.merchant_id_key));
+                intent.putExtra(AvenuesParams.ORDER_ID, createUniqueId());
+                intent.putExtra(AvenuesParams.CURRENCY, "INR");
+                intent.putExtra("life_id",id);
+                intent.putExtra(AvenuesParams.AMOUNT, amount);
+                intent.putExtra(AvenuesParams.REDIRECT_URL, context.getString(R.string.redirect_url_key));
+                intent.putExtra(AvenuesParams.CANCEL_URL,context.getString(R.string.cancel_url_key));
+                intent.putExtra(AvenuesParams.RSA_KEY_URL, context.getString(R.string.rsa_key_url));
+                context.startActivity(intent);  /*edited on 17 may*/
+
+            }
+        });
+
+        binding.btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
 }

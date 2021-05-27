@@ -68,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements  BottomNavigation
             intent.putExtra("product_id", getIntent().getStringExtra("product_id"));
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+        }else if(getIntent().getStringExtra("screen")!=null){
+            loadFragment(bagFragment);
         }else{
             loadFragment(homeFragment);
         }

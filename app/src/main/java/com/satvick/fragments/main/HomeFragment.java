@@ -232,7 +232,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
                         getActivity().finish();
                     }
                     else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
-                        CommonUtil.setUpSnackbarMessage(binding.mainRl,response.body().getMessage(),getActivity());
+                        CommonUtil.setUpSnackbarMessage(binding.mainRl,"Internal Server Error",getActivity());
                     }
                 } else {
                     Toast.makeText(getActivity(), R.string.service_error, Toast.LENGTH_SHORT).show();
@@ -271,7 +271,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
                         if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setDataToUI(response.body());
                         else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.mainRl,response.body().getMessage(), requireActivity());
                     }
-                    else CommonUtil.setUpSnackbarMessage(binding.mainRl,response.body().getMessage(), requireActivity());
+                    else CommonUtil.setUpSnackbarMessage(binding.mainRl,"Internal Server Error", requireActivity());
 
                 }
             }

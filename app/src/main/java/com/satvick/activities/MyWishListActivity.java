@@ -492,6 +492,6 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onBackPressed() {
-        finish();
+        super.onBackPressed();
     }
 }

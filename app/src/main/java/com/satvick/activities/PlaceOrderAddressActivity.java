@@ -264,7 +264,6 @@ public class PlaceOrderAddressActivity extends AppCompatActivity implements View
                     }
 
                 } else {
-                    Log.d("OnFAil:", response.body().toString());
                     myDialog.hideDialog();
                     Toast.makeText(PlaceOrderAddressActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                 }
@@ -585,18 +584,22 @@ public class PlaceOrderAddressActivity extends AppCompatActivity implements View
 
                         } else if (comeFrom.equalsIgnoreCase("Online")) {
                             Log.e("orderNumber", orderNumber[0]);
-                            orderPlaceApi(comeFrom, orderNumber[0]);  /*edited on 17 may*/
+                           // orderPlaceApi(comeFrom, orderNumber[0]);  /*edited on 17 may*/
 
                             Intent intent = new Intent(PlaceOrderAddressActivity.this, WebViewActivity.class);
+                            intent.putExtra("cameFrom",PlaceOrderAddressActivity.class.getSimpleName());
                             intent.putExtra(AvenuesParams.ACCESS_CODE, getString(R.string.access_code_key));
+                            intent.putParcelableArrayListExtra("data",new ArrayList(viewAddressModelList));
                             intent.putExtra(AvenuesParams.MERCHANT_ID, getString(R.string.merchant_id_key));
                             intent.putExtra(AvenuesParams.ORDER_ID, orderNumber[0]);
+                            intent.putExtra("coupan_code",coupan_code);
+                            intent.putExtra("order_number",orderNumber[0]);
                             intent.putExtra(AvenuesParams.CURRENCY, "INR");
-                            intent.putExtra(AvenuesParams.AMOUNT, "1");
+                            intent.putExtra(AvenuesParams.AMOUNT, binding.tvTotal.getText().toString().split(symbol)[1].trim());
                             intent.putExtra(AvenuesParams.REDIRECT_URL, getString(R.string.redirect_url_key));
                             intent.putExtra(AvenuesParams.CANCEL_URL, getString(R.string.cancel_url_key));
                             intent.putExtra(AvenuesParams.RSA_KEY_URL, getString(R.string.rsa_key_url));
-                            // startActivity(intent);  /*edited on 17 may*/
+                            startActivity(intent);  /*edited on 17 may*/
 
                         }
 

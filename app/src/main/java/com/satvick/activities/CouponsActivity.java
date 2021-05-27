@@ -122,6 +122,6 @@ public class CouponsActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, MainActivity.class).putExtra("from", "CouponsActivity"));
+        super.onBackPressed();
     }
 }

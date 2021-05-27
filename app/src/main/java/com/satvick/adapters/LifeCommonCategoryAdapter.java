@@ -30,7 +30,6 @@ public class LifeCommonCategoryAdapter extends RecyclerView.Adapter<RecyclerView
     public LifeCommonCategoryAdapter(Context context, List<TabModel> list){
         this.context=context;
         this.list=list;
-        Log.e("list",""+list.size());
     }
 
     @NonNull
@@ -71,6 +70,7 @@ public class LifeCommonCategoryAdapter extends RecyclerView.Adapter<RecyclerView
                 ((LifeCategoryViewHolder) holder).binding.rvCategory.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
                 ((LifeCategoryViewHolder) holder).binding.rvCategory.setAdapter(new LifeSubCategoryAdapter(context, list.get(position).getLifeTab()));
             }else{
+
                 ((LifeCategoryViewHolder) holder).binding.tvHeader.setVisibility(View.GONE);
                 ((LifeCategoryViewHolder) holder).binding.rvCategory.setVisibility(View.GONE);
             }

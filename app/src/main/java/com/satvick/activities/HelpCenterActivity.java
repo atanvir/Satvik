@@ -93,37 +93,7 @@ public class HelpCenterActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onBackPressed() {
-        if (comeFrom.equals("ProfileFrag")) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("from", "onBackProfileFrag");
-            startActivity(intent);
-        }
-        else if(comeFrom.equals("ManageYourAccountActivity")){
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("from", "onBackProfileFrag");
-            startActivity(intent);
-        }else if(comeFrom.equals("OtherActivity")){
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("from", "onBackProfileFrag");
-            startActivity(intent);
-        }else if(comeFrom.equals("PaymentActivity")){
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("from", "onBackProfileFrag");
-            startActivity(intent);
-        }else if(comeFrom.equals("OffersDiscountsCouponsActivity")){
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("from", "onBackProfileFrag");
-            startActivity(intent);
-        }else if(comeFrom.equals("PaymentRefundActivity")) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("from", "onBackProfileFrag");
-            startActivity(intent);
-        }else if(comeFrom.equals("MyOrderActivity")){
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("from", "onBackProfileFrag");
-            startActivity(intent);
-        }
-
+       super.onBackPressed();
     }
 
     @Override

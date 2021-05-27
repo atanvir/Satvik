@@ -125,6 +125,11 @@ dependencies {
 
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
+    implementation 'com.google.android.exoplayer:exoplayer:2.11.3'
+
+
+
+
 
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
 

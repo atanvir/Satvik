@@ -5,6 +5,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class BannerBean {
 
+    @SerializedName("id")
+    @Expose
+    private String id;
+
     @SerializedName("filter_data")
     @Expose
     private String filterData;
@@ -14,19 +18,43 @@ public class BannerBean {
     @SerializedName("image")
     @Expose
     private String image;
-    @SerializedName("desc")
+    @SerializedName("content")
     @Expose
     private String desc;
-    @SerializedName("writter")
+    @SerializedName("name")
     private String writter;
+    @SerializedName("created_at")
+    @Expose
+    private String created_at;
+    @SerializedName("updated_at")
+    @Expose
+    private String updated_at;
 
-    public BannerBean(String filterData, String type, String image, String desc, String writter) {
-        this.filterData = filterData;
-        this.type = type;
-        this.image = image;
-        this.desc = desc;
-        this.writter = writter;
+
+    public String getCreated_at() {
+        return created_at;
     }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
+    }
+
+    public String getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(String updated_at) {
+        this.updated_at = updated_at;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
 
     public String getDesc() {
         return desc;

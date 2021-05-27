@@ -131,9 +131,9 @@
     <!--    <string name="merchant_id_key">204482</string>-->
     <string name="merchant_id_key">340993</string>
     <!--<string name="redirect_url_key">http://youdomain.com/payment-response.php</string>-->
-    <string name="redirect_url_key">http://54.237.193.27/api/indipay/response</string>
+    <string name="redirect_url_key">https://soulahe.com/api/indipay/response</string>
     <!--<string name="cancel_url_key">http://youdomain.com/payment-cancel.php</string>-->
-    <string name="cancel_url_key">http://54.237.193.27/api/indipay/response</string>
+    <string name="cancel_url_key">https://soulahe.com/api/indipay/response</string>
     <!--<string name="rsa_key_url">https://secure.ccavenue.com/transaction/jsp/GetRSA.jsp</string>-->
     <!--<string name="rsa_key_url">https://test.ccavenue.com/transaction/getRSAKey</string>-->
     <string name="rsa_key_url">https://secure.ccavenue.com/transaction/jsp/GetRSA.jsp</string>

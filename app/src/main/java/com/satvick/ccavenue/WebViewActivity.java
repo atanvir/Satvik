@@ -5,30 +5,59 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.satvick.R;
+import com.satvick.activities.LifeDescriptionActivity;
+import com.satvick.activities.MyOrderActivity;
+import com.satvick.activities.PlaceOrderAddressActivity;
+import com.satvick.database.SharedPreferenceKey;
+import com.satvick.database.SharedPreferenceWriter;
+import com.satvick.model.LifeResponseModel;
+import com.satvick.model.PlaceOrderModel;
+import com.satvick.model.ViewAddressModel;
 import com.satvick.retrofit.ApiClient;
 import com.satvick.retrofit.ApiInterface;
+import com.satvick.retrofit.MyDialog;
+import com.satvick.utils.CommonUtil;
+import com.satvick.utils.GlobalVariables;
+import com.satvick.utils.HelperClass;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
+import static com.satvick.database.SharedPreferenceKey.gift_wrapup_status;
 
 public class WebViewActivity extends AppCompatActivity {
     Intent mainIntent;
     String encVal;
     String vResponse;
-
+    private List<ViewAddressModel.Viewaddress> viewAddressModelList = new ArrayList<>();
+    private String coupan_code;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -36,7 +65,6 @@ public class WebViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_webview);
         mainIntent = getIntent();
         Log.e("id:",mainIntent.getStringExtra(AvenuesParams.ORDER_ID));
-        //get rsa key method
         get_RSA_key(mainIntent.getStringExtra(AvenuesParams.ACCESS_CODE), mainIntent.getStringExtra(AvenuesParams.ORDER_ID));
     }
 
@@ -102,6 +130,17 @@ public class WebViewActivity extends AppCompatActivity {
                     if (url.indexOf("/ccavResponseHandler.jsp") != -1) {
                         webview.loadUrl("javascript:window.HTMLOUT.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
                     }
+                    if(url.contains("https://soulahe.com/api/indipay/response")){
+                        if(getIntent().getStringExtra("cameFrom").equalsIgnoreCase(PlaceOrderAddressActivity.class.getSimpleName())) {
+                            viewAddressModelList=getIntent().getParcelableArrayListExtra("data");
+                            coupan_code=getIntent().getStringExtra("coupan_code");
+                            orderPlaceApi();
+                        }else{
+                            placeLifeOrderApi();
+                        }
+                    }
+
+
 
                 }
 
@@ -122,6 +161,136 @@ public class WebViewActivity extends AppCompatActivity {
 
         }
     }
+
+    private void placeLifeOrderApi() {
+        final MyDialog myDialog=new MyDialog(this);
+        myDialog.showDialog();
+        Retrofit retrofit = ApiClient.getClient();
+        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
+        Call<LifeResponseModel> call = apiInterface.placeLifeOrder(HelperClass.getCacheData(this).first,HelperClass.getCacheData(this).second,getIntent().getStringExtra("life_id"),getIntent().getStringExtra(AvenuesParams.ORDER_ID)," ");
+        call.enqueue(new Callback<LifeResponseModel>() {
+            public void onResponse(Call<LifeResponseModel> call, Response<LifeResponseModel> response) {
+                myDialog.hideDialog();
+                if (response.isSuccessful()) {
+                    if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
+                        CommonMessagePopup(response.body().getMessage());
+                    }
+                    else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
+                        CommonMessagePopup(response.body().getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LifeResponseModel> call, Throwable t) {
+                myDialog.hideDialog();
+            }
+        });
+
+    }
+
+
+    private void orderPlaceApi() {
+        String token = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.TOKEN);
+        String userId = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.USER_ID);
+        String gift_wrap_status = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.gift_wrapup_status);
+        final MyDialog myDialog = new MyDialog(this);
+        myDialog.showDialog();
+
+
+        if (gift_wrap_status.equalsIgnoreCase("")) {
+
+            gift_wrap_status = "no";
+        }
+
+
+        Retrofit retrofit = ApiClient.getClient();
+        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
+        String location = "";
+        String state = "";
+        String city = "";
+        String country = "";
+        String pincode = "";
+        String phone = "";
+        String name = "";
+        String address_type = "";
+
+        for (int i = 0; i < viewAddressModelList.size(); i++) {
+            if (viewAddressModelList.size() > 1) {
+                if (viewAddressModelList.get(i).getRemark().equalsIgnoreCase("1")) {
+                    location += viewAddressModelList.get(i).getAddress() + "," + viewAddressModelList.get(i).getTown() + "," + viewAddressModelList.get(i).getCity() + "," + viewAddressModelList.get(i).getState() + "," + viewAddressModelList.get(i).getPincode() + "," + viewAddressModelList.get(i).getCountry();
+                    state += viewAddressModelList.get(i).getState();
+                    city += viewAddressModelList.get(i).getCity();
+                    country += viewAddressModelList.get(i).getCountry();
+                    pincode += viewAddressModelList.get(i).getPincode();
+                    phone += viewAddressModelList.get(i).getPhone();
+                    name += viewAddressModelList.get(i).getName();
+                    address_type = viewAddressModelList.get(i).getType();
+                }
+
+            } else {
+                if (viewAddressModelList.get(i).getRemark().equalsIgnoreCase("1")) {
+                    location += viewAddressModelList.get(i).getAddress() + "," + viewAddressModelList.get(i).getTown() + "," + viewAddressModelList.get(i).getCity() + "," + viewAddressModelList.get(i).getState() + "," + viewAddressModelList.get(i).getPincode() + "," + viewAddressModelList.get(i).getCountry();
+                    state += viewAddressModelList.get(i).getState();
+                    city += viewAddressModelList.get(i).getCity();
+                    country += viewAddressModelList.get(i).getCountry();
+                    pincode += viewAddressModelList.get(i).getPincode();
+                    phone += viewAddressModelList.get(i).getPhone();
+                    name += viewAddressModelList.get(i).getName();
+                    address_type = viewAddressModelList.get(i).getType();
+
+                } else {
+                    location += viewAddressModelList.get(i).getAddress() + "," + viewAddressModelList.get(i).getTown() + "," + viewAddressModelList.get(i).getCity() + "," + viewAddressModelList.get(i).getState() + "," + viewAddressModelList.get(i).getPincode() + "," + viewAddressModelList.get(i).getCountry();
+                    state += viewAddressModelList.get(i).getState();
+                    city += viewAddressModelList.get(i).getCity();
+                    country += viewAddressModelList.get(i).getCountry();
+                    pincode += viewAddressModelList.get(i).getPincode();
+                    phone += viewAddressModelList.get(i).getPhone();
+                    name += viewAddressModelList.get(i).getName();
+                    address_type = viewAddressModelList.get(i).getType();
+                }
+            }
+
+        }
+
+        Log.e("location", location);
+        if (coupan_code == null) {
+            coupan_code = "";
+        }
+
+        String currency = SharedPreferenceWriter.getInstance(this).getString("currency");
+        Call<PlaceOrderModel> call = apiInterface.getPlaceOrderResult(token, userId, gift_wrap_status, location, coupan_code, "Online", getIntent().getStringExtra("order_number"), "", state, city, country, pincode, phone, name, address_type, currency != "Rs." ? currency : "Rs");
+
+        call.enqueue(new Callback<PlaceOrderModel>() {
+            @Override
+            public void onResponse(Call<PlaceOrderModel> call, Response<PlaceOrderModel> response) {
+
+                if (response.isSuccessful()) {
+                    myDialog.hideDialog();
+
+                    PlaceOrderModel data = response.body();
+
+                    if (data.getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
+                        CommonMessagePopup(response.body().getMessage());
+
+                    } else if (data.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
+
+                        CommonMessagePopup(response.body().getMessage());
+                    }
+
+                } else {
+                    myDialog.hideDialog();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PlaceOrderModel> call, Throwable t) {
+                Log.e("failure", t.getMessage());
+                myDialog.hideDialog();
+            }
+        });
+    }
+
 
     public void get_RSA_key(final String ac, final String od) {
         LoadingDialog.showLoadingDialog(WebViewActivity.this, "Loading...");
@@ -216,5 +385,54 @@ public class WebViewActivity extends AppCompatActivity {
 
 
         alertDialog.show();
+    }
+
+    private void CommonMessagePopup(String message) {
+        final Dialog dialog = new Dialog(this, android.R.style.Theme_Black);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(R.layout.common_mesage_popup);
+        LottieAnimationView lottieAnimationView = dialog.findViewById(R.id.lottieAnimationView);
+        ImageView closeiv = dialog.findViewById(R.id.closeiv);
+        TextView messagetxt = dialog.findViewById(R.id.messagetxt);
+
+        if (message.equalsIgnoreCase("Your order completed successfully")) {
+            message = "Your order placed successfully";
+            messagetxt.setText(message);
+            lottieAnimationView.setAnimation("done.json");
+
+        } else {
+            messagetxt.setText(message);
+            lottieAnimationView.setAnimation("error.json");
+
+        }
+
+        Button okbtn = dialog.findViewById(R.id.okbtn);
+
+        closeiv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                startActivity(new Intent(WebViewActivity.this, MyOrderActivity.class));
+                SharedPreferenceWriter.getInstance(WebViewActivity.this).clearPreferenceValue(gift_wrapup_status, "no");
+                SharedPreferenceWriter.getInstance(WebViewActivity.this).writeBooleanValue(GlobalVariables.COUPON_APPLIED, false);
+
+            }
+        });
+        okbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                startActivity(new Intent(WebViewActivity.this, MyOrderActivity.class));
+                SharedPreferenceWriter.getInstance(WebViewActivity.this).clearPreferenceValue(gift_wrapup_status, "no");
+                SharedPreferenceWriter.getInstance(WebViewActivity.this).writeBooleanValue(GlobalVariables.COUPON_APPLIED, false);
+
+            }
+        });
+
+        dialog.show();
+
+
     }
 }

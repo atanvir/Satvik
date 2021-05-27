@@ -855,7 +855,7 @@ public class BagFragment extends Fragment implements View.OnClickListener {
                  openLoginSignUpBottomSheetWhenUserNotLogedIn();
             } else {
                 settingProductIdQuantity();
-                callingIntent("PlaceOrderAddressActivity",binding.tvTotalPrice.getText().toString().split("\\.")[1],cartProduct_id,cartProduct_quantity);
+                callingIntent("PlaceOrderAddressActivity",binding.tvTotalPrice.getText().toString().split(symbol)[1],cartProduct_id,cartProduct_quantity);
             }
             break;
 
@@ -866,7 +866,7 @@ public class BagFragment extends Fragment implements View.OnClickListener {
 
             case R.id.llaa:
             settingProductIdQuantity();
-            callingIntent("ApplyCouponActivity",binding.tvTotalPrice.getText().toString().split("\\.")[1],cartProduct_id,cartProduct_quantity);
+            callingIntent("ApplyCouponActivity",binding.tvTotalPrice.getText().toString().split(symbol)[1],cartProduct_id,cartProduct_quantity);
             break;
 
             case R.id.ivBack:

@@ -277,6 +277,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, MainActivity.class).putExtra("from", "SettingsActivity"));
+        super.onBackPressed();
     }
 }

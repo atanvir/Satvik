@@ -36,8 +36,7 @@ public class LifeBannerAdapter extends RecyclerView.Adapter<LifeBannerAdapter.My
     public void onBindViewHolder(@NonNull LifeBannerAdapter.MyViewHolder holder, int position) {
         holder.binding.tvWriteName.setText(list.get(position).getWritter());
         holder.binding.tvDesc.setText(list.get(position).getDesc());
-        Glide.with(context).load(list.get(position).getImage()).into(holder.binding.ivCoverPhoto);
-
+        Glide.with(context).load("https://soulahe.com/public/banner/bg.jpeg").into(holder.binding.ivCoverPhoto);
     }
 
     @Override

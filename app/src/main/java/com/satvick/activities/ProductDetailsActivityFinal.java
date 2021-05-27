@@ -920,7 +920,7 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
 
             case R.id.ivAddToBagOrCart:
                 Intent intent = new Intent(this, MainActivity.class);
-                intent.putExtra("from", "ProductDetailsActivityFinal");
+                intent.putExtra("screen", ProductDetailsActivityFinal.class.getSimpleName());
                 finish();
                 startActivity(intent);
 

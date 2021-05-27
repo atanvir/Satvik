@@ -66,6 +66,18 @@ public class LifeResponseModel {
         @Expose
         private Blog blog;
 
+        @SerializedName("have_subscribe")
+        @Expose
+        private String have_subscribe;
+
+        public String getHave_subscribe() {
+            return have_subscribe;
+        }
+
+        public void setHave_subscribe(String have_subscribe) {
+            this.have_subscribe = have_subscribe;
+        }
+
         public Blog getBlog() {
             return blog;
         }
@@ -285,6 +297,11 @@ public class LifeResponseModel {
         @SerializedName("page_content")
         @Expose
         private String pageContent;
+        @SerializedName("testimonials")
+        @Expose
+        private List<BannerBean> testimonials;
+
+
         @SerializedName("random_blog_one")
         @Expose
         private List<RandomBlog> RandomBlog = null;
@@ -301,6 +318,14 @@ public class LifeResponseModel {
 
         @SerializedName("workshop_array")
         private List<RandomBlog> workshop_array=null;
+
+        public List<BannerBean> getTestimonials() {
+            return testimonials;
+        }
+
+        public void setTestimonials(List<BannerBean> testimonials) {
+            this.testimonials = testimonials;
+        }
 
         public List<LifeResponseModel.RandomBlog> getWorkshop_array() {
             return workshop_array;

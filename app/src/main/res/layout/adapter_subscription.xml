@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/rlRecentOrdersOngoing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RelativeLayout
+                android:id="@+id/rlOrderNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvOrder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:gravity="start"
+                    android:text="Order No:"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rlOrderNo"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/dp_5"
+                android:padding="@dimen/dp_8">
+
+                <LinearLayout
+                    android:id="@+id/llTop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/ivProduct"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.5"
+                        android:adjustViewBounds="true"
+                        android:contentDescription="hotel"
+                        android:gravity="top"
+                        android:scaleType="center" />
+
+                    <RelativeLayout
+                        android:id="@+id/rlFood"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="start">
+
+                        <LinearLayout
+                            android:id="@+id/llRight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:gravity="start"
+                            android:orientation="vertical"
+                            android:paddingStart="@dimen/dp_5"
+                            android:paddingEnd="@dimen/dp_5"
+                            android:paddingBottom="@dimen/dp_5">
+
+                            <TextView
+                                android:id="@+id/tvName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:gravity="start"
+                                android:paddingStart="@dimen/dp_5"
+                                android:paddingEnd="@dimen/dp_5"
+                                android:paddingBottom="@dimen/dp_2"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
+                                android:textSize="14dp"
+                                app:font="@{`lato_bold`}" />
+
+                            <TextView
+                                android:id="@+id/tvDesc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:gravity="start"
+                                android:paddingStart="@dimen/dp_5"
+                                android:paddingEnd="@dimen/dp_5"
+                                android:paddingBottom="@dimen/dp_2"
+                                android:textSize="14dp"
+                                app:font="@{`lato_regular`}" />
+
+
+                            <RelativeLayout
+                                android:id="@+id/rlRupee"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:paddingStart="@dimen/dp_5"
+                                android:paddingEnd="@dimen/dp_5"
+                                android:paddingBottom="@dimen/dp_2">
+
+                                <LinearLayout
+                                    android:id="@+id/llRupee"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentStart="true"
+                                        android:text="Price :"
+                                        android:textColor="@color/black"
+                                        android:textStyle="bold"
+                                        android:textSize="14dp"
+                                        app:font="@{`lato_regular`}" />
+
+                                    <TextView
+                                        android:id="@+id/tvPrice"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentStart="true"
+                                        android:textSize="14dp"
+                                        app:font="@{`lato_regular`}" />
+
+
+                                </LinearLayout>
+
+
+
+                            </RelativeLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingStart="@dimen/dp_5"
+                                android:visibility="gone"
+                                android:paddingEnd="@dimen/dp_5"
+                                android:paddingBottom="@dimen/dp_2">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:text="Order Status:"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="14dp"
+                                    app:font="@{`lato_regular`}" />
+
+
+                                <TextView
+                                    android:id="@+id/tvOrderStatusContent"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_alignParentStart="true"
+                                    android:text="Dispatched"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="14dp"
+                                    app:font="@{`lato_regular`}" />
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingStart="@dimen/dp_5"
+                                android:paddingEnd="@dimen/dp_5"
+                                android:paddingBottom="@dimen/dp_2">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:text="Status :"
+                                    android:textColor="@color/black"
+                                    android:textStyle="bold"
+                                    android:textSize="14dp"
+                                    app:font="@{`lato_regular`}" />
+
+
+                                <TextView
+                                    android:id="@+id/tvStatus"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:textSize="14dp"
+                                    android:text="true"
+                                    app:font="@{`lato_regular`}" />
+
+
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingStart="@dimen/dp_5"
+                                android:paddingEnd="@dimen/dp_5"
+                                android:paddingBottom="@dimen/dp_2">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:text="Start Date :"
+                                    android:textColor="@color/black"
+                                    android:textStyle="bold"
+                                    android:textSize="14dp"
+                                    app:font="@{`lato_bold`}" />
+
+
+                                <TextView
+                                    android:id="@+id/tvStartDate"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:textSize="14dp"
+                                    app:font="@{`lato_regular`}" />
+
+
+                            </LinearLayout>
+
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingStart="@dimen/dp_5"
+                                android:paddingEnd="@dimen/dp_5"
+                                android:paddingBottom="@dimen/dp_2">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:text="End Date :"
+                                    android:textColor="@color/black"
+                                    android:textStyle="bold"
+                                    android:textSize="14dp"
+                                    app:font="@{`lato_bold`}" />
+
+
+                                <TextView
+                                    android:id="@+id/tvEndDate"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:textSize="14dp"
+                                    app:font="@{`lato_regular`}" />
+
+
+                            </LinearLayout>
+
+
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/rlTop"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/colorLightGrey" />
+        </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

@@ -30,10 +30,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.LifeDescriptionActivity"
+
+
+
+        <activity
+            android:name=".activities.LifeDescriptionActivity"
             android:screenOrientation="portrait"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            ></activity>
+            android:configChanges="orientation|keyboardHidden|screenLayout|screenSize">
+
+        </activity>
         <activity
             android:name=".activities.LifeCategoryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -307,6 +312,7 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
 
         <provider
             android:name="androidx.core.content.FileProvider"

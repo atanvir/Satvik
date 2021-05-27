@@ -124,22 +124,7 @@ public class MyOrderActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onBackPressed() {
-        if (comeFrom != null) {
-            if (comeFrom.equals("HelpCenterActivity")) {
-                startActivity(new Intent(MyOrderActivity.this, HelpCenterActivity.class).putExtra("from", "MyOrderActivity"));
-            } else if (comeFrom.equals("CancelOrderActivity")) {
-                startActivity(new Intent(MyOrderActivity.this, MainActivity.class).putExtra("from", "ProductListFragment"));
-            } else if (comeFrom.equalsIgnoreCase(MyFirebaseMessagingService.class.getSimpleName())) {
-                startActivity(new Intent(MyOrderActivity.this, MainActivity.class).putExtra("from", ""));
-            } else if (comeFrom.equalsIgnoreCase("")) {
-                startActivity(new Intent(MyOrderActivity.this, HelpCenterActivity.class).putExtra("from", "MyOrderActivity"));
-            } else {
-                startActivity(new Intent(MyOrderActivity.this, MainActivity.class).putExtra("from", "ProductListFragment"));
-            }
-        } else {
-
-            startActivity(new Intent(MyOrderActivity.this, MainActivity.class));
-        }
+        super.onBackPressed();
     }
 
     @Override

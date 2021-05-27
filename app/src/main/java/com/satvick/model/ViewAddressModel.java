@@ -1,11 +1,16 @@
 package com.satvick.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.versionedparcelable.NonParcelField;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class ViewAddressModel {
+public class ViewAddressModel implements Parcelable {
 
    /* {
         "status": "SUCCESS",
@@ -24,6 +29,38 @@ public class ViewAddressModel {
     private List<Viewaddress> viewaddress;
     @SerializedName("status")
     private String status;
+
+    protected ViewAddressModel(Parcel in) {
+        requestKey = in.readString();
+        message = in.readString();
+        viewaddress = in.createTypedArrayList(Viewaddress.CREATOR);
+        status = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(requestKey);
+        dest.writeString(message);
+        dest.writeTypedList(viewaddress);
+        dest.writeString(status);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<ViewAddressModel> CREATOR = new Creator<ViewAddressModel>() {
+        @Override
+        public ViewAddressModel createFromParcel(Parcel in) {
+            return new ViewAddressModel(in);
+        }
+
+        @Override
+        public ViewAddressModel[] newArray(int size) {
+            return new ViewAddressModel[size];
+        }
+    };
 
     public String getRequestKey() {
         return requestKey;
@@ -57,7 +94,8 @@ public class ViewAddressModel {
         this.status = status;
     }
 
-    public static class Viewaddress {
+
+    public static class Viewaddress implements Parcelable {
         @SerializedName("remark")
         private String remark;
         @SerializedName("updated_at")
@@ -94,6 +132,62 @@ public class ViewAddressModel {
         @Expose
         private String longitude;
 
+
+        protected Viewaddress(Parcel in) {
+            remark = in.readString();
+            updated_at = in.readString();
+            created_at = in.readString();
+            type = in.readString();
+            state = in.readString();
+            city = in.readString();
+            town = in.readString();
+            address = in.readString();
+            pincode = in.readString();
+            phone = in.readString();
+            name = in.readString();
+            user_id = in.readString();
+            id = in.readInt();
+            country = in.readString();
+            latitude = in.readString();
+            longitude = in.readString();
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(remark);
+            dest.writeString(updated_at);
+            dest.writeString(created_at);
+            dest.writeString(type);
+            dest.writeString(state);
+            dest.writeString(city);
+            dest.writeString(town);
+            dest.writeString(address);
+            dest.writeString(pincode);
+            dest.writeString(phone);
+            dest.writeString(name);
+            dest.writeString(user_id);
+            dest.writeInt(id);
+            dest.writeString(country);
+            dest.writeString(latitude);
+            dest.writeString(longitude);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        public static final Creator<Viewaddress> CREATOR = new Creator<Viewaddress>() {
+            @Override
+            public Viewaddress createFromParcel(Parcel in) {
+                return new Viewaddress(in);
+            }
+
+            @Override
+            public Viewaddress[] newArray(int size) {
+                return new Viewaddress[size];
+            }
+        };
 
         public String getLatitude() {
             return latitude;

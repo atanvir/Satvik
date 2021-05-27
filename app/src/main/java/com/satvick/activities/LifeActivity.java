@@ -46,7 +46,7 @@ public class LifeActivity extends YouTubeBaseActivity implements View.OnClickLis
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding=ActivityLifeTabBinding.inflate(getLayoutInflater());
+        binding = ActivityLifeTabBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         init();
         initCtrl();
@@ -88,7 +88,7 @@ public class LifeActivity extends YouTubeBaseActivity implements View.OnClickLis
                         if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setDataToUI(response.body());
                         else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(), LifeActivity.this);
                     }
-                    else CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(), LifeActivity.this);
+                    else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error", LifeActivity.this);
 
             }
 
@@ -117,7 +117,7 @@ public class LifeActivity extends YouTubeBaseActivity implements View.OnClickLis
     private List<TabModel> getCategoryData(LifeResponseModel.Appsatvicklife data) {
         List<TabModel> list= new ArrayList<>();
         list.add(new TabModel(Long.parseLong(String.valueOf(1)),null,"",getSubCategories(data.getRandomBlog())));
-        list.add(new TabModel(Long.parseLong(String.valueOf(2)),getBannerList(),"",null));
+        list.add(new TabModel(Long.parseLong(String.valueOf(2)),data.getTestimonials(),"",null));
         list.add(new TabModel(Long.parseLong(String.valueOf(3)),null,"",getSubCategories(data.getRandomBlogTwo())));
         return list;
     }
@@ -137,12 +137,6 @@ public class LifeActivity extends YouTubeBaseActivity implements View.OnClickLis
     }
 
 
-    private List<BannerBean> getBannerList() {
-        List<BannerBean> list= new ArrayList<>();
-        list.add( new BannerBean("","","https://soulahe.com/public/lifeimg/9120249210524115734.png","How many emails landed in your inbox this month offering you a path to a better version of yourself? A new year carries the energy of a fresh slate, a page turn, a new chapter or maybe even a whole new book. In modern culture, a new year is viewed as an opportunity to wipe the slate clean and invite a brighter future. ","-Tanvir Ahmed"));
-        list.add( new BannerBean("","","https://soulahe.com/public/lifeimg/9120249210524115734.png","How many emails landed in your inbox this month offering you a path to a better version of yourself? A new year carries the energy of a fresh slate, a page turn, a new chapter or maybe even a whole new book. In modern culture, a new year is viewed as an opportunity to wipe the slate clean and invite a brighter future. ","-Tanvir Ahmed"));
-        return list;
-    }
 
 
     @Override

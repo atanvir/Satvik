@@ -17,6 +17,7 @@ import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.AdapterLifeSubCategoryBinding;
 import com.satvick.model.LifeTabBean;
 import com.satvick.model.TabModel;
+import com.satvick.utils.HelperClass;
 
 import java.util.List;
 
@@ -41,7 +42,10 @@ public class LifeSubCategoryAdapter  extends RecyclerView.Adapter<LifeSubCategor
         holder.binding.tvTitle.setText(list.get(position).getTitle());
         holder.binding.tvDesc.setText(Html.fromHtml(list.get(position).getShort_desc()));
         if(list.get(position).getPayment_mode().equalsIgnoreCase("Paid")) holder.binding.btnPaymentMode.setText(SharedPreferenceWriter.getInstance(context).getString("symbol") +" "+Math.round(list.get(position).getPrice()));
-        else holder.binding.btnPaymentMode.setText(list.get(position).getPayment_mode());
+        else {
+            holder.binding.btnPaymentMode.setVisibility(View.GONE);
+            holder.binding.tvDesc.setMaxLines(5);
+        }
     }
 
     @Override
@@ -56,6 +60,7 @@ public class LifeSubCategoryAdapter  extends RecyclerView.Adapter<LifeSubCategor
             this.binding=binding;
 
             binding.cvMain.setOnClickListener(this);
+            binding.btnPaymentMode.setOnClickListener(this);
         }
 
         @Override
@@ -63,9 +68,14 @@ public class LifeSubCategoryAdapter  extends RecyclerView.Adapter<LifeSubCategor
             switch (v.getId()){
                 case R.id.cvMain:
                 Intent intent=new Intent(context, LifeDescriptionActivity.class);
-                intent.putExtra("_id",list.get(getAdapterPosition()).getId());
-                intent.putExtra("title",list.get(getAdapterPosition()).getTitle());
+                intent.putExtra("_id",list.get(getBindingAdapterPosition()).getId());
+                intent.putExtra("title",list.get(getBindingAdapterPosition()).getTitle());
                 context.startActivity(intent);
+                break;
+
+                case R.id.btnPaymentMode :
+                if(list.get(getBindingAdapterPosition()).getPayment_mode().equalsIgnoreCase("Paid"))
+                HelperClass.showSatvikLifeArticle(context,Math.round(list.get(getBindingAdapterPosition()).getPrice())+"",""+list.get(getBindingAdapterPosition()).getId());
                 break;
             }
         }
