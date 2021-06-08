@@ -92,11 +92,11 @@ public class AddNewAddressActivityPlaceOrderActivity extends AppCompatActivity i
                 break;
 
             case R.id.tvCancel:
-                startActivity(new Intent(this, PlaceOrderAddressActivity.class));
+                startActivity(new Intent(this, OrderConfirmationActivity.class));
                 break;
 
             case R.id.tvSave:
-                startActivity(new Intent(this, PlaceOrderAddressActivity.class));
+                startActivity(new Intent(this, OrderConfirmationActivity.class));
                 break;
 
             case R.id.edtGender:
@@ -112,7 +112,7 @@ public class AddNewAddressActivityPlaceOrderActivity extends AppCompatActivity i
     @Override
     public void onBackPressed() {
         if(comeFrom.equals("PlaceOrderAddressActivity")){
-            startActivity(new Intent(AddNewAddressActivityPlaceOrderActivity.this,PlaceOrderAddressActivity.class));
+            startActivity(new Intent(AddNewAddressActivityPlaceOrderActivity.this, OrderConfirmationActivity.class));
         }
     }
     @Override

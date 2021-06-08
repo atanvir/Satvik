@@ -1,277 +1,285 @@
 package com.satvick.activities;
 
+import android.app.Dialog;
 import android.content.Intent;
-import android.os.Bundle;
-import javax.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
+
 import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.LinearLayoutManager;
+
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.satvick.R;
-import com.satvick.adapters.AddNewAddressAdapter;
+import com.satvick.adapters.AddressAdapter;
 import com.satvick.database.SharedPreferenceKey;
 import com.satvick.database.SharedPreferenceWriter;
-import com.satvick.databinding.ActivityAddNewAddressBinding;
+import com.satvick.databinding.ActivityAddressBinding;
+import com.satvick.model.AddAddressModel;
+import com.satvick.model.EditAddressModel;
+import com.satvick.model.PinCodeModel;
 import com.satvick.model.ViewAddressModel;
 import com.satvick.retrofit.ApiClient;
 import com.satvick.retrofit.ApiInterface;
 import com.satvick.retrofit.MyDialog;
+import com.satvick.utils.CommonUtil;
+import com.satvick.utils.GlobalVariables;
+import com.satvick.utils.HelperClass;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.w3c.dom.Text;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
-public class AddressActivity extends AppCompatActivity implements View.OnClickListener {
-    ActivityAddNewAddressBinding binding;
-    List<ViewAddressModel.Viewaddress> viewAddressModelList = new ArrayList<>();
-    AddNewAddressAdapter addNewAddressAdapter;
+public class AddressActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
+    private ActivityAddressBinding binding;
+    private MyDialog dialog;
+    private ApiInterface apiInterface;
+    private String addressType="";
+    private ViewAddressModel.Viewaddress address;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_add_new_address);
-
-        binding.ivBack.setOnClickListener(this);
-        binding.tvAddNewAddress.setOnClickListener(this);
-        binding.tvEditDefault.setOnClickListener(this);
-
-        callViewAddressApi(binding.mainRl);
+        binding=ActivityAddressBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        init();
+        initCtrl();
     }
 
-    private void callViewAddressApi(final  View view) {
+    private void init() {
+        dialog = new MyDialog(this);
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        address=getIntent().getParcelableExtra("data");
 
-        String userId = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.USER_ID);
-
-        final MyDialog myDialog=new MyDialog(this);
-        myDialog.showDialog();
-        Retrofit retrofit = ApiClient.getClient();
-        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-
-        Call<ViewAddressModel> call = apiInterface.getViewAddressResult(userId);
-        call.enqueue(new Callback<ViewAddressModel>() {
-            @Override
-            public void onResponse(Call<ViewAddressModel> call, Response<ViewAddressModel> response) {
-
-                if (response.isSuccessful()) {
-                    myDialog.hideDialog();
-                    ViewAddressModel data = response.body();
-
-                    if (response.body().getStatus().equals("SUCCESS")) {
-                        viewAddressModelList = data.getViewaddress();
-                        if(viewAddressModelList.size()==2)
-                        {
-                            binding.tvAddNewAddress.setEnabled(false);
-                        }
-                        else
-                        {
-                            binding.tvAddNewAddress.setEnabled(true);
-                        }
-                        setAdapter(viewAddressModelList);
-
-                    } else {
-                        Toast.makeText(AddressActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    myDialog.hideDialog();
-                    final Snackbar mSnackbar = Snackbar.make(view, R.string.service_error, Snackbar.LENGTH_INDEFINITE);
-                    mSnackbar.setActionTextColor(ContextCompat.getColor(AddressActivity.this,R.color.colorWhite));
-                    mSnackbar.setAction("RETRY", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                            callViewAddressApi(view);
-                            Snackbar snackbar=Snackbar.make(view,"Please wait!",Snackbar.LENGTH_LONG);
-                            snackbar.getView().setBackground(ContextCompat.getDrawable(AddressActivity.this,R.drawable.drawable_gradient_line));
-                            snackbar.show();
-                        }
-                    });
-                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(AddressActivity.this,R.drawable.drawable_gradient_line));
-                    mSnackbar.show();
-                    Toast.makeText(AddressActivity.this, R.string.service_error, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ViewAddressModel> call, Throwable t) {
-                myDialog.hideDialog();
-            }
-        });
-    }
-
-    private void setAdapter(final List<ViewAddressModel.Viewaddress> viewAddressModelList) {
-        if (viewAddressModelList != null && viewAddressModelList.size() > 0) {
-            addNewAddressAdapter = new AddNewAddressAdapter(this, viewAddressModelList);
-
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-            binding.recyclerView.setLayoutManager(linearLayoutManager);
-            binding.recyclerView.setAdapter(addNewAddressAdapter);
-
-
-            addNewAddressAdapter.setListener(new AddNewAddressAdapter.AddressItemClickListener() {
-                @Override
-                public void onRemoveItemClick(View view, int pos) {
-                    if(viewAddressModelList.get(pos).getRemark().equalsIgnoreCase("2")){
-                         callSetAsDefaultAddressApi(String.valueOf(viewAddressModelList.get(pos).getId()),binding.mainRl);
-                    }else {
-                        callRemoveAddressApi(String.valueOf(viewAddressModelList.get(pos).getId()),binding.mainRl);
-                        addNewAddressAdapter.deleteItem(pos);
-                    }
-                }
-
-                @Override
-                public void onEditItemClick(View view, int pos) {
-
-                    Intent intent2=new Intent(AddressActivity.this, EditAddressActivity.class);
-
-                    Bundle bundle2 = new Bundle();
-                    bundle2.putString("from", "AddressActivityEditOther");
-                    bundle2.putString("name", viewAddressModelList.get(pos).getName());
-                    bundle2.putString("mobile_number", viewAddressModelList.get(pos).getPhone());
-                    bundle2.putString("pin_code", viewAddressModelList.get(pos).getPincode());
-                    bundle2.putString("state", viewAddressModelList.get(pos).getState());
-                    bundle2.putString("address", viewAddressModelList.get(pos).getAddress());
-                    bundle2.putString("locality_or_town", viewAddressModelList.get(pos).getTown());
-                    bundle2.putString("city_or_district", viewAddressModelList.get(pos).getCity());
-                    bundle2.putString("address_id", String.valueOf(viewAddressModelList.get(pos).getId()));
-                    bundle2.putString("remark", String.valueOf(viewAddressModelList.get(pos).getRemark()));
-                    bundle2.putString("country", String.valueOf(viewAddressModelList.get(pos).getCountry()));
-                    bundle2.putString("latitude", String.valueOf(viewAddressModelList.get(pos).getLatitude()));
-                    bundle2.putString("longitude", String.valueOf(viewAddressModelList.get(pos).getLongitude()));
-
-
-                    intent2.putExtras(bundle2);
-                    startActivity(intent2);
-                }
-            });
+        if(address!=null) {
+            binding.chbSelectPerson.setVisibility(View.GONE);
+            binding.tvLabelAddressType.setVisibility(View.GONE);
+            binding.radioGroup.setVisibility(View.GONE);
+            binding.toolbar.tvTitle.setText("Update Address");
+            binding.edtName.setText(address.getName());
+            binding.edtAddress.setText(address.getAddress());
+            binding.edtPinCode.setText(address.getPincode());
+            binding.edtLocality.setText(address.getTown());
+            binding.edtCity.setText(address.getCity());
+            binding.edtState.setText(address.getState());
+            binding.edtMobile.setText(address.getPhone());
+            addressType=address.getType();
+            if(address.getType().equalsIgnoreCase("Home")) binding.rbHome.setChecked(true);
+            else if(address.getType().equalsIgnoreCase("Office")) binding.rbOffice.setChecked(true);
+            if(address.getRemark().equalsIgnoreCase("1")) binding.chbSelectPerson.setChecked(true);
+        }else{
+            binding.toolbar.tvTitle.setText("Add Address");
         }
     }
+    private void initCtrl() {
+        binding.toolbar.ivBack.setOnClickListener(this);
+        binding.radioGroup.setOnCheckedChangeListener(this);
+        binding.tvCancel.setOnClickListener(this);
+        binding.tvSave.setOnClickListener(this);
+        binding.edtAddress.setOnClickListener(this);
+    }
+
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.ivBack:
-                onBackPressed();
-                break;
-
-            case R.id.tvAddNewAddress:
-                if(viewAddressModelList.size()>=2)
-                    return;
-                startActivity(new Intent(this, AddNewAddressClickActivity.class).putExtra("from", "AddressActivity"));
-                break;
-
+            case R.id.ivBack: onBackPressed(); break;
+            case R.id.tvCancel: finish(); break;
+            case R.id.tvSave:
+            if (checkValidation()) pinCodeApi(); break;
         }
-    }
+        }
 
-    private void callRemoveAddressApi(final String addressId,final View view) {
-        String userId = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.USER_ID);
-        String token = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.TOKEN);
-
-        final MyDialog myDialog=new MyDialog(this);
-        myDialog.showDialog();
-        Retrofit retrofit = ApiClient.getClient();
-        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-
-        Call<ViewAddressModel> call = apiInterface.getRemoveAddressResult(userId, token, addressId);
-        call.enqueue(new Callback<ViewAddressModel>() {
+    private void pinCodeApi() {
+        dialog.showDialog();
+        Call<PinCodeModel> call = apiInterface.getPinCodeResult(binding.edtPinCode.getText().toString());
+        call.enqueue(new Callback<PinCodeModel>() {
             @Override
-            public void onResponse(Call<ViewAddressModel> call, Response<ViewAddressModel> response) {
+            public void onResponse(Call<PinCodeModel> call, Response<PinCodeModel> response) {
 
                 if (response.isSuccessful()) {
-                    myDialog.hideDialog();
-                    if (response.body().getStatus().equals("SUCCESS")) {
-                        callViewAddressApi(view);
-
-                    } else {
-                        Toast.makeText(AddressActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    myDialog.hideDialog();
-                    final Snackbar mSnackbar = Snackbar.make(view, R.string.service_error, Snackbar.LENGTH_INDEFINITE);
-                    mSnackbar.setActionTextColor(ContextCompat.getColor(AddressActivity.this,R.color.colorWhite));
-                    mSnackbar.setAction("RETRY", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                            callRemoveAddressApi(addressId,view);
-                            Snackbar snackbar=Snackbar.make(view,"Please wait!",Snackbar.LENGTH_LONG);
-                            snackbar.getView().setBackground(ContextCompat.getDrawable(AddressActivity.this,R.drawable.drawable_gradient_line));
-                            snackbar.show();
+                    if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
+                        if(response.body().getCheckpincodeseller().getStatus().equalsIgnoreCase("0")) {
+                            dialog.hideDialog();
+                            CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(), AddressActivity.this);
                         }
-                    });
-                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(AddressActivity.this,R.drawable.drawable_gradient_line));
-                    mSnackbar.show();
-                }
+                        else if(address==null) saveAddress(); else editAddress();
+                    } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(), AddressActivity.this);
+                } else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!", AddressActivity.this);
+
             }
 
             @Override
-            public void onFailure(Call<ViewAddressModel> call, Throwable t) {
-                myDialog.hideDialog();
+            public void onFailure(Call<PinCodeModel> call, Throwable t) {
+                dialog.hideDialog();
+                CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(), AddressActivity.this);
             }
         });
-    }
 
-    private void callSetAsDefaultAddressApi(final String addressId, final View view) {
-        String userId = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.USER_ID);
-        String token = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.TOKEN);
 
-        final MyDialog myDialog=new MyDialog(this);
-        myDialog.showDialog();
-        Retrofit retrofit = ApiClient.getClient();
-        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-
-        Call<ViewAddressModel> call = apiInterface.getSetAsDefaultAddressResult(userId, token, addressId,"1");
-        call.enqueue(new Callback<ViewAddressModel>() {
-            @Override
-            public void onResponse(Call<ViewAddressModel> call, Response<ViewAddressModel> response) {
-
-                if (response.isSuccessful()) {
-                    myDialog.hideDialog();
-
-                    if (response.body().getStatus().equals("SUCCESS")) {
-                        callViewAddressApi(view);
-
-                    } else {
-                        Toast.makeText(AddressActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    myDialog.hideDialog();
-                    final Snackbar mSnackbar = Snackbar.make(view, R.string.service_error, Snackbar.LENGTH_INDEFINITE);
-                    mSnackbar.setActionTextColor(ContextCompat.getColor(AddressActivity.this,R.color.colorWhite));
-                    mSnackbar.setAction("RETRY", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                            callRemoveAddressApi(addressId,view);
-                            Snackbar snackbar=Snackbar.make(view,"Please wait!",Snackbar.LENGTH_LONG);
-                            snackbar.getView().setBackground(ContextCompat.getDrawable(AddressActivity.this,R.drawable.drawable_gradient_line));
-                            snackbar.show();
-                        }
-                    });
-                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(AddressActivity.this,R.drawable.drawable_gradient_line));
-                    mSnackbar.show();
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ViewAddressModel> call, Throwable t) {
-                myDialog.hideDialog();
-            }
-        });
     }
 
 
     @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        switch (group.getCheckedRadioButtonId()){
+            case R.id.rbHome : addressType=binding.rbHome.getText().toString();  break;
+            case R.id.rbOffice : addressType=binding.rbOffice.getText().toString(); break;
+        }
+    }
+
+    public boolean checkValidation() {
+        boolean validate = true;
+
+        if(TextUtils.isEmpty(binding.edtName.getText().toString())){
+            validate=false;
+            CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please Add Name",AddressActivity.this);
+        }
+
+        else if(TextUtils.isEmpty(binding.edtAddress.getText().toString())){
+            validate=false;
+            CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please Add Address",AddressActivity.this);
+        }
+
+        else if(TextUtils.isEmpty(binding.edtPinCode.getText().toString())){
+            validate=false;
+            CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please Add Pin Code",AddressActivity.this);
+        }
+
+        else if(binding.edtPinCode.getText().toString().length()!=6){
+            validate=false;
+            CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please Enter Valid Pin Code",AddressActivity.this);
+        }
+
+
+        else if(TextUtils.isEmpty(binding.edtLocality.getText().toString())){
+            validate=false;
+            CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please Add Locality",AddressActivity.this);
+        }
+
+        else if(TextUtils.isEmpty(binding.edtCity.getText().toString())){
+            validate=false;
+            CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please Add City",AddressActivity.this);
+        }
+
+        else if(TextUtils.isEmpty(binding.edtState.getText().toString())){
+            validate=false;
+            CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please Add State",AddressActivity.this);
+        }
+        else if(TextUtils.isEmpty(binding.edtMobile.getText().toString())){
+            validate=false;
+            CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please Add Mobile Number",AddressActivity.this);
+        }
+        else if(binding.edtMobile.getText().toString().length()!=10){
+            validate=false;
+            CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please Enter Valid Mobile Number",AddressActivity.this);
+        }
+        else if(TextUtils.isEmpty(addressType)){
+            validate=false;
+            CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please Select Address Type",AddressActivity.this);
+        }
+
+        return validate;
+    }
+
+
+
+    private void saveAddress() {
+        Call<AddAddressModel> call = apiInterface.getAddAddressResult(HelperClass.getCacheData(this).second,
+                HelperClass.getCacheData(this).first,
+                binding.edtName.getText().toString(),
+                binding.edtMobile.getText().toString(),
+                binding.edtPinCode.getText().toString(),
+                binding.edtAddress.getText().toString(),
+                binding.edtLocality.getText().toString(),
+                binding.edtCity.getText().toString(),
+                binding.edtState.getText().toString(),
+                addressType,binding.chbSelectPerson.isChecked()==true?"1":"0",
+                "0","India","0.0","0.0");
+        call.enqueue(new Callback<AddAddressModel>() {
+            @Override
+            public void onResponse(Call<AddAddressModel> call, Response<AddAddressModel> response) {
+                dialog.hideDialog();
+                if (response.isSuccessful()) {
+                    if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
+                        setResult(RESULT_OK);
+                        finish();
+                    } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(), AddressActivity.this);
+                } else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!", AddressActivity.this);
+
+            }
+
+            @Override
+            public void onFailure(Call<AddAddressModel> call, Throwable t) {
+                dialog.hideDialog();
+                CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(), AddressActivity.this);
+            }
+        });
+    }
+
+    private void editAddress() {
+        dialog.showDialog();
+        Call<EditAddressModel> call = apiInterface.getEditAddressResult(HelperClass.getCacheData(this).second,
+                HelperClass.getCacheData(this).first,
+                binding.edtName.getText().toString(),
+                binding.edtMobile.getText().toString(),
+                binding.edtPinCode.getText().toString(),
+                binding.edtAddress.getText().toString(),
+                binding.edtLocality.getText().toString(),
+                binding.edtCity.getText().toString(),
+                binding.edtState.getText().toString(),
+                addressType,binding.chbSelectPerson.isChecked()==true?"0":"1",
+                ""+address.getId(),address.getCountry(),address.getLatitude(),address.getLongitude());
+        call.enqueue(new Callback<EditAddressModel>() {
+            @Override
+            public void onResponse(Call<EditAddressModel> call, Response<EditAddressModel> response) {
+                dialog.hideDialog();
+                if (response.isSuccessful()) {
+                    if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
+                        setResult(RESULT_OK);
+                        finish();
+                    } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(), AddressActivity.this);
+                } else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!", AddressActivity.this);
+
+            }
+
+            @Override
+            public void onFailure(Call<EditAddressModel> call, Throwable t) {
+                dialog.hideDialog();
+                CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(), AddressActivity.this);
+            }
+        });
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
-        //finish();
     }
+
+
 }

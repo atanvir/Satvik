@@ -5,7 +5,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_5"
+        >
 
 
         <com.airbnb.lottie.LottieAnimationView
@@ -36,7 +38,8 @@
                 android:id="@+id/img"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_260"
-                android:scaleType="fitCenter"
+                android:scaleType="center"
+                android:adjustViewBounds="true"
                 android:src="@drawable/img543" />
 
             <LinearLayout
@@ -46,6 +49,19 @@
                 android:layout_below="@+id/img"
                 android:layout_marginTop="@dimen/dp_10">
 
+
+                <TextView
+                    android:id="@+id/tvDesc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_2"
+                    android:maxLines="2"
+                    android:layout_marginStart="@dimen/dp_8"
+                    android:layout_weight="1"
+                    android:text="Yellow Solid Kurta"
+                    android:textColor="@color/colorExremeLite"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
                 <TextView
                     android:id="@+id/tvName"
                     android:layout_width="0dp"
@@ -53,6 +69,7 @@
                     android:layout_marginStart="@dimen/dp_8"
                     android:layout_weight="1"
                     android:text="idalia"
+                    android:visibility="gone"
                     android:textColor="@color/colorBlack"
                     android:textSize="14dp"
                     app:font="@{`lato_regular`}" />
@@ -62,29 +79,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/dp_10"
+                    android:visibility="gone"
                     android:padding="@dimen/dp_1"
                     android:src="@drawable/save_icon" />
             </LinearLayout>
 
 
-            <TextView
-                android:id="@+id/tvDesc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/layout2"
-                android:layout_marginStart="@dimen/dp_8"
-                android:layout_marginTop="@dimen/dp_2"
-                android:maxLines="2"
-                android:text="Yellow Solid Kurta"
-                android:textColor="@color/colorExremeLite"
-                android:textSize="14dp"
-                app:font="@{`lato_regular`}" />
+
 
             <LinearLayout
                 android:id="@+id/layout1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvDesc"
+                android:layout_below="@+id/layout2"
                 android:layout_marginStart="@dimen/dp_8"
                 android:layout_marginTop="@dimen/dp_2"
                 android:layout_marginEnd="@dimen/dp_8"

@@ -112,7 +112,7 @@ public class ProductListingAdapter extends RecyclerView.Adapter<ProductListingAd
 
          if(productListingResponseList.get(position).getLikeStatus().equalsIgnoreCase("1"))
          {
-                    holder.binding.ivAddRemoveFromWishlist.setImageResource(R.drawable._saved_salected);
+                    holder.binding.ivAddRemoveFromWishlist.setImageResource(R.drawable.bitmap_saved_salected);
          }
          else
          {

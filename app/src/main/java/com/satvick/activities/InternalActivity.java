@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.text.InputType;
 import android.view.View;
 import android.widget.Toast;
 
@@ -104,7 +105,9 @@ public class InternalActivity extends AppCompatActivity implements View.OnClickL
             type=getIntent().getStringExtra("type");
         }
 
-        binding.tvTitle.setText(filterData);
+        binding.tvTitle.setText(filterData.replace("_"," "));
+        binding.tvTitle.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+
 
         if (SharedPreferenceWriter.getInstance(InternalActivity.this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false")||
                 SharedPreferenceWriter.getInstance(InternalActivity.this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) {

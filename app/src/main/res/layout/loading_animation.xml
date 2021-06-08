@@ -21,6 +21,7 @@
     <ProgressBar
         android:layout_width="@dimen/dp_45"
         android:layout_height="@dimen/dp_45"
+        android:progressDrawable="@drawable/progress_draawable"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

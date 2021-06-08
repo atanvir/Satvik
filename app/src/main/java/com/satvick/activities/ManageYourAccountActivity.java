@@ -19,49 +19,37 @@ public class ManageYourAccountActivity extends AppCompatActivity implements View
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_manage_your_account);
+        binding = ActivityManageYourAccountBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         init();
-
-
-
-
+        initCtrl();
     }
 
     private void init() {
+        center=new IHelpCenterImplementation();
+    }
+
+    private void initCtrl(){
         binding.rlunableLogin.setOnClickListener(this);
         binding.rlunsubscribe.setOnClickListener(this);
         binding.rlmywishList.setOnClickListener(this);
         binding.rlrefferalPoint.setOnClickListener(this);
         binding.ivBack.setOnClickListener(this);
-        center=new IHelpCenterImplementation();
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.ivBack:
-                onBackPressed();
-                break;
-            case R.id.rlunableLogin:
-                center.showBottomSheet(this,binding.unableLoginText.getText().toString());
-                break;
-
-            case R.id.rlunsubscribe:
-                center.showBottomSheet(this,binding.unsubscribeText.getText().toString());
-                break;
-
-            case R.id.rlmywishList:
-                center.showBottomSheet(this,binding.mywishListText.getText().toString());
-                break;
-
-            case R.id.rlrefferalPoint:
-                center.showBottomSheet(this,binding.refferalPointText.getText().toString());
-                break;
+            case R.id.ivBack: onBackPressed(); break;
+            case R.id.rlunableLogin: center.showBottomSheet(this,binding.unableLoginText.getText().toString()); break;
+            case R.id.rlunsubscribe: center.showBottomSheet(this,binding.unsubscribeText.getText().toString()); break;
+            case R.id.rlmywishList: center.showBottomSheet(this,binding.mywishListText.getText().toString()); break;
+            case R.id.rlrefferalPoint: center.showBottomSheet(this,binding.refferalPointText.getText().toString()); break;
         }
     }
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, HelpCenterActivity.class).putExtra("from","ManageYourAccountActivity"));
+        super.onBackPressed();
     }
 }

@@ -26,9 +26,22 @@ public class List {
     @SerializedName("product_id")
     @Expose
     public String productId;
+
+    @SerializedName("size")
+    @Expose
+    private String size;
+
     @SerializedName("num_of_addtocart")
     @Expose
     public Integer numOfAddtocart;
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
 
     public String getImage() {
         return image;

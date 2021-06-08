@@ -132,21 +132,20 @@ public class ReferEarnFragment extends Fragment implements View.OnClickListener 
               break;
 
             case R.id.tvShare:
-                String ShareLink= MessageFormat.format("\"Sign-up using my code #{0} on the YOD App & get discount.\\n Download the App using - https://www.playstore.com \\n\\n Hurry, it doesn’t get better than this! Download the YOD App NOW!\"",referalListObject.getReferalCode());
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, ShareLink);
-                startActivity(Intent.createChooser(shareIntent, getString(R.string.share_referral_code_using)));
-                break;
+            String ShareLink= MessageFormat.format("\"Sign-up using my code #{0} on the Satvik App & get discount.\\n Download the App using - https://www.playstore.com \\n\\n Hurry, it doesn’t get better than this! Download the Satvick App NOW!\"",referalListObject.getReferalCode());
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, ShareLink);
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_referral_code_using)));
+            break;
 
             case R.id.tvCopyLink:
-                String text = "Download the App from - https://www.playstore.com \n\n Use my code(#"+referalListObject.getReferalCode()+") on registration and get huge discount.";
-                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("label", text);
-                clipboard.setPrimaryClip(clip);
-                CommonUtil.setUpSnackbarMessage(binding.rlMain,"Link Copied",getActivity());
-
-                break;
+            String text = "Download the App from - https://www.playstore.com \n\n Use my code(#"+referalListObject.getReferalCode()+") on registration and get huge discount.";
+            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("label", text);
+            clipboard.setPrimaryClip(clip);
+            CommonUtil.setUpSnackbarMessage(binding.rlMain,"Link Copied",getActivity());
+            break;
         }
     }
 

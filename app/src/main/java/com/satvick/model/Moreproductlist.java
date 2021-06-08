@@ -30,7 +30,19 @@ import com.google.gson.annotations.SerializedName;
     @Expose
     public String likeStatus;
 
-    public String getImage() {
+    @SerializedName("size")
+    @Expose
+    private String size;
+
+     public String getSize() {
+         return size;
+     }
+
+     public void setSize(String size) {
+         this.size = size;
+     }
+
+     public String getImage() {
         return image;
     }
 

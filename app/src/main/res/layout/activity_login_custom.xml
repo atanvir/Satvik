@@ -126,7 +126,7 @@
                         android:imeOptions="actionDone"
                         android:inputType="textPassword"
                         android:maxLines="1"
-                        android:maxLength="10"
+                        android:maxLength="20"
                         android:scrollHorizontally="true"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:textColor="@color/colorLoginSignupText"

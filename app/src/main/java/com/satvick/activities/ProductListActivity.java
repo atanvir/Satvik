@@ -413,7 +413,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onIvItemClick(View view, int pos) {
                 productId = productListingResponseList.get(pos).getProductId();
-                callAddToWishlistApi(binding.mainRl);
+                callAddToWishlistApi(binding.mainRl,productListingResponseList.get(pos).getSize());
             }
 
         });
@@ -663,7 +663,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    private void callAddToWishlistApi(final View view) {
+    private void callAddToWishlistApi(final View view,String size) {
 
         String token = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.TOKEN);
         String userId = SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.USER_ID);
@@ -673,7 +673,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         Retrofit retrofit = ApiClient.getClient();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 
-        Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(token, userId, productId);
+        Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(token, userId, productId,size);
         call.enqueue(new Callback<MyWishListResponse>() {
             @Override
             public void onResponse(Call<MyWishListResponse> call, Response<MyWishListResponse> response) {
@@ -694,7 +694,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                         @Override
                         public void onClick(View view) {
 
-                            callAddToWishlistApi(view);
+                            callAddToWishlistApi(view,size);
                             Snackbar snackbar = Snackbar.make(view, "Please wait!", Snackbar.LENGTH_LONG);
                             snackbar.getView().setBackground(ContextCompat.getDrawable(ProductListActivity.this, R.drawable.drawable_gradient_line));
                             snackbar.show();

@@ -245,7 +245,7 @@
                         android:paddingTop="@dimen/_10sdp"
                         android:imeOptions="actionNext"
                         android:inputType="textPassword"
-                            android:maxLength="20"
+                        android:maxLength="20"
                         android:maxLines="1"
                         app:font="@{`lato_regular`}"
                         android:scrollHorizontally="true"

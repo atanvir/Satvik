@@ -22,6 +22,9 @@ public class CommonUtil {
 
 
     public static void setUpSnackbarMessage(View view,String message, Activity context) {
+        if(message.equalsIgnoreCase("already saved")){
+            message="Default Address Already Saved";
+        }
         Snackbar mSnackbar = Snackbar.make(context.findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG);
         mSnackbar.setActionTextColor(ContextCompat.getColor(context, R.color.colorWhite));
         mSnackbar.getView().setBackground(ContextCompat.getDrawable(context,R.drawable.drawable_gradient_line));

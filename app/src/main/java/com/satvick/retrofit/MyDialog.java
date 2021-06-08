@@ -34,7 +34,12 @@ public class MyDialog {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog.setContentView(R.layout.loading_animation);
             dialog.setCancelable(false);
-            dialog.show();
+            if(dialog.isShowing()){
+                dialog.dismiss();
+            }else{
+                dialog.show();
+
+            }
         }
         catch (Exception e) {
         }

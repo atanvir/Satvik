@@ -315,7 +315,7 @@ public class RequestForExchangeProductActivity extends AppCompatActivity impleme
                 break;
 
             case R.id.tvAddNewAddress:
-                startActivity(new Intent(this, AddNewAddressClickActivity.class).putExtra("from", "RequestForExchangeProductActivity"));
+                startActivity(new Intent(this, AddressActivity.class).putExtra("from", "RequestForExchangeProductActivity"));
                 break;
 
         }

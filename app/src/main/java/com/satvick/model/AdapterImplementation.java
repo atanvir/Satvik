@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.satvick.activities.CancelOrderActivity;
 import com.satvick.activities.MyOrderTrackActivity;
-import com.satvick.activities.PlaceOrderAddressActivity;
+import com.satvick.activities.OrderConfirmationActivity;
 import com.satvick.activities.RequestForExchangeProductActivity;
 import com.satvick.activities.ReturnItemActivity;
 import com.satvick.utils.GlobalVariables;
@@ -34,7 +34,7 @@ public class AdapterImplementation implements AdapterInterface {
             intent = new Intent(context, RequestForExchangeProductActivity.class);
 
         } else if (status.equalsIgnoreCase("OrderAgain")) {
-            intent = new Intent(context.getApplicationContext(), PlaceOrderAddressActivity.class);
+            intent = new Intent(context.getApplicationContext(), OrderConfirmationActivity.class);
             intent.putExtra("shippingCharges", "");
             intent.putExtra("grandTotal", myOrderDetailsModelList.get(postion).amount);
             intent.putExtra("total", myOrderDetailsModelList.get(postion).amount);

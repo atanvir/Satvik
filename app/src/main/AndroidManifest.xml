@@ -72,6 +72,10 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".activities.AddressActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".activities.LoginActivity"
             android:screenOrientation="portrait"
@@ -108,7 +112,7 @@
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".activities.PlaceOrderAddressActivity"
+            android:name=".activities.OrderConfirmationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
@@ -149,7 +153,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite" />
         <activity
-            android:name=".activities.AddressActivity"
+            android:name=".activities.SavedAddressActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite" />
         <activity
@@ -176,11 +180,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".activities.AddNewAddressClickActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
-            android:windowSoftInputMode="stateHidden" />
+
         <activity
             android:name=".activities.PaymentActivity"
             android:screenOrientation="portrait"

@@ -6,7 +6,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rlMain"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/dp_150"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_5sdp"
    >
@@ -29,7 +29,8 @@
             android:id="@+id/img_peoduct_detail_recycler"
             android:layout_width="@dimen/dp_150"
             android:layout_height="@dimen/dp_200"
-            android:scaleType="fitCenter"
+            android:scaleType="center"
+            android:adjustViewBounds="true"
             android:src="@drawable/img543"
             app:layout_constraintBottom_toTopOf="@+id/text_peoduct_detail_recycler"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,6 +49,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
+            android:visibility="gone"
             android:text="Maroon Cotton Chikankari Lucknowi Jaal Embroidered Kurta with Churidar Pajama"
             android:textColor="@color/colorBlack"
             android:textSize="14dp"
@@ -65,6 +67,7 @@
             android:layout_below="@+id/layout2"
             android:layout_marginTop="4dp"
             android:text="Contrary to popular"
+            android:maxLines="2"
             android:textColor="@color/colorExremeLite"
             android:textSize="14dp"
             android:visibility="visible"

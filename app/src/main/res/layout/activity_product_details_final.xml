@@ -103,12 +103,13 @@
         </LinearLayout>
 
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/layout"
             android:visibility="gone">
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -133,7 +134,6 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/viewPager"
                         android:layout_centerInParent="true"
-                        android:layout_marginTop="-12dp"
                         app:tabBackground="@drawable/indicator_selector"
                         app:tabGravity="center"
                         app:tabIndicatorHeight="0dp" />
@@ -162,9 +162,10 @@
                         android:id="@+id/tvName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/dp_4"
+                        android:layout_marginStart="@dimen/dp_4"
+                        android:layout_marginTop="@dimen/dp_4"
                         android:text="Men's Red and White checked Oxford Plain Shirt"
-                        android:textColor="@color/colorExremeLite"
+                        android:textColor="@color/colorBlack"
                         android:textSize="14dp"
                         app:font="@{`lato_regular`}" />
 
@@ -205,16 +206,74 @@
                             app:font="@{`lato_regular`}" />
                     </LinearLayout>
 
+
+
                     <TextView
+                        android:id="@+id/tvMoreDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/pro_price_lbl"
-                        android:layout_marginTop="@dimen/_12sdp"
+                        android:layout_margin="@dimen/dp_4"
                         android:text="MORE INFORMATION"
-                        android:textColor="@color/colorBlack"
                         android:textSize="14dp"
                         app:font="@{`lato_regular`}" />
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/layout_product_detail10"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:orientation="vertical">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/dp_4">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Product Code :"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="14dp"
+                                app:font="@{`lato_regular`}" />
+
+                            <TextView
+                                android:id="@+id/tvHsnCode"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:textColor="@color/colorLogOut"
+                                android:textSize="14dp"
+                                app:font="@{`lato_regular`}" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/dp_4">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Sold by : "
+                                android:textColor="@color/colorBlack"
+                                android:textSize="14dp"
+                                app:font="@{`lato_regular`}" />
+
+                            <TextView
+                                android:id="@+id/tvSoldBy"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="ABHISHEK PVT LTD"
+                                android:textColor="@color/colorLogOut"
+                                android:textSize="14dp"
+                                app:font="@{`lato_regular`}" />
+                        </LinearLayout>
+
+                    </LinearLayout>
 
                     <!--<TextView
                         android:layout_width="wrap_content"
@@ -229,6 +288,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/dp_4"
                         android:text=""
+                        android:visibility="gone"
                         android:textColor="@color/colorLogOut"
                         android:textSize="14dp"
                         app:font="@{`lato_regular`}" />
@@ -239,67 +299,19 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/dp_4"
                         android:text=""
+                        android:visibility="gone"
                         android:textColor="@color/colorExremeLite"
                         android:textSize="14dp"
                         app:font="@{`lato_regular`}" />
 
                 </LinearLayout>
 
-                <View
-                    android:id="@+id/product_detail_view1"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_below="@+id/layout_product_detail"
-                    android:layout_marginStart="@dimen/dp_12"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginEnd="14dp"
-                    android:background="@color/colorLightGrey" />
-
-                <RelativeLayout
-                    android:id="@+id/rl"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/product_detail_view1"
-                    android:layout_centerInParent="true"
-                    android:layout_marginTop="14dp"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/share"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/ivSearch"
-                        android:src="@drawable/shareicon_65" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp_10"
-                        android:layout_toRightOf="@+id/share"
-                        android:gravity="center"
-                        android:text="Share"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="14dp"
-                        app:font="@{`lato_regular`}" />
-
-                </RelativeLayout>
-
-                <View
-                    android:id="@+id/product_detail_view22"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_below="@+id/rl"
-                    android:layout_marginStart="@dimen/dp_12"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginEnd="14dp"
-                    android:background="@color/colorLightGrey" />
 
                 <RelativeLayout
                     android:id="@+id/rlT"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/product_detail_view22"
+                    android:layout_below="@+id/layout_product_detail"
                     android:layout_marginStart="@dimen/dp_10"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/dp_10"
@@ -346,6 +358,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
+                                android:nestedScrollingEnabled="false"
                                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
 
 
@@ -555,6 +568,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_10"
+                        android:nestedScrollingEnabled="false"
                         android:layout_marginBottom="@dimen/dp_10"
                         android:orientation="horizontal" />
 
@@ -595,6 +609,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_10"
                         android:layout_marginBottom="@dimen/dp_10"
+                        android:nestedScrollingEnabled="false"
                         android:orientation="horizontal" />
 
 
@@ -642,6 +657,8 @@
 
 
                     <!--wish list add to bag-->
+
+
                     <LinearLayout
                         android:id="@+id/llButtons"
                         android:layout_width="match_parent"
@@ -681,6 +698,8 @@
                             </LinearLayout>
                         </LinearLayout>
 
+
+
                         <LinearLayout
                             android:id="@+id/llAddToBagOrCart2"
                             android:layout_width="0dp"
@@ -713,6 +732,57 @@
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
+
+                    <View
+                        android:id="@+id/product_detail_view1"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/layout_product_detail"
+                        android:layout_marginStart="@dimen/dp_12"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginEnd="14dp"
+                        android:background="@color/colorLightGrey" />
+
+                    <RelativeLayout
+                        android:id="@+id/rl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/product_detail_view1"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="14dp"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/share"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/ivSearch"
+                            android:src="@drawable/shareicon_65" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp_10"
+                            android:layout_toRightOf="@+id/share"
+                            android:gravity="center"
+                            android:text="Share"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_regular`}" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:id="@+id/product_detail_view22"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/rl"
+                        android:layout_marginStart="@dimen/dp_12"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginEnd="14dp"
+                        android:background="@color/colorLightGrey" />
+
                 </LinearLayout>
 
                 <TextView
@@ -742,6 +812,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/dp_10"
                         android:orientation="vertical"
+                        android:nestedScrollingEnabled="false"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 
@@ -787,7 +858,9 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_product_detail"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+                        />
 
 
                 </LinearLayout>
@@ -944,74 +1017,16 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_product_detail2"
                         android:layout_width="wrap_content"
+                        android:nestedScrollingEnabled="false"
                         android:layout_height="wrap_content" />
 
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/layout_product_detail10"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:layout_marginBottom="@dimen/dp_10"
-                    android:orientation="vertical">
 
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp_12"
-                        android:layout_marginTop="@dimen/dp_5"
-                        android:layout_marginEnd="@dimen/dp_12">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Product Code :"
-                            android:textColor="@color/colorBlack"
-                            android:textSize="14dp"
-                            app:font="@{`lato_regular`}" />
-
-                        <TextView
-                            android:id="@+id/tvHsnCode"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text=""
-                            android:textColor="@color/colorLogOut"
-                            android:textSize="14dp"
-                            app:font="@{`lato_regular`}" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp_12"
-                        android:layout_marginTop="@dimen/dp_5"
-                        android:layout_marginEnd="@dimen/dp_12">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Sold by : "
-                            android:textColor="@color/colorBlack"
-                            android:textSize="14dp"
-                            app:font="@{`lato_regular`}" />
-
-                        <TextView
-                            android:id="@+id/tvSoldBy"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="ABHISHEK PVT LTD"
-                            android:textColor="@color/colorLogOut"
-                            android:textSize="14dp"
-                            app:font="@{`lato_regular`}" />
-                    </LinearLayout>
-
-                </LinearLayout>
 
             </RelativeLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
 
         <!--wish list add to bag-->

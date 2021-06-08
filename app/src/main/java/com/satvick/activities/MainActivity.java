@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements  BottomNavigation
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }else if(getIntent().getStringExtra("screen")!=null){
+            binding.navigation.setSelectedItemId(R.id.bag);
             loadFragment(bagFragment);
         }else{
             loadFragment(homeFragment);
@@ -123,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements  BottomNavigation
         }
         else if(!isHomeSet) {
             loadFragment(homeFragment);
+            binding.navigation.setSelectedItemId(R.id.home);
             isHomeSet = true;
             return;
         }else if(doubleBackToExitPressedOnce) {

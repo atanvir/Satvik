@@ -4,8 +4,10 @@
     xmlns:card_view="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="@dimen/dp_150"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        >
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/progressbar"
@@ -39,7 +41,8 @@
                 android:id="@+id/image"
                 android:layout_width="@dimen/dp_150"
                 android:layout_height="@dimen/dp_200"
-                android:scaleType="fitCenter"
+                android:scaleType="center"
+                android:adjustViewBounds="true"
                  />
 
             <LinearLayout
@@ -56,6 +59,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Levis"
+                    android:visibility="gone"
                     android:textColor="@color/colorBlack"
                     android:textSize="14dp"
                     app:font="@{`lato_bold`}" />

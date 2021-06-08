@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +44,7 @@ import com.satvick.activities.ApplyCouponActivity;
 import com.satvick.activities.LoginActivity;
 import com.satvick.activities.MainActivity;
 import com.satvick.activities.MyWishListActivity;
-import com.satvick.activities.PlaceOrderAddressActivity;
+import com.satvick.activities.OrderConfirmationActivity;
 import com.satvick.activities.ProductDetailsActivityFinal;
 import com.satvick.activities.SignUpActivity;
 import com.satvick.adapters.CartListAdapter;
@@ -52,6 +53,7 @@ import com.satvick.application.YODApplication;
 import com.satvick.database.SharedPreferenceKey;
 import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.FragmentBagBinding;
+import com.satvick.model.BillingModel;
 import com.satvick.model.CancelCouponModel;
 import com.satvick.model.CartListModel;
 import com.satvick.model.CartListModelResponse;
@@ -61,6 +63,7 @@ import com.satvick.model.SocialLoginModel;
 import com.satvick.retrofit.ApiClient;
 import com.satvick.retrofit.ApiInterface;
 import com.satvick.retrofit.MyDialog;
+import com.satvick.utils.BillingHelper;
 import com.satvick.utils.CommonUtil;
 import com.satvick.utils.GlobalVariables;
 import com.satvick.utils.HelperClass;
@@ -395,14 +398,13 @@ public class BagFragment extends Fragment implements View.OnClickListener {
     private void setGiftWrapPrice(List<CartListModel.ProductListRetrievedSuccessfully> cartListModelList) {
         binding.llGiftWrapPrice.setVisibility(View.GONE);
         String result = "";
-
         double price = 0d;
-        if (cartListModelList.size() > 0 && cartListModelList != null) {
-            for (int i = 0; i < cartListModelList.size(); i++) {
 
-                if (!cartListModelList.get(i).getGiftwrap_price().equalsIgnoreCase("0")) {
+        if(giftwrap2.equalsIgnoreCase("1")) {
+            if (cartListModelList.size() > 0 && cartListModelList != null) {
+                for (int i = 0; i < cartListModelList.size(); i++) {
                     binding.llGiftWrapPrice.setVisibility(View.VISIBLE);
-                    price += Integer.parseInt(cartListModelList.get(i).getGiftwrap_price())*convertedPrice;
+                    price += Integer.parseInt(/*cartListModelList.get(i).getGiftwrap_price()*/"30")*convertedPrice;
                 }
             }
         }
@@ -511,7 +513,7 @@ public class BagFragment extends Fragment implements View.OnClickListener {
                     } else {
                         productId = cartListModelList.get(pos).getProductId();
                         final MyDialog myDialog = new MyDialog(getActivity());
-                        callAddToWishlistApi(productId);
+                        callAddToWishlistApi(productId,cartListModelList.get(pos).getSize());
                     }
                 }
 
@@ -633,7 +635,7 @@ public class BagFragment extends Fragment implements View.OnClickListener {
     }
 
 
-            private void callAddToWishlistApi (String productId){
+            private void callAddToWishlistApi (String productId,String size){
                 final MyDialog myDialog = new MyDialog(getActivity());
                 myDialog.showDialog();
 
@@ -644,7 +646,7 @@ public class BagFragment extends Fragment implements View.OnClickListener {
                 Retrofit retrofit = ApiClient.getClient();
                 ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 
-                Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(token, userId, productId);
+                Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(token, userId, productId,size);
                 call.enqueue(new Callback<MyWishListResponse>() {
                     @Override
                     public void onResponse(Call<MyWishListResponse> call, Response<MyWishListResponse> response) {
@@ -979,25 +981,19 @@ public class BagFragment extends Fragment implements View.OnClickListener {
     }
 
     private void callingIntent(String class_name, String total_price, String product_id, String product_quantity) {
+        BillingHelper.getInstance().saveBillingData(new BillingModel(product_id, product_quantity, ""+coponCode, ""+Math.round(couponDiscount),
+                                                                     binding.tvGiftWrapPrice.getText().toString().length()>1?binding.tvGiftWrapPrice.getText().toString().substring(1):"",
+                                                                     "",
+                                                                     binding.tvOrderTotal.getText().toString(), total_price));
+
         Intent intent = null;
         if (class_name.equalsIgnoreCase("PlaceOrderAddressActivity")) {
-            intent = new Intent(getActivity(), PlaceOrderAddressActivity.class);
+            intent = new Intent(getActivity(), OrderConfirmationActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         } else if (class_name.equalsIgnoreCase("ApplyCouponActivity")) {
             intent = new Intent(getActivity(), ApplyCouponActivity.class);
-        }
-        intent.putExtra("shippingCharges",""+ binding.tvShippingCharges.getText().toString().split("\\+")[1]);
-        intent.putExtra("grandTotal", total_price);
-        intent.putExtra("total", binding.tvOrderTotal.getText().toString());
-        intent.putExtra("product_id", product_id);
-        intent.putExtra("product_quantity", product_quantity);
-        intent.putExtra("discount", ""+couponDiscount);
-        intent.putExtra("coupan_code", coponCode);
-        gift_wrapup_status = SharedPreferenceWriter.getInstance((Context)getActivity()).getString("gift_wrapup_status");
-        intent.putExtra("gift_wrap",""+ binding.tvGiftWrapPrice.getText().toString().split("\\+")[1]);
-        if (class_name.equalsIgnoreCase("ApplyCouponActivity")) {
             startActivityForResult(intent, 121);
-        }else {
-            startActivity(intent);
         }
     }
 

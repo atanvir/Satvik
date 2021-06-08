@@ -4,7 +4,6 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -15,23 +14,18 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.snackbar.Snackbar;
-import com.satvick.adapters.SubscriptionAdapter;
 import com.satvick.fragments.more.SubscriptionFragment;
 import com.satvick.model.ViewProfileResponse;
-import com.squareup.picasso.Picasso;
 import com.satvick.R;
-import com.satvick.activities.AddressActivity;
+import com.satvick.activities.SavedAddressActivity;
 import com.satvick.activities.CouponsActivity;
 import com.satvick.activities.EditProfileActivity;
 import com.satvick.activities.HelpCenterActivity;
 import com.satvick.activities.LoginActivity;
-import com.satvick.activities.MainActivity;
 import com.satvick.activities.MyOrderActivity;
 import com.satvick.activities.MyWishListActivity;
 import com.satvick.activities.NotificationActivity;
 import com.satvick.activities.ReferAndEarnActivity;
-import com.satvick.activities.SavedCardActivity;
 import com.satvick.activities.SettingsActivity;
 import com.satvick.database.SharedPreferenceKey;
 import com.satvick.database.SharedPreferenceWriter;
@@ -113,8 +107,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
         switch (view.getId()) {
             case R.id.LLOrders: startNewActivity(MyOrderActivity.class,"CancelOrderActivity"); break;
             case R.id.LLWishList: startNewActivity(MyWishListActivity.class); break;
-            case R.id.LLAddress: startNewActivity(AddressActivity.class); break;
-            case R.id.LLArticles :  requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content, subscriptionFragment).commit(); break;
+            case R.id.LLAddress: startNewActivity(SavedAddressActivity.class); break;
+            case R.id.LLArticles :  requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content, subscriptionFragment).addToBackStack(ProfileFragment.class.getSimpleName()).commit(); break;
             case R.id.LLProfileDetails: loadProfileDetail(); break;
             case R.id.LLNotification: startNewActivity(NotificationActivity.class); break;
             case R.id.LLHelpCenter: startNewActivity(HelpCenterActivity.class,"ProfileFrag"); break;
@@ -159,6 +153,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
         Intent intent1 = new Intent(getActivity(),LoginActivity.class);
         intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent1);
+        SharedPreferenceWriter.getInstance(getActivity()).writeIntValue(GlobalVariables.count, 0);
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.product_id, "");
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.color_name, "");
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.size, "");
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.quantity, "");
         SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.CURRENT_LOGIN, "false");
         SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.CURRENT_LOGIN, "");
         SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.TOKEN, "");

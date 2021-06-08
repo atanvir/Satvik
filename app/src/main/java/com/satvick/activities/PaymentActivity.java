@@ -92,7 +92,7 @@ public class PaymentActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, PlaceOrderAddressActivity.class).putExtra("from","PaymentActivity"));
+        startActivity(new Intent(this, OrderConfirmationActivity.class).putExtra("from","PaymentActivity"));
     }
 
     private void openPopup() {

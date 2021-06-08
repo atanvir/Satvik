@@ -279,7 +279,7 @@ public class ReturnItemActivity extends AppCompatActivity implements View.OnClic
                 break;
 
             case R.id.tvAddNewAddress:
-                startActivity(new Intent(this, AddNewAddressClickActivity.class).putExtra("from","ReturnItemActivity"));
+                startActivity(new Intent(this, AddressActivity.class).putExtra("from","ReturnItemActivity"));
                 break;
 
             case R.id.rlReturnPolicy:

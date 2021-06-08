@@ -120,7 +120,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
         switch (view.getId()) {
             case R.id.ivBack:
                 if (comeFrom.equalsIgnoreCase("PlaceOrderAddressActivity")) {
-                    Intent intent=new Intent(EditAddressActivity.this,PlaceOrderAddressActivity.class);
+                    Intent intent=new Intent(EditAddressActivity.this, OrderConfirmationActivity.class);
                     intent.putExtra("product_id",getIntent().getStringExtra("product_id"));
                     intent.putExtra("product_quantity",getIntent().getStringExtra("product_quantity"));
                     intent.putExtra("total", getIntent().getStringExtra("total"));
@@ -133,16 +133,16 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
                     intent.putExtra("coupan_code", getIntent().getStringExtra("coupan_code"));
                     startActivity(intent);
                 } else {
-                    startActivity(new Intent(this, AddressActivity.class));
+                    startActivity(new Intent(this, SavedAddressActivity.class));
                 }
                 break;
 
             case R.id.tvCancel:
 
                 if (comeFrom.equals("PlaceOrderAddressActivity")) {
-                    startActivity(new Intent(this, PlaceOrderAddressActivity.class));
+                    startActivity(new Intent(this, OrderConfirmationActivity.class));
                 } else {
-                    startActivity(new Intent(this, AddressActivity.class));
+                    startActivity(new Intent(this, SavedAddressActivity.class));
                 }
                 break;
 
@@ -164,7 +164,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
     public void onBackPressed() {
 
         if (comeFrom.equalsIgnoreCase("PlaceOrderAddressActivity")) {
-            Intent intent=new Intent(EditAddressActivity.this,PlaceOrderAddressActivity.class);
+            Intent intent=new Intent(EditAddressActivity.this, OrderConfirmationActivity.class);
             intent.putExtra("product_id",getIntent().getStringExtra("product_id"));
             intent.putExtra("product_quantity",getIntent().getStringExtra("product_quantity"));
             intent.putExtra("total", getIntent().getStringExtra("total"));
@@ -176,7 +176,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
             intent.putExtra("discount", getIntent().getStringExtra("discount"));
             intent.putExtra("coupan_code", getIntent().getStringExtra("coupan_code"));
             startActivity(intent);
-        } else { startActivity(new Intent(this, AddressActivity.class)); }
+        } else { startActivity(new Intent(this, SavedAddressActivity.class)); }
     }
 
     private void callEditApi(final View view){
@@ -196,7 +196,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
                 binding.edtLocality.getText().toString(),
                 binding.edtCity.getText().toString(),
                 binding.edtAddress.getText().toString(),
-                remark,
+                remark,"",
                 address_id,"India",""+0.0,""+0.0);
         call.enqueue(new Callback<EditAddressModel>() {
             @Override
@@ -208,7 +208,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
 
                         Toast.makeText(EditAddressActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                         if (comeFrom.equals("PlaceOrderAddressActivity")) {
-                            Intent intent=new Intent(EditAddressActivity.this,PlaceOrderAddressActivity.class);
+                            Intent intent=new Intent(EditAddressActivity.this, OrderConfirmationActivity.class);
                             intent.putExtra("product_id",getIntent().getStringExtra("product_id"));
                             intent.putExtra("product_quantity",getIntent().getStringExtra("product_quantity"));
                             intent.putExtra("total", getIntent().getStringExtra("total"));
@@ -219,7 +219,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
                             intent.putExtra("coupan_code", getIntent().getStringExtra("coupan_code"));
                             startActivity(intent);
                         } else {
-                            startActivity(new Intent(EditAddressActivity.this, AddressActivity.class));
+                            startActivity(new Intent(EditAddressActivity.this, SavedAddressActivity.class));
                         }
 
                     } else {

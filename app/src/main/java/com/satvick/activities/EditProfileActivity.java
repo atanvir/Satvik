@@ -37,6 +37,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.satvick.utils.CommonUtil;
+import com.satvick.utils.HelperClass;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -654,35 +656,18 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         call.enqueue(new Callback<EditProfileModel>() {
             @Override
             public void onResponse(Call<EditProfileModel> call, Response<EditProfileModel> response) {
-
+                myDialog.hideDialog();
                 if (response.isSuccessful()) {
-                    myDialog.hideDialog();
                     EditProfileModel data = response.body();
                     if (data.getStatus().equals("SUCCESS")) {
                         setEditedData(data);//set data
                         startActivity(new Intent(EditProfileActivity.this, MainActivity.class).putExtra("from", "EditProfileFragment"));
-
-                       // openPopUp();
-
                     } else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
                         Toast.makeText(EditProfileActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    myDialog.hideDialog();
-                    final Snackbar mSnackbar = Snackbar.make(view, R.string.service_error, Snackbar.LENGTH_INDEFINITE);
-                    mSnackbar.setActionTextColor(ContextCompat.getColor(EditProfileActivity.this,R.color.colorWhite));
-                    mSnackbar.setAction("RETRY", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+                    CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error",EditProfileActivity.this);
 
-                            callEditProfileApi(view);
-                            Snackbar snackbar=Snackbar.make(view,"Please wait!",Snackbar.LENGTH_LONG);
-                            snackbar.getView().setBackground(ContextCompat.getDrawable(EditProfileActivity.this,R.drawable.drawable_gradient_line));
-                            snackbar.show();
-                        }
-                    });
-                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(EditProfileActivity.this,R.drawable.drawable_gradient_line));
-                    mSnackbar.show();
                 }
             }
 

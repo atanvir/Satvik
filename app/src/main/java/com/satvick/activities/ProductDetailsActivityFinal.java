@@ -134,6 +134,9 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_product_details_final);
+
+
+
         binding.ivWishlist.setOnClickListener(this);
         binding.llAddToWishList.setOnClickListener(this);
         binding.llAddToWishList2.setOnClickListener(this);
@@ -174,6 +177,7 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
         callProductDetailsApi(binding.mainRl); //hit api
 
 
+
         binding.scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
 
             @Override
@@ -183,11 +187,10 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
                     public void run() {
                         int scrollX = binding.scrollView.getScrollX(); //for horizontalScrollView
                         int scrollY = binding.scrollView.getScrollY(); //for verticalScrollView
-
                         int sc = scrollY + height;
+                        Log.e("scroll","poistion--> "+sc);
 
-
-                        if (sc <= 898) {
+                        if (sc <= 450) {
                             binding.llButtonStart.setVisibility(View.VISIBLE);
                         } else {
                             binding.llButtonStart.setVisibility(View.GONE);
@@ -361,6 +364,7 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
         attribute.setKeyName("Product Details");
         attribute.setKeyValue(data.getProductdetails().getDescription());
         data.getProductdetails().getAttributes().add(0, attribute);
+        binding.tvMoreDescription.setText(data.getProductdetails().getDescription());
 
         //prouduct description
         binding.productDesRv.setVisibility(View.GONE);
@@ -435,9 +439,12 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
         if (data.getProductdetails().getWishHave().equalsIgnoreCase("0")) {
             binding.wishListIV2.setImageResource(R.drawable.savedicon8);
             binding.whisListIV1.setImageResource(R.drawable.savedicon8);
+            binding.ivWishlist.setImageResource(R.drawable.savedicon8);
         } else {
-            binding.wishListIV2.setImageResource(R.drawable._saved_salected);
-            binding.whisListIV1.setImageResource(R.drawable._saved_salected);
+            binding.wishListIV2.setImageResource(R.drawable.bitmap_saved_salected);
+            binding.whisListIV1.setImageResource(R.drawable.bitmap_saved_salected);
+            binding.ivWishlist.setImageResource(R.drawable.bitmap_saved_salected);
+
         }
 
 
@@ -465,10 +472,21 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
 
 
         //more text section
-//
-//        binding.moreTextOne.setText(data.getProductdetails().getMorebrand().get(0));
-//        binding.moreTextTwo.setText(data.getProductdetails().getMorebrand().get(1));
-//        binding.moreTextThree.setText(data.getProductdetails().getMorebrand().get(2));
+        if(!data.getProductdetails().getMorebrand().isEmpty()){
+            if(data.getProductdetails().getMorebrand().get(0)!=null){
+                binding.layoutProductDetail7.setVisibility(View.VISIBLE);
+                binding.moreTextOne.setText(data.getProductdetails().getMorebrand().get(0));
+            }
+            if(data.getProductdetails().getMorebrand().get(1)!=null){
+                binding.layoutProductDetail8.setVisibility(View.VISIBLE);
+                binding.moreTextTwo.setText(data.getProductdetails().getMorebrand().get(1));
+            }
+
+            if(data.getProductdetails().getMorebrand().get(2)!=null){
+                binding.layoutProductDetail9.setVisibility(View.VISIBLE);
+                binding.moreTextThree.setText(data.getProductdetails().getMorebrand().get(2));
+            }
+        }
 
 
         //customer also like
@@ -499,6 +517,7 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
                 public void itemClick(View view, int pos) {
                     sizeText = pos + "";
                     sizeName = size.get(pos);
+
                     getImageByColor(colorName, sizeName);
                 }
             });
@@ -892,7 +911,9 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
                     //  Toast.makeText(this, "Please login first", Toast.LENGTH_SHORT).show();
                     openLoginSignUpBottomSheetWhenUserNotLogedIn();
                 } else {
-                    callAddToWishlistApi(binding.mainRl);//hit api
+                    if (sizeText == null && sizeList.size() > 0) CommonMessagePopup("Please select any size", "");
+                    else if (!isValidVariant) CommonMessagePopup("Not valid product variant", "FAILURE");
+                    else callAddToWishlistApi(binding.mainRl);//hit api
                 }
                 break;
 
@@ -1151,7 +1172,7 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
                 boolean isProductExists = false;
 
                 if (isAddToBagClicked) {
-                    isAddToBagClicked = false;
+//                    isAddToBagClicked = false;
 
                     strings = new ArrayList<>();
                     if (selectedQuantity.equalsIgnoreCase("")) {
@@ -1163,22 +1184,27 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
                         }
                     }
 
+                    ArrayList<ProductDetails> duplicates=new ArrayList<>();
+
                     strings.add(new ProductDetails(productId, colorName, sizeName, selectedQuantity));
 
                     if (((YODApplication) getApplication()).getHugeData() != null && ((YODApplication) getApplication()).getHugeData().size() >= 0) {
-
                         //if product is already in bag
-
                         ArrayList<ProductDetails> details = ((YODApplication) getApplication()).getHugeData();
                         for (int i = 0; i < details.size(); i++) {
-                            if (!strings.get(0).getProduct_id().equalsIgnoreCase(details.get(i).getProduct_id())) {
-                                strings.add(((YODApplication) getApplication()).getHugeData().get(i));
-                            } else {
-                                isProductExists = true;
+                            for(int j=0;j<strings.size();j++){
+                            if (strings.get(j).getProduct_id().equalsIgnoreCase(details.get(i).getProduct_id())){
+                              if(!strings.get(j).getSize().equalsIgnoreCase(details.get(i).getSize())){
+                                  duplicates.add(((YODApplication) getApplication()).getHugeData().get(i));
+                              }else{
+                                  isProductExists=true;
+                              }
                             }
-
+                            }
                         }
                     }
+
+                    strings.addAll(duplicates);
 
                     String product_id = "", color_name = "", size = "", quantity = "";
                     int count = strings.size();
@@ -1225,9 +1251,9 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
                     CommonMessagePopup(getString(R.string.added_to_cart_already), "");
                 }
 
-            } else {
+            }
+            else {
                 if (isAddToBagClicked) {
-                    isAddToBagClicked = false;
                     final MyDialog myDialog = new MyDialog(this);
                     callAddToCartOrBaglistApi();//hit api
                 } else {
@@ -1300,7 +1326,7 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
         Retrofit retrofit = ApiClient.getClient();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 
-        Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(token, userId, productId);
+        Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(token, userId, productId,sizeName);
         call.enqueue(new Callback<MyWishListResponse>() {
             @Override
             public void onResponse(Call<MyWishListResponse> call, Response<MyWishListResponse> response) {
@@ -1310,11 +1336,13 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
 
                     if (response.body().getStatus().equals("SUCCESS")) {
                         if (response.body().getMessage().equalsIgnoreCase("Product removed from wishlist successfully")) {
-                            binding.whisListIV1.setImageResource(R.drawable.savedicon8);
                             binding.wishListIV2.setImageResource(R.drawable.savedicon8);
+                            binding.whisListIV1.setImageResource(R.drawable.savedicon8);
+                            binding.ivWishlist.setImageResource(R.drawable.savedicon8);
                         } else {
-                            binding.whisListIV1.setImageResource(R.drawable._saved_salected);
-                            binding.wishListIV2.setImageResource(R.drawable._saved_salected);
+                            binding.whisListIV1.setImageResource(R.drawable.bitmap_saved_salected);
+                            binding.wishListIV2.setImageResource(R.drawable.bitmap_saved_salected);
+                            binding.ivWishlist.setImageResource(R.drawable.bitmap_saved_salected);
                         }
 
 
@@ -1372,6 +1400,8 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
                 }
             }
         }
+
+        Log.e("cart",""+sizeName);
 
         Call<CartListModel2> call = apiInterface.getAddToCartResult3(token, userId, productId, colorName, sizeName, selectedQuantity);
         call.enqueue(new Callback<CartListModel2>() {

@@ -33,6 +33,7 @@ import com.satvick.model.MyOrderHelp;
 import com.satvick.model.MyWishListResponse;
 import com.satvick.model.NotificationListResponse;
 import com.satvick.model.Offer;
+import com.satvick.model.PinCodeModel;
 import com.satvick.model.PlaceOrderModel;
 import com.satvick.model.ProductDetailsResponse;
 import com.satvick.model.ProductListingResponse;
@@ -40,6 +41,7 @@ import com.satvick.model.ReferalListModel;
 import com.satvick.model.RequestForOrderModel;
 import com.satvick.model.SearchListModel;
 import com.satvick.model.SettingNotificationModel;
+import com.satvick.model.ShippingChargesModel;
 import com.satvick.model.SignUpModel;
 import com.satvick.model.SocialLoginModel;
 import com.satvick.model.SubCategoriesModel;
@@ -155,6 +157,7 @@ public interface ApiInterface {
             @Field("town") String town,
             @Field("city") String city,
             @Field("state") String state,
+            @Field("type") String type,
             @Field("remark") String remark,
             @Field("address_id") String address_id,
             @Field("country") String country,
@@ -242,7 +245,8 @@ public interface ApiInterface {
     Call<MyWishListResponse> getAddToWishListResult(
             @Field("token") String token,
             @Field("user_id") String user_id,
-            @Field("product_id") String product_id);
+            @Field("product_id") String product_id,
+            @Field("size") String size);
 
 
     @FormUrlEncoded
@@ -504,4 +508,14 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("placelifeorder")
     Call<LifeResponseModel> placeLifeOrder(@Field("token") String token,@Field("user_id") String user_id,@Field("life_id") String life_id,@Field("order_id") String order_id,@Field("tracking_id") String tracking_id);
+
+    @FormUrlEncoded
+    @POST("checkpincodeseller")
+    Call<PinCodeModel> getPinCodeResult(@Field("pincode") String pincode);
+
+    @FormUrlEncoded
+    @POST("getshippingcharges")
+    Call<ShippingChargesModel> getShippingCharges(@Field("user_id") String user_id,
+                                                  @Field("address_id") String address_id,
+                                                  @Field("giftwrap") String gift_wrap);
 }

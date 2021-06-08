@@ -692,6 +692,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onClick(View view) {
 
                 if (!edtCode.getText().toString().isEmpty()) {
+                    bottomSheetDialog.dismiss();
+//                    if (comeFrom.equalsIgnoreCase("ForgotPass")) {
+//                        openPopUpChangePass();
+//                    } else {
+//                        callCheckPhoneDataApiForLoginUsingOTP(binding.mainSv);
+//                    }
                     MyDialog myDialog = new MyDialog(LoginActivity.this);
                     myDialog.showDialog();
                     verifyVerificationCode(edtCode.getText().toString(), myDialog, bottomSheetDialog);
@@ -792,6 +798,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Toast.makeText(LoginActivity.this, R.string.please_enter_confirm_password, Toast.LENGTH_LONG).show();
                 } else {
                     if (edtNewPass.getText().toString().equals(edtNewPass.getText().toString())) {
+                        bottomSheetDialog.dismiss();
                         callChangePasswordByPhoneApi(edtNewPass.getText().toString(), binding.mainSv);
                     } else {
                         Toast.makeText(LoginActivity.this, "Please enter same new password and confirm password", Toast.LENGTH_LONG).show();

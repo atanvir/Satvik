@@ -238,13 +238,16 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
                             wishListAdapter.setListener(new MyWishListAdapter.MyWishListItemClickListener() {
                                 @Override
                                 public void onMoveToBagItemClick(View view, int pos) {
+                                    sizeName=wishlistproduct.getList().get(pos).getSize();
+                                    callAddToCartOrBaglistApi(wishlistproduct.getList().get(pos).getProductId(), pos, binding.mainRl);
 
-                                    openPopupForSelectSizeAndColor(String.valueOf(wishlistproduct.getList().get(pos).getProductId()), pos);
+                                   // openPopupForSelectSizeAndColor(String.valueOf(wishlistproduct.getList().get(pos).getProductId()), pos);
 
                                 }
 
                                 @Override
                                 public void onIvCrossItemClick(View view, int pos) {
+                                    sizeName=wishlistproduct.getList().get(pos).getSize();
                                     callAddToWishlistApi(pos, binding.mainRl);
                                 }
                             });
@@ -305,7 +308,7 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
 
                 if (validateForm()) {
                     if (HelperClass.showInternetAlert(MyWishListActivity.this)) {
-                        callAddToCartOrBaglistApi(mProductId, pos, binding.mainRl);//hit api
+
                         bottomSheetDialog.dismiss();
                     }
                 }
@@ -434,7 +437,7 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
         Retrofit retrofit = ApiClient.getClient();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 
-        Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(token, userId, wishlistproduct.getList().get(pos).getProductId());
+        Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(token, userId, wishlistproduct.getList().get(pos).getProductId(),wishlistproduct.getList().get(pos).getSize());
         call.enqueue(new Callback<MyWishListResponse>() {
             @Override
             public void onResponse(Call<MyWishListResponse> call, Response<MyWishListResponse> response) {
@@ -485,7 +488,7 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
                 break;
 
             case R.id.ivBag:
-                startActivity(new Intent(MyWishListActivity.this, MainActivity.class).putExtra("from", "MyWishListActivity"));
+                startActivity(new Intent(MyWishListActivity.this, MainActivity.class).putExtra("screen", "MyWishListActivity"));
                 break;
         }
     }

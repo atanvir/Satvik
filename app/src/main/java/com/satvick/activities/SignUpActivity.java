@@ -270,7 +270,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onClick(View view) {
                 bottomSheetDialogg.dismiss();
-
+//                callSignUpApi(binding.mainRl);
                if(!edtCode.getText().toString().isEmpty())
                     verifyVerificationCode(edtCode.getText().toString());
                 else
