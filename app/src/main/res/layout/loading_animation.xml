@@ -7,21 +7,24 @@
     android:background="#16112233">
 
 <!--    <com.airbnb.lottie.LottieAnimationView-->
-<!--        android:layout_width="@dimen/dp_200"-->
-<!--        android:layout_height="@dimen/dp_200"-->
+<!--        android:layout_width="@dimen/dp_50"-->
+<!--        android:layout_height="@dimen/dp_50"-->
 <!--        app:layout_constraintBottom_toBottomOf="parent"-->
 <!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:lottie_fileName="loading.json"-->
+<!--        app:lottie_fileName="new_loader.json"-->
 <!--        app:lottie_autoPlay="true"-->
+<!--        android:background="@color/green"-->
+<!--        android:backgroundTint="@android:color/transparent"-->
 <!--        app:lottie_loop="true"-->
 <!--        android:scaleType="centerCrop"-->
 <!--        app:layout_constraintStart_toStartOf="parent"-->
 <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-    <ProgressBar
-        android:layout_width="@dimen/dp_45"
-        android:layout_height="@dimen/dp_45"
-        android:progressDrawable="@drawable/progress_draawable"
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:layout_width="@dimen/dp_42"
+        android:layout_height="@dimen/dp_42"
+        android:backgroundTint="@color/green"
+        style="@style/Widget.AppCompat.ProgressBar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

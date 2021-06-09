@@ -209,8 +209,6 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
     }
 
     private void googleRegister() {
-// Configure sign-in to request the user's ID, email address, and basic profile.
-// ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -911,7 +909,7 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
                     //  Toast.makeText(this, "Please login first", Toast.LENGTH_SHORT).show();
                     openLoginSignUpBottomSheetWhenUserNotLogedIn();
                 } else {
-                    if (sizeText == null && sizeList.size() > 0) CommonMessagePopup("Please select any size", "");
+                    if (sizeText == null && sizeList.size() > 0 && sizeName.equals("")) CommonMessagePopup("Please select any size", "");
                     else if (!isValidVariant) CommonMessagePopup("Not valid product variant", "FAILURE");
                     else callAddToWishlistApi(binding.mainRl);//hit api
                 }
@@ -924,7 +922,9 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
                     // Toast.makeText(this, "Please login first", Toast.LENGTH_SHORT).show();
                     openLoginSignUpBottomSheetWhenUserNotLogedIn();
                 } else {
-                    callAddToWishlistApi(binding.mainRl);//hit api
+                    if (sizeText == null && sizeList.size() > 0 && sizeName.equals("")) CommonMessagePopup("Please select any size", "");
+                    else if (!isValidVariant) CommonMessagePopup("Not valid product variant", "FAILURE");
+                    else callAddToWishlistApi(binding.mainRl);//hit api
                 }
                 break;
 
@@ -994,7 +994,6 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
 
             case R.id.layout_product_detail9:
                 callingIntent(GlobalVariables.ProductDetailsActivityFinal, "moreTextThree", binding.moreTextThree.getText().toString(), data.getProductdetails().getSubsubcatid());
-
                 break;
         }
     }
@@ -1218,9 +1217,7 @@ public class ProductDetailsActivityFinal extends AppCompatActivity implements Vi
                             color_name += ",";
                             size += ",";
                             quantity += ",";
-
                         }
-
                     }
                     SharedPreferenceWriter.getInstance(getApplicationContext()).writeIntValue(GlobalVariables.count, count);
                     SharedPreferenceWriter.getInstance(getApplicationContext()).writeStringValue(GlobalVariables.product_id, product_id);

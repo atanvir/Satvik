@@ -111,7 +111,9 @@ public class WebViewActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog.showDialog();
+            LoadingDialog.showLoadingDialog(WebViewActivity.this, "Loading...");
+
+//            dialog.showDialog();
         }
 
         @Override
@@ -129,12 +131,14 @@ public class WebViewActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            dialog.hideDialog();
+//            dialog.hideDialog();
+            LoadingDialog.cancelLoading();
+
             @SuppressWarnings("unused")
             class MyJavaScriptInterface {
                 @JavascriptInterface
                 public void processHTML(String html) {
-                    Log.e("response", html);
+                    Log.e("responseData","All" +html);
 
                     // process the html source code to get final status of transaction
                     String status = null;
@@ -147,10 +151,10 @@ public class WebViewActivity extends AppCompatActivity {
                     } else {
                         status = "Status Not Known!";
                     }
-                    //Toast.makeText(getApplicationContext(), status, Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), StatusActivity.class);
-                    intent.putExtra("transStatus", status);
-                    startActivity(intent);
+//                    //Toast.makeText(getApplicationContext(), status, Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(getApplicationContext(), StatusActivity.class);
+//                    intent.putExtra("transStatus", status);
+//                    startActivity(intent);
                 }
             }
 
@@ -162,20 +166,23 @@ public class WebViewActivity extends AppCompatActivity {
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(webview, url);
                     Log.e("pageUrl", url);
-                    dialog.hideDialog();
+                    LoadingDialog.cancelLoading();
+
                     if (url.indexOf("/ccavResponseHandler.jsp") != -1) {
                         webview.loadUrl("javascript:window.HTMLOUT.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
                     }
-                    if (url.contains("https://soulahe.com/api/indipay/response")) {
-                        if (getIntent().getStringExtra("cameFrom").equalsIgnoreCase(OrderConfirmationActivity.class.getSimpleName())) orderPlaceApi();
-                        else placeLifeOrderApi();
-                    }
+
+                   // dialog.hideDialog();
+//                    else if (url.contains("https://soulahe.com/api/indipay/response")) {
+//                        if (getIntent().getStringExtra("cameFrom").equalsIgnoreCase(OrderConfirmationActivity.class.getSimpleName())) orderPlaceApi();
+//                        else placeLifeOrderApi();
+//                    }
                 }
 
                 @Override
                 public void onPageStarted(WebView view, String url, Bitmap favicon) {
                     super.onPageStarted(view, url, favicon);
-                    dialog.showDialog();
+                    LoadingDialog.showLoadingDialog(WebViewActivity.this, "Loading...");
                 }
             });
 

@@ -207,7 +207,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                         SharedPreferenceWriter.getInstance(context).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase(""))
                 {
                     myDialog.hideDialog();
-                    listener.setTotalPrice(view,quantity);
+                    listener.setTotalPrice(view,quantity,cartListModelList.get(getAdapterPosition).getSize());
                     listPopupWindow.dismiss();
 
                 }
@@ -228,7 +228,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                                 myDialog.hideDialog();
 
                                 if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
-                                    listener.setTotalPrice(view, quantity);
+                                    listener.setTotalPrice(view, quantity,cartListModelList.get(getAdapterPosition).getSize());
                                     listPopupWindow.dismiss();
                                 } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
                                     Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -307,7 +307,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         void onRemoveItemClick(View view, int pos);
         void onMoveToWishListItemClick(View view, int pos);
         void onImageItemClick(View view,int pos);
-        void setTotalPrice(View view,Map<String,String> map);
+        void setTotalPrice(View view,Map<String,String> map,String size);
 
     }
 

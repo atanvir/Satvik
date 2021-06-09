@@ -136,6 +136,8 @@ public class BagFragment extends Fragment implements View.OnClickListener {
         return rootView;
     }
 
+
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void init() {
         binding.tvPlaceOrder.setOnClickListener(this);
@@ -488,11 +490,9 @@ public class BagFragment extends Fragment implements View.OnClickListener {
             cartListAdapter = new CartListAdapter(getActivity(), cartListModelList);
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-
             binding.recyclerView.setLayoutManager(linearLayoutManager);
             binding.recyclerView.setAdapter(cartListAdapter);
             grandTotal = cartListAdapter.getPrice();
-
             cartListAdapter.setListener(new CartListAdapter.CartItemClickListener() {
                 @Override
                 public void onRemoveItemClick(View view, int pos) {
@@ -524,7 +524,7 @@ public class BagFragment extends Fragment implements View.OnClickListener {
                 }
 
                 @Override
-                public void setTotalPrice(View view, Map<String, String> map) {
+                public void setTotalPrice(View view, Map<String, String> map,String size) {
                     cartProduct_id = "";
                     cartProduct_quantity = "";
                     double total;
@@ -538,14 +538,15 @@ public class BagFragment extends Fragment implements View.OnClickListener {
                             cartProduct_id += ",";
                             cartProduct_quantity += ",";
                         }
+
                         for (int y = 0; y < cartListModelList.size(); y++) {
-                            if (cartListModelList.get(y).getProductId().equalsIgnoreCase(key)) {
+                            if (cartListModelList.get(y).getProductId().equalsIgnoreCase(key) ) {
                                 total = Double.parseDouble(cartListModelList.get(y).getActualPrice()) * Double.parseDouble(map.get(key));
                                 grandToal = grandToal + total;
                             }
                         }
-
                     }
+
                     callCartListApi(giftwrap2);
                 }
             });

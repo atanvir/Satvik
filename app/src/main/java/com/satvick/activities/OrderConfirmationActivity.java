@@ -104,16 +104,12 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
     private void loadAddressUI(List<ViewAddressModel.Viewaddress> data) {
         this.addressList=data;
         for(int i=0;i<addressList.size();i++){
-            if(addressList.get(i).getRemark().equalsIgnoreCase("1")){
-                viewAddress=addressList.get(i);
-                shippingChargesApi(""+viewAddress.getId());
-                break;
-            }
+            addressList.get(i).setRemark("1");
         }
-
         if(addressList.isEmpty()) { binding.tvAddNewAddress.setVisibility(View.VISIBLE); binding.viewAddress.setVisibility(View.VISIBLE); }
+        else binding.tvAddNewAddress.setVisibility(View.GONE); binding.viewAddress.setVisibility(View.GONE);
         binding.rvAddress.setLayoutManager(new LinearLayoutManager(this));
-        binding.rvAddress.setAdapter(new AddressAdapter(this,data,this,false));
+        binding.rvAddress.setAdapter(new AddressAdapter(this,addressList,this,false));
     }
 
     private void shippingChargesApi(String addressId) {
@@ -142,6 +138,7 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
     private void loadBilling(ShippingChargesModel.ChargesModel.PaymentModel model) {
         binding.llDeliveryCharges.setVisibility(View.VISIBLE);
         BillingHelper.getInstance().getBillingData().setSHIPPING_CHARGES(model.getShipping());
+        BillingHelper.getInstance().getBillingData().setSUB_TOTAL(model.getPayableWithShipAndGift());
 
         if(Double.parseDouble(model.getPayable())>1000){
             String subTotal= String.valueOf(Double.parseDouble(BillingHelper.getInstance().getBillingData().SUB_TOTAL) - Double.parseDouble(BillingHelper.getInstance().getBillingData().SHIPPING_CHARGES));
@@ -150,7 +147,6 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
             BillingHelper.getInstance().getBillingData().setSUB_TOTAL(subTotal);
 
         }else{
-            BillingHelper.getInstance().getBillingData().setSUB_TOTAL(model.getPayableWithShipAndGift());
             binding.tvDeliveryCharges.setText("+"+BillingHelper.getInstance().getBillingData().SHIPPING_CHARGES);
             binding.tvTotal.setText("₹" + " " + BillingHelper.getInstance().getBillingData().SUB_TOTAL);
         }
@@ -167,8 +163,7 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
 
             case R.id.tvAddNewAddress:
             Intent intent = new Intent(this, AddressActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            startActivityForResult(intent, NEW_ADDRESS_REQUEST);
             break;
 
             case R.id.ivBack: onBackPressed(); break;
