@@ -78,9 +78,8 @@ public class ApplyCouponActivity extends AppCompatActivity implements View.OnCli
     public void onResponse(Call<ApplyCouponModel> call, Response<ApplyCouponModel> response) {
         dialog.hideDialog();
         if (response.isSuccessful()) {
-            if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setResult(RESULT_OK);
-            else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) setResult(RESULT_CANCELED);
-            finish();
+            if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) { setResult(RESULT_OK); finish();}
+            else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) { CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(),ApplyCouponActivity.this); }
         } else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error",ApplyCouponActivity.this);
     }
 

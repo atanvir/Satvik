@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.gson.Gson;
 import com.satvick.R;
 import com.satvick.activities.MyOrderActivity;
 import com.satvick.activities.OrderConfirmationActivity;
@@ -30,6 +31,7 @@ import com.satvick.database.SharedPreferenceKey;
 import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.ActivityWebviewBinding;
 import com.satvick.model.LifeResponseModel;
+import com.satvick.model.PaymentResponseModel;
 import com.satvick.model.PlaceOrderModel;
 import com.satvick.model.ViewAddressModel;
 import com.satvick.retrofit.ApiClient;
@@ -40,6 +42,12 @@ import com.satvick.utils.CommonUtil;
 import com.satvick.utils.GlobalVariables;
 import com.satvick.utils.HelperClass;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.IOException;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -138,23 +146,39 @@ public class WebViewActivity extends AppCompatActivity {
             class MyJavaScriptInterface {
                 @JavascriptInterface
                 public void processHTML(String html) {
-                    Log.e("responseData","All" +html);
+//                    String sdk= "<head><head></head><body><pre style=\"word-wrap: break-word; white-space: pre-wrap;\">{\"status\":\"SUCCESS\",\"indipay\":{\"order_id\":\"G8W\",\"tracking_id\":\"110181627297\",\"order_status\":\"Success\",\"status_message\":\"SUCCESS\"},\"message\":\"Payment Response\",\"requestKey\":\"api/indipay/response\"}</pre></body></head>";
+                    PaymentResponseModel paymentResponse = null;
+                    try {
+                        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+                        factory.setNamespaceAware(true);
+                        XmlPullParser parser = factory.newPullParser();
+                        parser.setInput(new StringReader(html));
 
-                    // process the html source code to get final status of transaction
-                    String status = null;
-                    if (html.indexOf("Failure") != -1) {
-                        status = "Transaction Declined!";
-                    } else if (html.indexOf("Success") != -1) {
-                        status = "Transaction Successful!";
-                    } else if (html.indexOf("Aborted") != -1) {
-                        status = "Transaction Cancelled!";
-                    } else {
-                        status = "Status Not Known!";
+                        int eventType = parser.getEventType();
+                        while (eventType != XmlPullParser.END_DOCUMENT) {
+                            String tagname = parser.getName()+"";
+                            Log.e("tag","==>>"+tagname);
+                            switch (eventType) {
+                                case XmlPullParser.TEXT: paymentResponse=new Gson().fromJson(parser.getText(), PaymentResponseModel.class); break;
+                            }
+                            eventType = parser.next();
+                        }
+
+                    } catch (XmlPullParserException e) {e.printStackTrace();}
+                    catch (IOException e) {e.printStackTrace();}
+                    finally {
+                        if(paymentResponse!=null){
+                            if(paymentResponse.getIndipay().getStatus_message().equalsIgnoreCase("SUCCESS")) {
+                                binding.webview.setVisibility(View.GONE);
+                                if (getIntent().getStringExtra("cameFrom").equalsIgnoreCase(OrderConfirmationActivity.class.getSimpleName())) orderPlaceApi(paymentResponse.getIndipay().getTracking_id());
+                                else placeLifeOrderApi(paymentResponse.getIndipay().getTracking_id());
+                            }
+                        }else{
+                            CommonUtil.setUpSnackbarMessage(binding.getRoot(),"No Such Response Found",WebViewActivity.this);
+                        }
                     }
-//                    //Toast.makeText(getApplicationContext(), status, Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(getApplicationContext(), StatusActivity.class);
-//                    intent.putExtra("transStatus", status);
-//                    startActivity(intent);
+
+
                 }
             }
 
@@ -165,18 +189,10 @@ public class WebViewActivity extends AppCompatActivity {
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(webview, url);
-                    Log.e("pageUrl", url);
                     LoadingDialog.cancelLoading();
-
-                    if (url.indexOf("/ccavResponseHandler.jsp") != -1) {
+                    if (url.contains("https://soulahe.com/api/indipay/response")) {
                         webview.loadUrl("javascript:window.HTMLOUT.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
                     }
-
-                   // dialog.hideDialog();
-//                    else if (url.contains("https://soulahe.com/api/indipay/response")) {
-//                        if (getIntent().getStringExtra("cameFrom").equalsIgnoreCase(OrderConfirmationActivity.class.getSimpleName())) orderPlaceApi();
-//                        else placeLifeOrderApi();
-//                    }
                 }
 
                 @Override
@@ -197,9 +213,9 @@ public class WebViewActivity extends AppCompatActivity {
         }
     }
 
-    private void placeLifeOrderApi() {
+    private void placeLifeOrderApi(String trackingId) {
         dialog.showDialog();
-        Call<LifeResponseModel> call = apiInterface.placeLifeOrder(HelperClass.getCacheData(this).first,HelperClass.getCacheData(this).second,getIntent().getStringExtra("life_id"),getIntent().getStringExtra(AvenuesParams.ORDER_ID)," ");
+        Call<LifeResponseModel> call = apiInterface.placeLifeOrder(HelperClass.getCacheData(this).first,HelperClass.getCacheData(this).second,getIntent().getStringExtra("life_id"),getIntent().getStringExtra(AvenuesParams.ORDER_ID),trackingId);
         call.enqueue(new Callback<LifeResponseModel>() {
             public void onResponse(Call<LifeResponseModel> call, Response<LifeResponseModel> response) {
                 dialog.hideDialog();
@@ -215,13 +231,13 @@ public class WebViewActivity extends AppCompatActivity {
 
     }
 
-    private void orderPlaceApi() {
+    private void orderPlaceApi(String trackingId) {
         dialog.showDialog();
         Call<PlaceOrderModel> call = apiInterface.getPlaceOrderResult(HelperClass.getCacheData(this).first,
                                                                       HelperClass.getCacheData(this).second,
-                                                                      SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.gift_wrapup_status),
+                                                                      SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.gift_wrapup_status).equalsIgnoreCase("Yes")?"1":"0",
                                                                       viewAddress.getAddress(), BillingHelper.getInstance().getBillingData().COUPON_CODE,
-                                                                      "Online", getIntent().getStringExtra("order_number"), "",
+                                                                      "Online", getIntent().getStringExtra("order_number"), trackingId,
                                                                       viewAddress.getState(), viewAddress.getCity(), viewAddress.getCountry(),
                                                                       viewAddress.getPincode(), viewAddress.getPhone(),viewAddress.getName(),
                                                                       viewAddress.getType(),"Rs");

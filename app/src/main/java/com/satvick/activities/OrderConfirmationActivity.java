@@ -2,12 +2,14 @@ package com.satvick.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.gson.Gson;
 import com.satvick.R;
 import com.satvick.adapters.AddressAdapter;
 import com.satvick.ccavenue.AvenuesParams;
@@ -16,6 +18,7 @@ import com.satvick.database.SharedPreferenceKey;
 import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.ActivityOrderConfirmationBinding;
 import com.satvick.model.GenerateOrderIdModel;
+import com.satvick.model.PaymentResponseModel;
 import com.satvick.model.ShippingChargesModel;
 import com.satvick.model.ViewAddressModel;
 import com.satvick.retrofit.ApiClient;
@@ -26,6 +29,12 @@ import com.satvick.utils.CommonUtil;
 import com.satvick.utils.GlobalVariables;
 import com.satvick.utils.HelperClass;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.List;
 
 import retrofit2.Call;
@@ -40,6 +49,7 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
     private ViewAddressModel.Viewaddress viewAddress;
     private final int NEW_ADDRESS_REQUEST=12,
                       UPDATE_ADDRESS_REQUEST=21;
+
     private List<ViewAddressModel.Viewaddress> addressList;
 
     @Override
@@ -103,9 +113,7 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
 
     private void loadAddressUI(List<ViewAddressModel.Viewaddress> data) {
         this.addressList=data;
-        for(int i=0;i<addressList.size();i++){
-            addressList.get(i).setRemark("1");
-        }
+        for(int i=0;i<addressList.size();i++){ addressList.get(i).setRemark("1"); }
         if(addressList.isEmpty()) { binding.tvAddNewAddress.setVisibility(View.VISIBLE); binding.viewAddress.setVisibility(View.VISIBLE); }
         else binding.tvAddNewAddress.setVisibility(View.GONE); binding.viewAddress.setVisibility(View.GONE);
         binding.rvAddress.setLayoutManager(new LinearLayoutManager(this));
@@ -122,7 +130,7 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
             public void onResponse(Call<ShippingChargesModel> call, Response<ShippingChargesModel> response) {
                 dialog.hideDialog();
                 if (response.isSuccessful()) {
-                    if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) loadBilling(response.body().getGetshippingcharges().getPayment());
+                    if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) loadBilling(response.body().getGetshippingcharges().getPayment());
                     else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(), response.body().getMessage(),OrderConfirmationActivity.this);
                 } else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!",OrderConfirmationActivity.this);
             }
@@ -136,23 +144,22 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
     }
 
     private void loadBilling(ShippingChargesModel.ChargesModel.PaymentModel model) {
+
         binding.llDeliveryCharges.setVisibility(View.VISIBLE);
         BillingHelper.getInstance().getBillingData().setSHIPPING_CHARGES(model.getShipping());
         BillingHelper.getInstance().getBillingData().setSUB_TOTAL(model.getPayableWithShipAndGift());
 
-        if(Double.parseDouble(model.getPayable())>1000){
+        if(Double.parseDouble(model.getPayable())>1000) {
+
             String subTotal= String.valueOf(Double.parseDouble(BillingHelper.getInstance().getBillingData().SUB_TOTAL) - Double.parseDouble(BillingHelper.getInstance().getBillingData().SHIPPING_CHARGES));
             binding.tvDeliveryCharges.setText("-"+BillingHelper.getInstance().getBillingData().SHIPPING_CHARGES);
             binding.tvTotal.setText("₹" + " " + subTotal);
             BillingHelper.getInstance().getBillingData().setSUB_TOTAL(subTotal);
 
-        }else{
+        }else {
             binding.tvDeliveryCharges.setText("+"+BillingHelper.getInstance().getBillingData().SHIPPING_CHARGES);
             binding.tvTotal.setText("₹" + " " + BillingHelper.getInstance().getBillingData().SUB_TOTAL);
         }
-
-
-
     }
 
 
@@ -212,6 +219,9 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
         intent.putExtra(AvenuesParams.RSA_KEY_URL, getString(R.string.rsa_key_url));
         startActivity(intent);
     }
+
+
+
 
 
     @Override
