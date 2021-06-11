@@ -47,6 +47,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
             if(list.get(position).getRemark().equals("0")) holder.binding.cbDefaultAddress.setVisibility(View.VISIBLE);
             else holder.binding.cbDefaultAddress.setVisibility(View.GONE);
         }
+
         holder.binding.tvName.setText(list.get(position).getName());
         holder.binding.tvAddress.setText(list.get(position).getAddress());
         holder.binding.tvContactNumber.setText(list.get(position).getPhone());

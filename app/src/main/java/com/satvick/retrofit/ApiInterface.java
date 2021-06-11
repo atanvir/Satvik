@@ -435,13 +435,15 @@ public interface ApiInterface {
             @Field("token") String token,
             @Field("user_id") String user_id,
             @Field("product_id") String product_id,
-            @Field("quantity") String quantity);
+            @Field("quantity") String quantity,
+            @Field("size") String size);
 
     @FormUrlEncoded
     @POST("removetocart")
     Call<CartListModelResponse> removeToCart(@Field("user_id") String user_id,
                                              @Field("token") String token,
-                                             @Field("product_id") String productId);
+                                             @Field("product_id") String productId,
+                                             @Field("size") String size);
 
 
     @FormUrlEncoded

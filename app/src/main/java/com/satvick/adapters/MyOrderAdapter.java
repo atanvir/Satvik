@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,14 +40,12 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
     private Double convertedPrice;
     private String symbol;
 
-    public MyOrderAdapter(Context context, List<MyOrderDetailsModel.Response> myOrderDetailsModelList) {
+    public MyOrderAdapter(Context context, List<MyOrderDetailsModel.Response> myOrderDetailsModelList,AdapterInterface anInterface) {
         this.context = context;
         this.myOrderDetailsModelList = myOrderDetailsModelList;
-        anInterface = new AdapterImplementation();
+        this.anInterface = anInterface;
         this.convertedPrice = Double.valueOf(Double.parseDouble(SharedPreferenceWriter.getInstance(context).getString("converted_amount")));
         this.symbol = SharedPreferenceWriter.getInstance(context).getString("symbol");
-
-
     }
 
     @NonNull
@@ -91,28 +91,30 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
 
         viewHolder.binding.tvOrderNumber.setText(myOrderDetailsModelList.get(i).getOrderNumber());
 
-
-        if (myOrderDetailsModelList.get(i).getPercentage() == 0) {
-            viewHolder.binding.tvCuttedText.setVisibility(View.GONE);
-            viewHolder.binding.tvOff.setVisibility(View.GONE);
-        } else {
-            viewHolder.binding.tvCuttedText.setVisibility(View.VISIBLE);
-            viewHolder.binding.tvOff.setVisibility(View.VISIBLE);
-            viewHolder.binding.tvCuttedText.setText(symbol + " " + Math.round(Double.parseDouble(myOrderDetailsModelList.get(i).getMrp()) * convertedPrice));
-            viewHolder.binding.tvOff.setText(myOrderDetailsModelList.get(i).getPercentage() + "% OFF");
-
-        }
+//
+//        if (myOrderDetailsModelList.get(i).getPercentage() == 0) {
+//            viewHolder.binding.tvCuttedText.setVisibility(View.GONE);
+//            viewHolder.binding.tvOff.setVisibility(View.GONE);
+//        } else {
+//            viewHolder.binding.tvCuttedText.setVisibility(View.VISIBLE);
+//            viewHolder.binding.tvOff.setVisibility(View.VISIBLE);
+//            viewHolder.binding.tvCuttedText.setText(symbol + " " + Math.round(Double.parseDouble(myOrderDetailsModelList.get(i).getMrp()) * convertedPrice));
+//            viewHolder.binding.tvOff.setText(myOrderDetailsModelList.get(i).getPercentage() + "% OFF");
+//
+//        }
 
         viewHolder.binding.tvCuttedText.setPaintFlags(viewHolder.binding.tvCuttedText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        // viewHolder.binding.tvOrderStatusContent.setText(myOrderDetailsModelList.get(i).getStatus());
+         viewHolder.binding.tvOrderStatusContent.setText(myOrderDetailsModelList.get(i).getStatus());
         viewHolder.binding.tvOrderDateContent.setText(myOrderDetailsModelList.get(i).getOrderDate());
         viewHolder.binding.tvAddress.setText(myOrderDetailsModelList.get(i).getLocation());
-
+        viewHolder.binding.tvTrackingNo.setText(myOrderDetailsModelList.get(i).getTracking_id());
+        Log.e("order Status ",myOrderDetailsModelList.get(i).getStatus());
         if (myOrderDetailsModelList.get(i).getStatus().equalsIgnoreCase(GlobalVariables.new_order)) {
             viewHolder.binding.tvRequestForReturn.setText("Cancel");
                viewHolder.binding.tvRequestForExchange.setText("Track Order");
         } else if (myOrderDetailsModelList.get(i).getStatus().equalsIgnoreCase(GlobalVariables.delivred)) {
             viewHolder.binding.tvRequestForReturn.setText("Return");
+            viewHolder.binding.tvRequestForExchange.setVisibility(View.GONE);
             viewHolder.binding.tvRequestForExchange.setText("Exchange");
         } else if (myOrderDetailsModelList.get(i).getStatus().equalsIgnoreCase(GlobalVariables.cancelled)) {
             viewHolder.binding.tvRequestForReturn.setText("Cancelled");
@@ -130,7 +132,6 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
         } else {
             viewHolder.binding.tvRequestForReturn.setText("Cancel");
             viewHolder.binding.tvRequestForExchange.setText("Track Order");
-
         }
 
 
@@ -148,6 +149,14 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
         ViewHolder(@NonNull final ItemMyOrdersBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+
+            binding.tvTrackingNo.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.delhivery.com/"));
+                    context.startActivity(i);
+                }
+            });
 
             binding.tvRequestForReturn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -184,5 +193,8 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
 
         }
     }
+
+
+
 }
 

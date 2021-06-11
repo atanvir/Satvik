@@ -29,7 +29,7 @@ public class ReturnOrderCancelActivity extends AppCompatActivity implements View
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.llCancelOrder:
-                startActivity(new Intent(this, CancelOrderActivity.class));
+                startActivity(new Intent(this, OrderManageActivity.class));
                 break;
         }
     }

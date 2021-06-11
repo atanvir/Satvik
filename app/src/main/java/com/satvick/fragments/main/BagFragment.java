@@ -499,10 +499,10 @@ public class BagFragment extends Fragment implements View.OnClickListener {
                     if (SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false") ||
                         SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) {
                         productId = cartListModelList.get(pos).getProductId();
-                        removeOfflineProducts(productId, pos, binding.mainRl);
+                        removeOfflineProducts(productId, pos, binding.mainRl,cartListModelList.get(pos).getSize());
                     } else {
                         productId = cartListModelList.get(pos).getProductId();
-                        removeToCartApi(productId, pos, binding.mainRl);
+                        removeToCartApi(productId, pos, binding.mainRl,cartListModelList.get(pos).getSize()!=null?cartListModelList.get(pos).getSize():"");
                     }
                 }
 
@@ -513,7 +513,7 @@ public class BagFragment extends Fragment implements View.OnClickListener {
                     } else {
                         productId = cartListModelList.get(pos).getProductId();
                         final MyDialog myDialog = new MyDialog(getActivity());
-                        callAddToWishlistApi(productId,cartListModelList.get(pos).getSize());
+                        callAddToWishlistApi(productId,cartListModelList.get(pos).getSize()!=null?cartListModelList.get(pos).getSize():"");
                     }
                 }
 
@@ -561,7 +561,7 @@ public class BagFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    private void removeOfflineProducts(String productId, int pos,View view) {
+    private void removeOfflineProducts(String productId, int pos,View view,String existingSize) {
         String product_id = "", color_name = "",sizes = "", quantity = "";
         int size= 0;
         ArrayList<ProductDetails> details = ((YODApplication) getActivity().getApplication()).getHugeData();
@@ -569,7 +569,7 @@ public class BagFragment extends Fragment implements View.OnClickListener {
         if (details!=null && details.size()>0) {
             for (int i = 0; i < details.size(); i++) {
 
-                if (details.get(i).getProduct_id().equalsIgnoreCase(productId)) {
+                if (details.get(i).getProduct_id().equalsIgnoreCase(productId) && details.get(i).getSize().equalsIgnoreCase(existingSize)) {
                     details.remove(i);
                     details=YODApplication.getInstance().removeData(i);
                     cartListModelList.remove(pos);
@@ -674,7 +674,7 @@ public class BagFragment extends Fragment implements View.OnClickListener {
 
 
 
-            private void removeToCartApi(final String productId,final int pos,final View view){
+            private void removeToCartApi(final String productId,final int pos,final View view,String size){
                 final MyDialog myDialog = new MyDialog(getActivity());
                 myDialog.showDialog();
 
@@ -684,7 +684,7 @@ public class BagFragment extends Fragment implements View.OnClickListener {
                 Retrofit retrofit = ApiClient.getClient();
                 ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 
-                Call<CartListModelResponse> call = apiInterface.removeToCart(userId, token, productId);
+                Call<CartListModelResponse> call = apiInterface.removeToCart(userId, token, productId,size);
                 call.enqueue(new Callback<CartListModelResponse>() {
                     @Override
                     public void onResponse(Call<CartListModelResponse> call, Response<CartListModelResponse> response) {
@@ -708,7 +708,7 @@ public class BagFragment extends Fragment implements View.OnClickListener {
                                 @Override
                                 public void onClick(View view) {
 
-                                    removeToCartApi(productId, pos, view);
+                                    removeToCartApi(productId, pos, view,size);
                                     Snackbar snackbar = Snackbar.make(view, "Please wait!", Snackbar.LENGTH_LONG);
                                     snackbar.getView().setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.drawable_gradient_line));
                                     snackbar.show();

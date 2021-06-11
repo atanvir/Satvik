@@ -91,7 +91,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
             addressType=address.getType();
             if(address.getType().equalsIgnoreCase("Home")) binding.rbHome.setChecked(true);
             else if(address.getType().equalsIgnoreCase("Office")) binding.rbOffice.setChecked(true);
-            if(address.getRemark().equalsIgnoreCase("1")) binding.chbSelectPerson.setChecked(true);
+            if(address.getRemark().equalsIgnoreCase("0")) binding.chbSelectPerson.setChecked(true);
         }else{
             binding.toolbar.tvTitle.setText("Add Address");
         }
@@ -116,7 +116,12 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
         }
 
     private void pinCodeApi() {
-        dialog.showDialog();
+        try {
+            dialog = new MyDialog(this);
+            dialog.showDialog();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         Call<PinCodeModel> call = apiInterface.getPinCodeResult(binding.edtPinCode.getText().toString());
         call.enqueue(new Callback<PinCodeModel>() {
             @Override
@@ -219,7 +224,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
                 binding.edtLocality.getText().toString(),
                 binding.edtCity.getText().toString(),
                 binding.edtState.getText().toString(),
-                addressType,binding.chbSelectPerson.isChecked()==true?"1":"0",
+                addressType,binding.chbSelectPerson.isChecked()==true?"0":"1",
                 "0","India","0.0","0.0");
         call.enqueue(new Callback<AddAddressModel>() {
             @Override

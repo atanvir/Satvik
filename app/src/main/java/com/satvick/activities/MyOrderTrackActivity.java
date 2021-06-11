@@ -130,14 +130,12 @@ public class MyOrderTrackActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.ivBack:
-                onBackPressed();
-                break;
+            case R.id.ivBack: onBackPressed(); break;
         }
     }
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this,MyOrderActivity.class).putExtra("from","CancelOrderActivity"));
+        super.onBackPressed();
     }
 }

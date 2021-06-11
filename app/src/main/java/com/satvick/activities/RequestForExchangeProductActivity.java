@@ -419,6 +419,6 @@ public class RequestForExchangeProductActivity extends AppCompatActivity impleme
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(RequestForExchangeProductActivity.this, MyOrderActivity.class).putExtra("from","CancelOrderActivity"));
+        super.onBackPressed();
     }
 }

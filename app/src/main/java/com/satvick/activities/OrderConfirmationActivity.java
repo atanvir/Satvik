@@ -132,7 +132,7 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) loadBilling(response.body().getGetshippingcharges().getPayment());
                     else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(), response.body().getMessage(),OrderConfirmationActivity.this);
-                } else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!",OrderConfirmationActivity.this);
+                } else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Sorry we do not serve this area! Please change your delivery address",OrderConfirmationActivity.this);
             }
 
             @Override
@@ -205,6 +205,7 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
     }
 
     private void CCAvenueLaucher(String orderId) {
+
         Intent intent = new Intent(OrderConfirmationActivity.this, WebViewActivity.class);
         intent.putExtra("cameFrom", OrderConfirmationActivity.class.getSimpleName());
         intent.putExtra(AvenuesParams.ACCESS_CODE, getString(R.string.access_code_key));

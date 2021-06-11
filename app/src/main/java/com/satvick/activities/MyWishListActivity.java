@@ -238,7 +238,7 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
                             wishListAdapter.setListener(new MyWishListAdapter.MyWishListItemClickListener() {
                                 @Override
                                 public void onMoveToBagItemClick(View view, int pos) {
-                                    sizeName=wishlistproduct.getList().get(pos).getSize();
+                                    sizeName=wishlistproduct.getList().get(pos).getSize()!=null?wishlistproduct.getList().get(pos).getSize():"";
                                     callAddToCartOrBaglistApi(wishlistproduct.getList().get(pos).getProductId(), pos, binding.mainRl);
 
                                    // openPopupForSelectSizeAndColor(String.valueOf(wishlistproduct.getList().get(pos).getProductId()), pos);

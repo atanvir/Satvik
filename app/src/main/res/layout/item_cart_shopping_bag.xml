@@ -58,20 +58,21 @@
                         <ImageView
                             android:id="@+id/imgProduct"
                             android:layout_width="0dp"
-                            android:layout_height="@dimen/dp_180"
+                            android:layout_height="160dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="0.6"
+                            android:adjustViewBounds="true"
                             android:contentDescription="hotel"
                             android:gravity="center"
-                            android:scaleType="fitCenter" />
+                            android:scaleType="center" />
 
                         <RelativeLayout
                             android:id="@+id/rlRight"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
+                            android:layout_gravity="top"
                             android:layout_weight="1"
-                            android:gravity="start">
+                            android:gravity="top">
 
                             <LinearLayout
                                 android:id="@+id/llRight"
@@ -94,6 +95,7 @@
                                     android:paddingEnd="@dimen/dp_5"
                                     android:paddingBottom="@dimen/dp_2"
                                     android:text="Hangup"
+                                    android:visibility="gone"
                                     android:textColor="@color/colorBlack"
                                     android:textSize="14dp"
                                     app:font="@{`lato_bold`}" />

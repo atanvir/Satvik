@@ -85,26 +85,11 @@ public class MainActivity extends AppCompatActivity implements  BottomNavigation
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-
-            case R.id.home:
-            loadFragment(homeFragment);
-            return true;
-
-            case R.id.categories:
-            loadFragment(categoriesFragment);
-            return true;
-
-
-            case R.id.more:
-            loadFragment(moreFragment);
-            return true;
-
-            case R.id.profile:
-            if (SharedPreferenceWriter.getInstance(MainActivity.this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false")|| SharedPreferenceWriter.getInstance(MainActivity.this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) { loadFragment(loginSingup);return true; }
-            else { loadFragment(profileFragment);return true; }
-
-            case R.id.bag:
-            loadFragment(bagFragment);
+            case R.id.home: loadFragment(homeFragment); return true;
+            case R.id.categories: loadFragment(categoriesFragment); return true;
+            case R.id.more: loadFragment(moreFragment); return true;
+            case R.id.profile: if (SharedPreferenceWriter.getInstance(MainActivity.this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false")|| SharedPreferenceWriter.getInstance(MainActivity.this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) { loadFragment(loginSingup);return true; } else { loadFragment(profileFragment);return true; }
+            case R.id.bag: loadFragment(bagFragment);
             return true;
         }
         return false;

@@ -153,6 +153,10 @@ public class MyOrderDetailsModel implements Parcelable {
         @Expose
         public String size;
 
+        @SerializedName("tracking_id")
+        @Expose
+        public String tracking_id;
+
 
 
         @SerializedName("notifyStatus")
@@ -162,7 +166,13 @@ public class MyOrderDetailsModel implements Parcelable {
         @SerializedName("size_label")
         private String size_label;
 
+        public String getTracking_id() {
+            return tracking_id;
+        }
 
+        public void setTracking_id(String tracking_id) {
+            this.tracking_id = tracking_id;
+        }
 
         protected Response(Parcel in) {
             image = in.readString();
@@ -201,6 +211,7 @@ public class MyOrderDetailsModel implements Parcelable {
             }
             color = in.readString();
             size = in.readString();
+            tracking_id = in.readString();
             notifyStatus = in.createTypedArrayList(Notifystatus.CREATOR);
             size_label=in.readString();
         }
@@ -440,6 +451,7 @@ public class MyOrderDetailsModel implements Parcelable {
             }
             parcel.writeString(color);
             parcel.writeString(size);
+            parcel.writeString(tracking_id);
             parcel.writeTypedList(notifyStatus);
             parcel.writeString(size_label);
         }

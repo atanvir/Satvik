@@ -87,7 +87,7 @@ public class ReturnItemActivity extends AppCompatActivity implements View.OnClic
         binding.ivBack.setOnClickListener(this);
         binding.tvProceed.setOnClickListener(this);
         binding.tvCancel.setOnClickListener(this);
-        binding.tvAddNewAddress.setOnClickListener(this);
+//        binding.tvAddNewAddress.setOnClickListener(this);
         binding.rlReturnPolicy.setOnClickListener(this);
         binding.chbProductIsUnused.setOnClickListener(this);
         binding.chbAllTagsIntact.setOnClickListener(this);
@@ -122,26 +122,26 @@ public class ReturnItemActivity extends AppCompatActivity implements View.OnClic
         }
 
         binding.tvRupee.setText(symbol+" "+Math.round(Double.parseDouble(mAmount)*convertedPrice));
-        binding.tvOrderNumber.setText(mOrderId);
+        binding.tvOrderNumber.setText(mOrderNumber);
         binding.tvProductName.setText(mBrand);
         binding.tvProductDesc.setText(mProductDesc);
         binding.tvSizeContent.setText(mSize);
         binding.tvSize.setText(getIntent().getStringExtra("size_label")+":");
         binding.tvLocation.setText(mLocation);
-        if(mDiscountedPrice.equalsIgnoreCase("0"))
-        {
-            binding.tvOff.setVisibility(View.GONE);
-            binding.tvCuttedText.setVisibility(View.GONE);
-        }
-        else
-        {
-            binding.tvOff.setVisibility(View.VISIBLE);
-            binding.tvCuttedText.setVisibility(View.VISIBLE);
-            binding.tvOff.setText(mDiscountedPrice);
-            binding.tvCuttedText.setText(symbol+" "+Math.round(Double.parseDouble(mMrp)*convertedPrice));
-            binding.tvCuttedText.setPaintFlags(binding.tvCuttedText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
-        }
+//        if(mDiscountedPrice.equalsIgnoreCase("0"))
+//        {
+//            binding.tvOff.setVisibility(View.GONE);
+//            binding.tvCuttedText.setVisibility(View.GONE);
+//        }
+//        else
+//        {
+//            binding.tvOff.setVisibility(View.VISIBLE);
+//            binding.tvCuttedText.setVisibility(View.VISIBLE);
+//            binding.tvOff.setText(mDiscountedPrice);
+//            binding.tvCuttedText.setText(symbol+" "+Math.round(Double.parseDouble(mMrp)*convertedPrice));
+//            binding.tvCuttedText.setPaintFlags(binding.tvCuttedText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+//
+//        }
 
         binding.tvName.setText(mBuyer);
 
@@ -240,7 +240,7 @@ public class ReturnItemActivity extends AppCompatActivity implements View.OnClic
         if (reason.equalsIgnoreCase("")) {
             Toast.makeText(this, "Please select issue", Toast.LENGTH_SHORT).show();
             return false;
-        }else if(otherReason.equals("")){
+        }/*else if(otherReason.equals("")){
             Toast.makeText(this, "Please select other reason", Toast.LENGTH_SHORT).show();
             return false;
         } else if(mPaymentMode.equals("")){
@@ -249,7 +249,7 @@ public class ReturnItemActivity extends AppCompatActivity implements View.OnClic
         }else if (mAdditionalComment.length()==0) {
             Toast.makeText(this, "Please add comment", Toast.LENGTH_SHORT).show();
             return false;
-        }
+        }*/
 
         return isValidate;
     }
@@ -401,7 +401,7 @@ public class ReturnItemActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, MyOrderActivity.class).putExtra("from","CancelOrderActivity"));
+        super.onBackPressed();
     }
 
     private void openPopupReturnPolicy() {

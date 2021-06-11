@@ -46,7 +46,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_below="@+id/vieww">
 
             <RelativeLayout
@@ -56,7 +56,9 @@
                 <RelativeLayout
                     android:id="@+id/rlOrderNo"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    >
 
                     <TextView
                         android:id="@+id/tvOrder"
@@ -89,6 +91,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/rlOrderNo"
+                    android:visibility="gone"
                     android:layout_marginTop="@dimen/dp_5"
                     android:padding="@dimen/dp_8">
 
@@ -102,12 +105,9 @@
                             android:id="@+id/ivProduct"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/dp_150"
-                            android:layout_gravity="center_vertical"
                             android:layout_weight="0.5"
-                            android:contentDescription="hotel"
-                            android:gravity="center"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/red_shirts" />
+                            android:adjustViewBounds="true"
+                            android:scaleType="center" />
 
                         <RelativeLayout
                             android:id="@+id/rlFood"
@@ -138,6 +138,7 @@
                                     android:paddingEnd="@dimen/dp_5"
                                     android:paddingBottom="@dimen/dp_2"
                                     android:text="Lee Jeans"
+                                    android:visibility="gone"
                                     android:textColor="@color/colorPureBlack"
                                     android:textSize="14dp"
                                     app:font="@{`lato_bold`}" />
@@ -280,6 +281,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_alignParentStart="true"
                                             android:text="Rs.1500"
+                                            android:visibility="gone"
                                             android:textColor="@color/colorExremeLite"
                                             android:textSize="14dp"
                                             app:font="@{`lato_regular`}" />
@@ -289,6 +291,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="73% OFF"
+                                            android:visibility="gone"
                                             android:layout_marginLeft="@dimen/_5sdp"
                                             android:textColor="@color/colorPercent"
                                             android:textSize="14dp"
@@ -347,6 +350,8 @@
                         android:layout_marginTop="@dimen/dp_10"
                         android:gravity="start"
                         android:text="Valid for return before:"
+                        android:visibility="gone"
+
                         android:textColor="@color/colorBlack"
                         android:textSize="14dp"
                         app:font="@{`lato_regular`}" />
@@ -360,6 +365,7 @@
                         android:layout_toRightOf="@+id/tvValid"
                         android:gravity="start"
                         android:text="21 May 2019"
+                        android:visibility="gone"
                         android:textColor="@color/colorBlack"
                         android:textSize="14dp"
                         app:font="@{`lato_regular`}" />
@@ -391,6 +397,7 @@
                         android:layout_marginStart="@dimen/dp_10"
                         android:layout_marginTop="@dimen/dp_10"
                         android:gravity="start"
+                        android:visibility="gone"
                         android:text="For more information,please view our "
                         android:textColor="@color/colorBlack"
                         android:textSize="14dp"
@@ -404,6 +411,7 @@
                         android:layout_marginTop="@dimen/dp_10"
                         android:layout_toRightOf="@+id/tvForMore"
                         android:gravity="start"
+                        android:visibility="gone"
                         android:text="Return Policy"
                         android:textColor="@color/colorLogOut"
                         android:textSize="14dp"
@@ -418,6 +426,7 @@
                     android:layout_marginStart="@dimen/dp_10"
                     android:layout_marginTop="@dimen/dp_10"
                     android:gravity="start"
+                    android:visibility="gone"
                     android:text="@string/please_tell_the_reason"
                     android:textColor="@color/colorBlack"
                     android:textSize="14dp"
@@ -464,67 +473,67 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                    <RadioButton
-                        android:id="@+id/tvMyReasonIsNotListed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp_10"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:gravity="start|center"
-                        android:text="My Reason Is Not Listed Here"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="14dp"
-                        app:font="@{`lato_regular`}" />
+                        <RadioButton
+                            android:id="@+id/tvMyReasonIsNotListed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp_10"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:gravity="start|center"
+                            android:text="My Reason Is Not Listed Here"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_regular`}" />
 
-                    <View
-                        android:id="@+id/view1"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_below="@+id/tvMyReason"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:background="@color/colorLightGrey" />
+                        <View
+                            android:id="@+id/view1"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@+id/tvMyReason"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:background="@color/colorLightGrey" />
 
-                    <RadioButton
-                        android:id="@+id/tvTheProductDidNotFit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/view1"
-                        android:layout_marginStart="@dimen/dp_10"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:gravity="start|center"
-                        android:text="The Product Did't Fit Me"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="14dp"
-                        app:font="@{`lato_regular`}" />
+                        <RadioButton
+                            android:id="@+id/tvTheProductDidNotFit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/view1"
+                            android:layout_marginStart="@dimen/dp_10"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:gravity="start|center"
+                            android:text="The Product Did't Fit Me"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_regular`}" />
 
-                    <View
-                        android:id="@+id/view2"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_below="@+id/tvTheProduct"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:background="@color/colorLightGrey" />
+                        <View
+                            android:id="@+id/view2"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@+id/tvTheProduct"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:background="@color/colorLightGrey" />
 
-                    <RadioButton
-                        android:id="@+id/tvReceivedADefective"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/view2"
-                        android:layout_marginStart="@dimen/dp_10"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:gravity="start|center"
-                        android:text="Received A Defective Product"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="14dp"
-                        app:font="@{`lato_regular`}" />
+                        <RadioButton
+                            android:id="@+id/tvReceivedADefective"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/view2"
+                            android:layout_marginStart="@dimen/dp_10"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:gravity="start|center"
+                            android:text="Received A Defective Product"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_regular`}" />
 
-                    <View
-                        android:id="@+id/view3"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_below="@+id/tvReceived"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:background="@color/colorLightGrey" />
+                        <View
+                            android:id="@+id/view3"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@+id/tvReceived"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:background="@color/colorLightGrey" />
 
                         <RadioButton
                             android:id="@+id/tvReceivedAWrong"
@@ -539,36 +548,36 @@
                             android:textSize="14dp"
                             app:font="@{`lato_regular`}" />
 
-                    <View
-                        android:id="@+id/view4"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_below="@+id/tvReceivedAWrong"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:background="@color/colorLightGrey" />
+                        <View
+                            android:id="@+id/view4"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@+id/tvReceivedAWrong"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:background="@color/colorLightGrey" />
 
-                    <RadioButton
-                        android:id="@+id/tvNotWorth"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/view4"
-                        android:layout_marginStart="@dimen/dp_10"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:layout_marginBottom="@dimen/dp_10"
-                        android:gravity="start|center"
-                        android:text="Not Worth The Value"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="14dp"
-                        app:font="@{`lato_regular`}" />
+                        <RadioButton
+                            android:id="@+id/tvNotWorth"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/view4"
+                            android:layout_marginStart="@dimen/dp_10"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:layout_marginBottom="@dimen/dp_10"
+                            android:gravity="start|center"
+                            android:text="Not Worth The Value"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="14dp"
+                            app:font="@{`lato_regular`}" />
 
-                    <View
-                        android:visibility="gone"
-                        android:id="@+id/view5"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_below="@+id/tvNotWorth"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:background="@color/colorLightGrey" />
+                        <View
+                            android:visibility="gone"
+                            android:id="@+id/view5"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@+id/tvNotWorth"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:background="@color/colorLightGrey" />
 
                     </RadioGroup>
 
@@ -581,18 +590,18 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                   <!-- <TextView
-                        android:id="@+id/tvProductUnused"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/view5"
-                        android:layout_marginStart="@dimen/dp_10"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:gravity="start"
-                        android:text="Product Is Unused"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="14dp"
-                        app:font="@{`lato_regular`}" />-->
+                    <!-- <TextView
+                         android:id="@+id/tvProductUnused"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_below="@+id/view5"
+                         android:layout_marginStart="@dimen/dp_10"
+                         android:layout_marginTop="@dimen/dp_10"
+                         android:gravity="start"
+                         android:text="Product Is Unused"
+                         android:textColor="@color/colorBlack"
+                         android:textSize="14dp"
+                         app:font="@{`lato_regular`}" />-->
 
                     <CheckBox
                         android:id="@+id/chbProductIsUnused"
@@ -602,23 +611,24 @@
                         android:layout_marginTop="@dimen/dp_10"
                         android:layout_marginEnd="@dimen/dp_20"
                         android:button="@drawable/new_rect"
+                        android:visibility="gone"
                         android:padding="@dimen/dp_10"
                         android:text="Product is unused"
                         android:textColor="@color/colorBlack"
                         android:textSize="15dp" />
 
-                   <!-- <TextView
-                        android:id="@+id/tvAllTheTag"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/view6"
-                        android:layout_marginStart="@dimen/dp_10"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:gravity="start"
-                        android:text="All The Tag Are Intact"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="14dp"
-                        app:font="@{`lato_regular`}" />-->
+                    <!-- <TextView
+                         android:id="@+id/tvAllTheTag"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_below="@+id/view6"
+                         android:layout_marginStart="@dimen/dp_10"
+                         android:layout_marginTop="@dimen/dp_10"
+                         android:gravity="start"
+                         android:text="All The Tag Are Intact"
+                         android:textColor="@color/colorBlack"
+                         android:textSize="14dp"
+                         app:font="@{`lato_regular`}" />-->
 
                     <CheckBox
                         android:id="@+id/chbAllTagsIntact"
@@ -629,19 +639,21 @@
                         android:layout_marginEnd="@dimen/dp_20"
                         android:button="@drawable/new_rect"
                         android:padding="@dimen/dp_10"
+                        android:visibility="gone"
                         android:text="All the tags are intact"
                         android:textColor="@color/colorBlack"
                         android:textSize="15dp" />
 
                 </LinearLayout>
-                
+
                 <LinearLayout
                     android:id="@+id/llAddress"
                     android:layout_below="@+id/llCheckedUnchecked"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:orientation="horizontal">
-                    
+
                     <LinearLayout
                         android:layout_weight="1"
                         android:layout_width="match_parent"
@@ -656,7 +668,7 @@
                             android:layout_marginStart="@dimen/dp_20"
                             android:layout_marginTop="@dimen/dp_20"
                             android:gravity="start|center"
-                            android:text="Default Address"
+                            android:text="Shipping Address"
                             android:textColor="@color/colorPureBlack"
                             android:textSize="14dp"
                             android:visibility="visible"
@@ -742,18 +754,19 @@
                     </LinearLayout>
 
                     <TextView
-                        android:visibility="visible"
+                        android:visibility="gone"
                         android:id="@+id/tvAddNewAddress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_10"
                         android:padding="@dimen/dp_10"
                         android:gravity="center"
+
                         android:text="Add New Address"
                         android:textColor="@color/colorLogOut"
                         android:textSize="14dp"
                         app:font="@{`lato_regular`}" />
-                    
+
                 </LinearLayout>
 
 
@@ -763,6 +776,7 @@
                     android:layout_height="1dp"
                     android:layout_below="@+id/llAddress"
                     android:layout_marginTop="@dimen/dp_10"
+                    android:visibility="gone"
                     android:background="@color/colorLightGrey" />
 
                 <LinearLayout
@@ -770,6 +784,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_10"
+                    android:visibility="gone"
                     android:layout_marginStart="@dimen/dp_20"
                     android:layout_below="@+id/view13"
                     android:orientation="horizontal">
@@ -829,7 +844,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_below="@id/edtAdditionalComment"
                     android:layout_alignParentBottom="true"
                     android:layout_marginStart="@dimen/dp_10"

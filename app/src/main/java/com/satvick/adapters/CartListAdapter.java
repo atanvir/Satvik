@@ -218,7 +218,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                     Call<UpdateCartQuantity> call = apiInterface.updatecart(SharedPreferenceWriter.getInstance(context).getString(SharedPreferenceKey.TOKEN),
                             SharedPreferenceWriter.getInstance(context).getString(SharedPreferenceKey.USER_ID),
                             cartListModelList.get(getAdapterPosition).getProductId(),
-                            quantity.get(cartListModelList.get(getAdapterPosition).getProductId()));
+                            quantity.get(cartListModelList.get(getAdapterPosition).getProductId()),cartListModelList.get(getAdapterPosition).getSize()!=null?cartListModelList.get(getAdapterPosition).getSize():"");
 
 
                     call.enqueue(new Callback<UpdateCartQuantity>() {

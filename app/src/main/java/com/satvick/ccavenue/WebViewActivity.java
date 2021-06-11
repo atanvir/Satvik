@@ -21,6 +21,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.gson.Gson;
@@ -78,7 +79,7 @@ public class WebViewActivity extends AppCompatActivity {
         init();
     }
 
-    public void init(){
+    public void init() {
         dialog = new MyDialog(this);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         viewAddress=getIntent().getParcelableExtra("data");
@@ -169,9 +170,12 @@ public class WebViewActivity extends AppCompatActivity {
                     finally {
                         if(paymentResponse!=null){
                             if(paymentResponse.getIndipay().getStatus_message().equalsIgnoreCase("SUCCESS")) {
+                                Toast.makeText(WebViewActivity.this, "Payment Successfull", Toast.LENGTH_SHORT).show();
                                 binding.webview.setVisibility(View.GONE);
                                 if (getIntent().getStringExtra("cameFrom").equalsIgnoreCase(OrderConfirmationActivity.class.getSimpleName())) orderPlaceApi(paymentResponse.getIndipay().getTracking_id());
                                 else placeLifeOrderApi(paymentResponse.getIndipay().getTracking_id());
+                            }else{
+                                CommonUtil.setUpSnackbarMessage(binding.getRoot(),paymentResponse.getIndipay().getStatus_message(),WebViewActivity.this);
                             }
                         }else{
                             CommonUtil.setUpSnackbarMessage(binding.getRoot(),"No Such Response Found",WebViewActivity.this);
@@ -219,7 +223,7 @@ public class WebViewActivity extends AppCompatActivity {
         call.enqueue(new Callback<LifeResponseModel>() {
             public void onResponse(Call<LifeResponseModel> call, Response<LifeResponseModel> response) {
                 dialog.hideDialog();
-                if (response.isSuccessful()) HelperClass.orderStatusDailog(WebViewActivity.this,response.body().getMessage());
+                if (response.isSuccessful()) HelperClass.myArticlePopUp(WebViewActivity.this,response.body().getMessage());
                 else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error",WebViewActivity.this);
             }
 

@@ -45,6 +45,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.satvick.R;
+import com.satvick.activities.MainActivity;
 import com.satvick.activities.MyOrderActivity;
 import com.satvick.activities.OrderConfirmationActivity;
 import com.satvick.ccavenue.AvenuesParams;
@@ -704,6 +705,41 @@ public class HelperClass {
         dialog.show();
     }
 
+
+    public static void myArticlePopUp(Context context,String message) {
+        final Dialog dialog = new Dialog(context, android.R.style.Theme_Black);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        dialog.setContentView(R.layout.common_mesage_popup);
+        LottieAnimationView lottieAnimationView = dialog.findViewById(R.id.lottieAnimationView);
+        ImageView closeiv = dialog.findViewById(R.id.closeiv);
+        TextView messagetxt = dialog.findViewById(R.id.messagetxt);
+        message = "Article Buyed Successfully";
+        messagetxt.setText(message);
+        lottieAnimationView.setAnimation("done.json");
+        Button okbtn = dialog.findViewById(R.id.okbtn);
+
+        closeiv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                context.startActivity(new Intent(context, MainActivity.class));
+            }
+        });
+
+        okbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                context.startActivity(new Intent(context, MainActivity.class));
+            }
+        });
+
+        dialog.show();
+    }
+
     public static Pair<String, String>  getValue(String token, String _id){
         return new Pair<String, String>(token, _id);
     }
@@ -714,7 +750,7 @@ public class HelperClass {
     public static void showSatvikLifeArticle(Context context,String amount,String id) {
 
         if(HelperClass.getCacheData((Activity)context).first.equalsIgnoreCase("1") ||
-           HelperClass.getCacheData((Activity)context).first.equalsIgnoreCase("") ){
+           HelperClass.getCacheData((Activity)context).first.equalsIgnoreCase("") ) {
             Toast.makeText(context, "Please Login First", Toast.LENGTH_SHORT).show();
         }else {
             Dialog dialog = new Dialog(context, android.R.style.Theme_Black);

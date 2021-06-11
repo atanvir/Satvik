@@ -33,6 +33,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <Button
+                android:id="@+id/tvRequestForOrderAgan"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:gravity="center"
+
+                android:background="@color/colorBlack"
+                android:text="Order Again"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="12dp"
+                app:font="@{`lato_regular`}" />
+
             <RelativeLayout
                 android:id="@+id/rlOrderNo"
                 android:layout_width="match_parent"
@@ -65,10 +79,42 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rlTracking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rlOrderNo">
+
+                <TextView
+                    android:id="@+id/tvTrackingLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:gravity="start"
+                    android:text="Tracking Number:"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+
+                <TextView
+                    android:id="@+id/tvTrackingNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_toRightOf="@+id/tvTrackingLabel"
+                    android:gravity="start"
+                    android:text="Hahahhahah"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    app:font="@{`lato_regular`}" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/rlTop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/rlOrderNo"
+                android:layout_below="@+id/rlTracking"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/dp_5"
                 android:padding="@dimen/dp_8">
@@ -82,18 +128,18 @@
                     <ImageView
                         android:id="@+id/ivProduct"
                         android:layout_width="0dp"
-                        android:layout_height="@dimen/dp_180"
-                        android:layout_gravity="center_vertical"
+                        android:layout_height="@dimen/dp_150"
                         android:layout_weight="0.6"
+                        android:adjustViewBounds="true"
                         android:contentDescription="hotel"
                         android:gravity="center"
-                        android:scaleType="fitCenter" />
+                        android:scaleType="center" />
 
                     <RelativeLayout
                         android:id="@+id/rlFood"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_gravity="top"
                         android:layout_weight="1"
                         android:gravity="start">
 
@@ -116,6 +162,7 @@
                                 android:gravity="start"
                                 android:paddingStart="@dimen/dp_5"
                                 android:paddingEnd="@dimen/dp_5"
+                                android:visibility="gone"
                                 android:paddingBottom="@dimen/dp_2"
                                 android:text="Lee"
                                 android:textColor="@color/colorPureBlack"
@@ -293,6 +340,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_alignParentStart="true"
                                         android:text="Rs.1500"
+                                        android:visibility="gone"
                                         android:textColor="@color/colorExremeLite"
                                         android:textSize="14dp"
                                         app:font="@{`lato_regular`}" />
@@ -314,6 +362,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_alignParentStart="true"
                                         android:text="(20% OFF)"
+                                        android:visibility="gone"
                                         android:textColor="@color/colorPercent"
                                         android:textSize="14dp"
                                         app:font="@{`lato_regular`}" />
@@ -328,7 +377,7 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
                                 android:paddingStart="@dimen/dp_5"
-                                android:visibility="gone"
+                                android:visibility="visible"
                                 android:paddingEnd="@dimen/dp_5"
                                 android:paddingBottom="@dimen/dp_2">
 
@@ -354,6 +403,9 @@
 
 
                             </LinearLayout>
+
+
+
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -470,19 +522,7 @@
                         android:textSize="14dp"
                         app:font="@{`lato_regular`}" />
 
-                    <TextView
-                        android:id="@+id/tvRequestForOrderAgan"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/dp_40"
-                        android:layout_marginStart="@dimen/dp_5"
-                        android:layout_weight="1"
-                        android:background="@drawable/drawable_rectangle_logout_btn_with_radius"
-                        android:gravity="center"
-                        android:text="Order Again"
-                        android:textAllCaps="true"
-                        android:textColor="@color/colorLogOut"
-                        android:textSize="14dp"
-                        app:font="@{`lato_regular`}" />
+
                 </LinearLayout>
 
 
