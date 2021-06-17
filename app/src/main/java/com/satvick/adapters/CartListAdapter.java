@@ -185,69 +185,33 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         listPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, final View view, int i, long l) {
-                final MyDialog myDialog=new MyDialog(context);
+                final MyDialog myDialog = new MyDialog(context);
                 myDialog.showDialog();
                 String selectedMenu = selectedMenuList.get(i);
                 viewHolder.binding.tvSelectQty.setText(selectedMenu);
-                clickCount=clickCount-1;
-                viewHolder.binding.tvPrice.setText(symbol+" "+Double.parseDouble(selectedMenu)*Double.parseDouble(cartListModelList.get(getAdapterPosition).getActualPrice())*convertedPrice);
-                if(quantity.containsKey(cartListModelList.get(getAdapterPosition).getProductId()))
-                {
+                clickCount = clickCount - 1;
+                viewHolder.binding.tvPrice.setText(symbol + " " + Double.parseDouble(selectedMenu) * Double.parseDouble(cartListModelList.get(getAdapterPosition).getActualPrice()) * convertedPrice);
+                if (quantity.containsKey(cartListModelList.get(getAdapterPosition).getProductId())) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        quantity.replace(cartListModelList.get(getAdapterPosition).getProductId(),selectedMenu);
+                        quantity.replace(cartListModelList.get(getAdapterPosition).getProductId(), selectedMenu);
                     }
-                }
-                else
-                {
-                    quantity.put(cartListModelList.get(getAdapterPosition).getProductId(),selectedMenu);
+                } else {
+                    quantity.put(cartListModelList.get(getAdapterPosition).getProductId(), selectedMenu);
                 }
 
 
                 if (SharedPreferenceWriter.getInstance(context).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false") ||
-                        SharedPreferenceWriter.getInstance(context).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase(""))
-                {
+                        SharedPreferenceWriter.getInstance(context).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) {
                     myDialog.hideDialog();
-                    listener.setTotalPrice(view,quantity,cartListModelList.get(getAdapterPosition).getSize());
+                    listener.setTotalPrice(view, quantity, cartListModelList.get(getAdapterPosition).getSize());
                     listPopupWindow.dismiss();
+                } else {
+                    listPopupWindow.dismiss();
+                    if(listener!=null) listener.updateCart(getAdapterPosition, quantity.get(cartListModelList.get(getAdapterPosition).getProductId()));
                 }
-                else {
 
-
-                    ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                    Call<UpdateCartQuantity> call = apiInterface.updatecart(SharedPreferenceWriter.getInstance(context).getString(SharedPreferenceKey.TOKEN),
-                            SharedPreferenceWriter.getInstance(context).getString(SharedPreferenceKey.USER_ID),
-                            cartListModelList.get(getAdapterPosition).getProductId(),
-                            quantity.get(cartListModelList.get(getAdapterPosition).getProductId()),cartListModelList.get(getAdapterPosition).getSize()!=null?cartListModelList.get(getAdapterPosition).getSize():"");
-
-
-                    call.enqueue(new Callback<UpdateCartQuantity>() {
-                        @Override
-                        public void onResponse(Call<UpdateCartQuantity> call, Response<UpdateCartQuantity> response) {
-                            if (response.isSuccessful()) {
-                                myDialog.hideDialog();
-
-                                if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
-                                    listener.setTotalPrice(view, quantity,cartListModelList.get(getAdapterPosition).getSize());
-                                    listPopupWindow.dismiss();
-                                } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
-                                    Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-
-                                }
-                            }
-                        }
-
-
-
-
-
-                        @Override
-                        public void onFailure(Call<UpdateCartQuantity> call, Throwable t) {
-                            myDialog.hideDialog();
-
-                        }
-                    });
-                }
             }
+
         });
 
         listPopupWindow.setAnchorView(viewHolder.binding.tvSelectQty);
@@ -307,6 +271,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         void onMoveToWishListItemClick(View view, int pos);
         void onImageItemClick(View view,int pos);
         void setTotalPrice(View view,Map<String,String> map,String size);
+        void updateCart(int pos,String quantity);
     }
 
 }

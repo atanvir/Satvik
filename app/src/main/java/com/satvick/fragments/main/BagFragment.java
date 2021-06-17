@@ -50,6 +50,7 @@ import com.satvick.model.CartListModelResponse;
 import com.satvick.model.MyWishListResponse;
 import com.satvick.model.ProductDetails;
 import com.satvick.model.SocialLoginModel;
+import com.satvick.model.UpdateCartQuantity;
 import com.satvick.retrofit.ApiClient;
 import com.satvick.retrofit.ApiInterface;
 import com.satvick.retrofit.MyDialog;
@@ -184,6 +185,60 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
             }
         });
     }
+    private void removeToCartApi(String productId,String size){
+        dialog.showDialog();
+        Call<CartListModelResponse> call = apiInterface.removeToCart(HelperClass.getCacheData(requireActivity()).second,
+                HelperClass.getCacheData(requireActivity()).first,
+                productId,size);
+        call.enqueue(new Callback<CartListModelResponse>() {
+            @Override
+            public void onResponse(Call<CartListModelResponse> call, Response<CartListModelResponse> response) {
+
+                if (response.isSuccessful()) {
+                    if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
+                        cartListModelList.clear();
+                        callCartListApi();
+                    } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
+                        dialog.hideDialog();
+                        CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(),requireActivity());}
+                } else {
+                    dialog.hideDialog();
+                    CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!",requireActivity());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CartListModelResponse> call, Throwable t) {
+                dialog.hideDialog();
+                CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),requireActivity());
+            }
+        });
+    }
+    private void updateCartApi(int pos,String quantity) {
+        dialog.showDialog();
+        Call<UpdateCartQuantity> call = apiInterface.updatecart(HelperClass.getCacheData(requireActivity()).first,
+                                                                HelperClass.getCacheData(requireActivity()).second,
+                                                                cartListModelList.get(pos).getProductId(), quantity,
+                                                                cartListModelList.get(pos).getSize()!=null?cartListModelList.get(pos).getSize():"");
+        call.enqueue(new Callback<UpdateCartQuantity>() {
+            @Override
+            public void onResponse(Call<UpdateCartQuantity> call, Response<UpdateCartQuantity> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) callCartListApi();
+                    else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
+                        dialog.hideDialog();
+                        CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(),requireActivity());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UpdateCartQuantity> call, Throwable t) {
+                dialog.hideDialog();
+                CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),requireActivity());
+            }
+        });
+    }
     private void cancelCouponApi() {
         dialog.showDialog();
         Call<CancelCouponModel> call=apiInterface.cancelCoupon(HelperClass.getCacheData(requireActivity()).second);
@@ -270,36 +325,6 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
             }
         });
     }
-    private void removeToCartApi(String productId,String size){
-        dialog.showDialog();
-        Call<CartListModelResponse> call = apiInterface.removeToCart(HelperClass.getCacheData(requireActivity()).second,
-                HelperClass.getCacheData(requireActivity()).first,
-                productId,size);
-        call.enqueue(new Callback<CartListModelResponse>() {
-            @Override
-            public void onResponse(Call<CartListModelResponse> call, Response<CartListModelResponse> response) {
-
-                if (response.isSuccessful()) {
-                    if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
-                        cartListModelList.clear();
-                        callCartListApi();
-                    } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
-                        dialog.hideDialog();
-                        CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(),requireActivity());}
-                } else {
-                    dialog.hideDialog();
-                    CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!",requireActivity());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CartListModelResponse> call, Throwable t) {
-                dialog.hideDialog();
-                CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),requireActivity());
-            }
-        });
-    }
-
     private void saveData(Response<SocialLoginModel> response) {
         SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.BATCH_COUNT, "");
         SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.FULL_NAME, response.body().getSociallogin().getName());
@@ -514,6 +539,11 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
         quantities=TextUtils.join(",",map.values().toArray());
         SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.quantity,quantities);
         callCartListApi();
+    }
+
+    @Override
+    public void updateCart(int pos,String quantity) {
+        updateCartApi(pos,quantity);
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> task) {
