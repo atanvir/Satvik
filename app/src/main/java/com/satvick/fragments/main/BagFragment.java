@@ -1,29 +1,20 @@
 package com.satvick.fragments.main;
 
-import android.content.Context;
 import android.content.Intent;
-
-import androidx.annotation.RequiresApi;
-import androidx.databinding.DataBindingUtil;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.os.Build;
 import android.os.Bundle;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -38,7 +29,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.satvick.R;
 import com.satvick.activities.ApplyCouponActivity;
 import com.satvick.activities.LoginActivity;
@@ -46,12 +36,13 @@ import com.satvick.activities.MainActivity;
 import com.satvick.activities.MyWishListActivity;
 import com.satvick.activities.OrderConfirmationActivity;
 import com.satvick.activities.ProductDetailActivity;
+import com.satvick.activities.SearchScreenActivity;
 import com.satvick.activities.SignUpActivity;
 import com.satvick.adapters.CartListAdapter;
-import com.satvick.adapters.OfferAdapter;
 import com.satvick.database.SharedPreferenceKey;
 import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.FragmentBagBinding;
+import com.satvick.databinding.PopUpBottomSheetLoginWhenUserNotLogedInBinding;
 import com.satvick.model.BillingModel;
 import com.satvick.model.CancelCouponModel;
 import com.satvick.model.CartListModel;
@@ -67,175 +58,161 @@ import com.satvick.utils.CommonUtil;
 import com.satvick.utils.GlobalVariables;
 import com.satvick.utils.GuestUserData;
 import com.satvick.utils.HelperClass;
-
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
-import static android.app.Activity.RESULT_OK;
+public class BagFragment extends Fragment implements View.OnClickListener, FacebookCallback<LoginResult>, GraphRequest.GraphJSONObjectCallback, CartListAdapter.CartItemClickListener {
 
-public class BagFragment extends Fragment implements View.OnClickListener {
-    View rootView;
-    FragmentBagBinding binding;
-    List<CartListModel.ProductListRetrievedSuccessfully> cartListModelList = new ArrayList<>();
-    CartListAdapter cartListAdapter;
-    String productId = "";
-    String token = "";
-    String userId = "";
-    String commaSeparatedProductId = "";
-    private Double couponDiscount = 0.0;
-    boolean isChecked = true;
-    double totalPrice = 0.0;
-    String mTotalPrice = "";
-    String grandTotal = "";
-    CallbackManager callbackManager;
+    private FragmentBagBinding binding;
+    private String productIds = "",symbol="", coponCode = "",colorNames = "", sizes = "", quantities = "",gift_wrapup_status="";
+    private List<CartListModel.ProductListRetrievedSuccessfully> cartListModelList = new ArrayList<>();
+    private MyDialog dialog;
+    private ApiInterface apiInterface=ApiClient.getClient().create(ApiInterface.class);
+    private TextView tvBadge;
+    private double convertedPrice=0.0, total = 0.0,giftWrapPrice = 0.0,couponDiscount=0.0,subTotal=0.0;
+    private BottomSheetDialog bottomSheetDialog;
+    private CallbackManager callbackManager;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 901;
-    String gift_wrapup_status = "";
-    boolean giftwrap = false;
-    String cartProduct_id = "", cartProduct_quantity = "";
-    Bundle bundle;
-    String coupan_code = "";
-    String percantageDiscount = "";
-    String min_price_coupon = "";
-    String symbol;
-    private Double convertedPrice;
-    private String coponCode = "";
-    String productIds = "", colorNames = "", sizes = "", quantities = "", giftwrap2 = "0";
-    private TextView tvBadge;
-    public BagFragment(){
-
-    }
-
+    public BagFragment(){ }
     public BagFragment(TextView tvBadge){
         this.tvBadge=tvBadge;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_bag, container, false);
-        rootView = binding.getRoot();
-        symbol = SharedPreferenceWriter.getInstance(getActivity()).getString("symbol");
-        convertedPrice = Double.parseDouble(SharedPreferenceWriter.getInstance(getActivity()).getString("converted_amount"));
-        init();
-        fbRegisterCallBack();
-        googleRegister();
-        if (HelperClass.showInternetAlert(getActivity())) {
-            callCartListApi(giftwrap2);
-        }
-
-        return rootView;
+        binding = FragmentBagBinding.inflate(inflater,container,false);
+        return binding.getRoot();
     }
 
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        init();
+        initCtrl();
+        if (HelperClass.showInternetAlert(getActivity())) { dialog.showDialog(); callCartListApi();}
+    }
 
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private void init() {
-        binding.tvPlaceOrder.setOnClickListener(this);
-        binding.tvWishList.setOnClickListener(this);
-        binding.ivBack.setOnClickListener(this);
-        binding.llgiftwrap.setOnClickListener(this);
-        binding.llaa.setOnClickListener(this);
-        binding.llgiftwrap.setOnClickListener(this);
+        dialog=new MyDialog(requireActivity());
+        callbackManager = CallbackManager.Factory.create();
+        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build());
 
 
-        mTotalPrice = SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.TOTAL_PRICE);
+        symbol = SharedPreferenceWriter.getInstance(getActivity()).getString("symbol");
+        convertedPrice = Double.parseDouble(SharedPreferenceWriter.getInstance(getActivity()).getString("converted_amount"));
         gift_wrapup_status = SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.gift_wrapup_status);
         productIds = SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.product_id);
         colorNames = SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.color_name);
         sizes = SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.size);
         quantities = SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.quantity);
 
-        if (SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false") ||
-              SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) {
-            token = "1";
-            userId = "1";
-        } else {
-            token = SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.TOKEN);
-            userId = SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.USER_ID);
-        }
-
-        gift_wrapup_status = SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.gift_wrapup_status);
         if (gift_wrapup_status.equalsIgnoreCase("yes")) {
-            giftwrap2 = "1";
             binding.llgiftwrap.setBackground(getActivity().getDrawable(R.drawable.drawable_gradient_line));
             binding.tvApplyy.setTextColor(getActivity().getResources().getColor(R.color.colorWhite));
             binding.giftWrapIv.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.close));
             binding.giftWrapIv.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.drawable_circle));
-            binding.giftWrapIv.setBackgroundTintList(getActivity().getColorStateList(android.R.color.white));
-            binding.giftWrapIv.setOnClickListener(this);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) binding.giftWrapIv.setBackgroundTintList(getActivity().getColorStateList(android.R.color.white));
+        }
+    }
+    private void initCtrl() {
+        binding.tvPlaceOrder.setOnClickListener(this);
+        binding.tvWishList.setOnClickListener(this);
+        binding.ivBack.setOnClickListener(this);
+        binding.llgiftwrap.setOnClickListener(this);
+        binding.llaa.setOnClickListener(this);
+        binding.llgiftwrap.setOnClickListener(this);
+        binding.giftWrapIv.setOnClickListener(this);
+        LoginManager.getInstance().registerCallback(callbackManager, this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+
+        case R.id.ivCross: bottomSheetDialog.dismiss(); break;
+        case R.id.btnLogin: bottomSheetDialog.dismiss(); startActivity(new Intent(requireActivity(),LoginActivity.class)); break;
+        case R.id.btnSignUp: bottomSheetDialog.dismiss(); startActivity(new Intent(requireActivity(),SignUpActivity.class)); break;
+        case R.id.ivFb: bottomSheetDialog.dismiss(); facebookLogin(); break;
+        case R.id.ivGoogle: bottomSheetDialog.dismiss(); googleSignIn(); break;
+        case R.id.ivSearch: getActivity().startActivity(new Intent(getActivity(), SearchScreenActivity.class)); break;
+
+        case R.id.tvPlaceOrder:
+        if(CommonUtil.isUserLogin(requireActivity())) openLoginSignUpBottomSheetWhenUserNotLogedIn();
+        else intentForOrderConfirmation();
+        break;
+
+        case R.id.tvWishList:
+        if(CommonUtil.isUserLogin(requireActivity())) openLoginSignUpBottomSheetWhenUserNotLogedIn();
+        else startActivity(new Intent(getActivity(), MyWishListActivity.class));
+        break;
+
+        case R.id.llaa: startActivityForResult(new Intent(getActivity(), ApplyCouponActivity.class), 121); break;
+        case R.id.ivBack: break;
+        case R.id.llgiftwrap: removeGiftWrap(); break;
+        case R.id.couponImg: if(!coponCode.equalsIgnoreCase("")) cancelCouponApi(); break;
+        case R.id.giftWrapIv: changeGiftWrapStatus(); break;
         }
     }
 
-    private void googleRegister() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
+    private void callCartListApi() {
+        Call<CartListModel> call = apiInterface.getCartListResult(HelperClass.getCacheData(requireActivity()).first,
+                HelperClass.getCacheData(requireActivity()).second,
+                productIds, colorNames, quantities, sizes,
+                gift_wrapup_status.equalsIgnoreCase("yes")?"1":"0");
+        call.enqueue(new Callback<CartListModel>() {
+            public void onResponse(Call<CartListModel> call, Response<CartListModel> response) {
+                dialog.hideDialog();
+                if (response.isSuccessful()) {
+                    if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setDataToUI(response.body());
+                    else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(),"FAILURE",requireActivity());
+                } else {
+                    CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!",requireActivity());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CartListModel> call, Throwable t) {
+                dialog.hideDialog();
+                CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),requireActivity());
+            }
+        });
     }
-
-    private void fbRegisterCallBack() {
-        callbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().registerCallback(callbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        getBasicProfile(loginResult);
+    private void cancelCouponApi() {
+        dialog.showDialog();
+        Call<CancelCouponModel> call=apiInterface.cancelCoupon(HelperClass.getCacheData(requireActivity()).second);
+        call.enqueue(new Callback<CancelCouponModel>() {
+            public void onResponse(Call<CancelCouponModel> call, Response<CancelCouponModel> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().getStatus().equalsIgnoreCase("SUCCESS")) {
+                        callCartListApi();
+                    } else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
+                        dialog.hideDialog();
+                        CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(),requireActivity());
                     }
+                }else {
+                    dialog.hideDialog();
+                    CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!",requireActivity());
+                }
+            }
 
-                    @Override
-                    public void onCancel() {
-                        Toast.makeText(getActivity(), R.string.cancel, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
-                    }
-                });
+            public void onFailure(Call<CancelCouponModel> call, Throwable t) {
+                dialog.hideDialog();
+                CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),requireActivity());
+            }
+        });
     }
-
-    private void getBasicProfile(LoginResult loginResult) {
-        // App code
-        GraphRequest request = GraphRequest.newMeRequest(
-                loginResult.getAccessToken(),
-                new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject object, GraphResponse response) {
-                        Log.v("LoginActivity", response.toString());
-
-                        // Application code
-                        String name = object.optString("name");
-                        String fbid = object.optString("id");
-                        String email = object.optString("email");
-                        String profilePhoto = "https://graph.facebook.com/" + fbid + "/picture?type=large";
-
-                        if (HelperClass.showInternetAlert(getActivity())) {
-                            callLoginApiForSocial(name, fbid, email, profilePhoto, "Facebook");
-                        }
-                    }
-                });
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,email");
-        request.setParameters(parameters);
-        request.executeAsync();
-    }
-
     private void callLoginApiForSocial(final String name, final String fbid, final String email, final String profilePhoto, final String socialType) {
-        String deviceToken = SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.DEVICE_TOKEN);
-
-        final MyDialog myDialog = new MyDialog(getActivity());
-        myDialog.showDialog();
-        Retrofit retrofit = ApiClient.getClient();
-        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-        Call<SocialLoginModel> call = apiInterface.socialLogin(fbid, socialType, deviceToken, "android", name, email, profilePhoto, "",
+        dialog.showDialog();
+        Call<SocialLoginModel> call = apiInterface.socialLogin(fbid, socialType,
+                SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.DEVICE_TOKEN),
+                "android", name, email, profilePhoto, "",
                 SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.product_id),
                 SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.color_name),
                 SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.quantity),
@@ -244,361 +221,168 @@ public class BagFragment extends Fragment implements View.OnClickListener {
         call.enqueue(new Callback<SocialLoginModel>() {
             @Override
             public void onResponse(Call<SocialLoginModel> call, Response<SocialLoginModel> response) {
-
+                dialog.hideDialog();
                 if (response.isSuccessful()) {
-                    myDialog.hideDialog();
-                    if (response.body().getStatus().equals("SUCCESS")) {
-                        SharedPreferenceWriter.getInstance(getActivity()).getString(commaSeparatedProductId, "");
-                        SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.BATCH_COUNT, "");
-                        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.FULL_NAME, response.body().getSociallogin().getName());
-                        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.EMAIL, (String) response.body().getSociallogin().getEmail());
-                        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.IMAGE, response.body().getSociallogin().getImage());
-                        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.USER_ID, "" + response.body().getSociallogin().getId());
-                        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.TOKEN, response.body().getSociallogin().getToken());
-                        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.CRTEATED_AT, response.body().getSociallogin().getCreatedAt());
-                        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.UPDATED_AT, response.body().getSociallogin().getUpdatedAt());
-                        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.CURRENT_LOGIN, "true");
-                        SharedPreferenceWriter.getInstance(getActivity()).writeBooleanValue(SharedPreferenceKey.NOTIFICATION_STATUS, true);
-
-                        Intent intent = new Intent(getActivity(), MainActivity.class).putExtra("from", "LoginButton");
+                    if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
+                        saveData(response);
+                        Intent intent = new Intent(getActivity(), MainActivity.class).putExtra("screen", "BagFragment");
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
-                        getActivity().finish();
                     } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
-                        CommonUtil.setUpSnackbarMessage(binding.mainRl, response.body().getMessage(), getActivity());
+                        CommonUtil.setUpSnackbarMessage(binding.getRoot(), response.body().getMessage(), getActivity());
                     }
                 } else {
-                    myDialog.hideDialog();
-                    final Snackbar mSnackbar = Snackbar.make(binding.mainRl, R.string.service_error, Snackbar.LENGTH_INDEFINITE);
-                    mSnackbar.setActionTextColor(ContextCompat.getColor(getActivity(), R.color.colorWhite));
-                    mSnackbar.setAction("RETRY", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            callLoginApiForSocial(name, fbid, email, profilePhoto, socialType);
-                            Snackbar snackbar = Snackbar.make(view, "Please wait!", Snackbar.LENGTH_LONG);
-                            snackbar.getView().setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.drawable_gradient_line));
-                            snackbar.show();
-                        }
-                    });
-                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.drawable_gradient_line));
-                    mSnackbar.show();
+                    CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!",requireActivity());
                 }
             }
 
             @Override
             public void onFailure(Call<SocialLoginModel> call, Throwable t) {
-                myDialog.hideDialog();
+                dialog.hideDialog();
+                CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),requireActivity());
             }
         });
     }
-
-
-    private void callCartListApi(String giftWrap) {
-        final MyDialog myDialog = new MyDialog(getActivity());
-        myDialog.showDialog();
-
-        Retrofit retrofit = ApiClient.getClient();
-        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-        Call<CartListModel> call = apiInterface.getCartListResult(token, userId, productIds, colorNames, quantities, sizes, giftWrap);
-        call.enqueue(new Callback<CartListModel>() {
-
-            @RequiresApi(api = Build.VERSION_CODES.M)
+    private void callAddToWishlistApi (String productId,String size){
+        dialog.showDialog();
+        Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(HelperClass.getCacheData(requireActivity()).first,
+                HelperClass.getCacheData(requireActivity()).second,
+                productId,size);
+        call.enqueue(new Callback<MyWishListResponse>() {
             @Override
-            public void onResponse(Call<CartListModel> call, Response<CartListModel> response) {
-                if (getActivity() != null) {
-                    myDialog.hideDialog();
-                }
+            public void onResponse(Call<MyWishListResponse> call, Response<MyWishListResponse> response) {
                 if (response.isSuccessful()) {
-
-                    CartListModel data = response.body();
-
-                    if (response.body().getStatus().equals("SUCCESS")) {
-                        cartListModelList = data.getProductListRetrievedSuccessfully();
-                        if (cartListModelList.size() == 0) {
-                            binding.scrollView.setVisibility(View.GONE);
-                            binding.llBagListEmpty.setVisibility(View.VISIBLE);
-                            binding.tvPlaceOrder.setVisibility(View.GONE);
-                            tvBadge.setVisibility(View.GONE);
-                            SharedPreferenceWriter.getInstance(getActivity()).clearPreferenceValue(SharedPreferenceKey.gift_wrapup_status, "no");
-                            SharedPreferenceWriter.getInstance(getActivity()).writeBooleanValue(GlobalVariables.COUPON_APPLIED, false);
-
-                        } else {
-                            binding.tvPlaceOrder.setVisibility(View.VISIBLE);
-                            binding.scrollView.setVisibility(View.VISIBLE);
-                            tvBadge.setVisibility(View.VISIBLE);
-                            tvBadge.setText(String.valueOf(cartListModelList.size()));
-                        }
-
-                        setOffersText(data.getMessage());
-
-
-                        if (cartListModelList.size() == 0) {
-                            if (getActivity() != null) {
-                                tvBadge.setVisibility(View.GONE);
-                            }
-                        } else {
-                            if (getActivity() != null) {
-                                tvBadge.setVisibility(View.VISIBLE);
-                                tvBadge.setText(String.valueOf(cartListModelList.size()));
-                            }
-                        }
-
-
-                        if (userId.equalsIgnoreCase("1")) {
-
-                            if (cartListModelList.size() == 0) {
-                                if (getActivity() != null) {
-                                    tvBadge.setVisibility(View.GONE);
-                                }
-                            } else {
-                                if (getActivity() != null) {
-                                    tvBadge.setVisibility(View.VISIBLE);
-                                    tvBadge.setText(String.valueOf(cartListModelList.size()));
-                                }
-                            }
-                        }
-
-                        settingTotalPrice(cartListModelList);
-                        setCartListAdapter(cartListModelList);//set adapter
-
-
-                        setGiftWrapPrice(cartListModelList);
-                        couponAppliedOrNot(cartListModelList);
-                        //setShippingCarges(cartListModelList);
-
-
-                    } else {
-                        // Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    if (response.body().getStatus().equals("SUCCESS")) callCartListApi();
+                    else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
+                        dialog.hideDialog();
+                        CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(),requireActivity());
                     }
-
                 } else {
-                    myDialog.hideDialog();
-                    Toast.makeText(getActivity(), R.string.service_error, Toast.LENGTH_SHORT).show();
+                    dialog.hideDialog();
+                    CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!",requireActivity());
                 }
             }
 
             @Override
-            public void onFailure(Call<CartListModel> call, Throwable t) {
-                myDialog.hideDialog();
-                Log.e("msg", t.getMessage());
+            public void onFailure(Call<MyWishListResponse> call, Throwable t) {
+                dialog.hideDialog();
+                CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),requireActivity());
+            }
+        });
+    }
+    private void removeToCartApi(String productId,String size){
+        dialog.showDialog();
+        Call<CartListModelResponse> call = apiInterface.removeToCart(HelperClass.getCacheData(requireActivity()).second,
+                HelperClass.getCacheData(requireActivity()).first,
+                productId,size);
+        call.enqueue(new Callback<CartListModelResponse>() {
+            @Override
+            public void onResponse(Call<CartListModelResponse> call, Response<CartListModelResponse> response) {
+
+                if (response.isSuccessful()) {
+                    if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
+                        cartListModelList.clear();
+                        callCartListApi();
+                    } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
+                        dialog.hideDialog();
+                        CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(),requireActivity());}
+                } else {
+                    dialog.hideDialog();
+                    CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!",requireActivity());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CartListModelResponse> call, Throwable t) {
+                dialog.hideDialog();
+                CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),requireActivity());
             }
         });
     }
 
-    private void setShippingCarges(List<CartListModel.ProductListRetrievedSuccessfully> cartListModelList) {
-        double shipingCharges = 0d;
-        for (int i = 0; i < cartListModelList.size(); i++) {
-            shipingCharges += Double.parseDouble(cartListModelList.get(i).getShipping_charges())*convertedPrice;
-        }
-
-        binding.tvShippingCharges.setText("+" + Math.round(shipingCharges));
-//        Double aDouble = Double.parseDouble(binding.tvTotalPrice.getText().toString().split(symbol)[1]);
-//        Double totalPrice = aDouble + shipingCharges;
-//        binding.tvTotalPrice.setText(symbol + Math.round(totalPrice));
+    private void saveData(Response<SocialLoginModel> response) {
+        SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.BATCH_COUNT, "");
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.FULL_NAME, response.body().getSociallogin().getName());
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.EMAIL, (String) response.body().getSociallogin().getEmail());
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.IMAGE, response.body().getSociallogin().getImage());
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.USER_ID, "" + response.body().getSociallogin().getId());
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.TOKEN, response.body().getSociallogin().getToken());
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.CRTEATED_AT, response.body().getSociallogin().getCreatedAt());
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.UPDATED_AT, response.body().getSociallogin().getUpdatedAt());
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.CURRENT_LOGIN, "true");
+        SharedPreferenceWriter.getInstance(getActivity()).writeBooleanValue(SharedPreferenceKey.NOTIFICATION_STATUS, true);
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.product_id,"");
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.color_name,"");
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.quantity,"");
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.size,"");
     }
-
-    private void setGiftWrapPrice(List<CartListModel.ProductListRetrievedSuccessfully> cartListModelList) {
-        binding.llGiftWrapPrice.setVisibility(View.GONE);
-        String result = "";
-        double price = 0d;
-
-        if(giftwrap2.equalsIgnoreCase("1")) {
-            if (cartListModelList.size() > 0 && cartListModelList != null) {
-                for (int i = 0; i < cartListModelList.size(); i++) {
-                    binding.llGiftWrapPrice.setVisibility(View.VISIBLE);
-                    price += Integer.parseInt(/*cartListModelList.get(i).getGiftwrap_price()*/"30")*convertedPrice;
-                }
-            }
-        }
-
-        binding.tvGiftWrapPrice.setText("+" + Math.round(price));
-        Double aDouble = Double.parseDouble(binding.tvTotalPrice.getText().toString().split(symbol)[1]);
-        Double totalPrice = aDouble + price;
-        binding.tvTotalPrice.setText(symbol + totalPrice);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private void couponAppliedOrNot(List<CartListModel.ProductListRetrievedSuccessfully> list) {
-        couponDiscount = 0.0;
-        for (int i = 0; i < list.size(); i++) {
-            if (!list.get(i).getDiscount_coupon().equalsIgnoreCase("0")) {
-                coponCode = list.get(i).getCoupon_code();
-                couponDiscount = couponDiscount + (Double.parseDouble(list.get(i).getDiscount_coupon()) * convertedPrice);
-            }
-        }
-            if (couponDiscount > 0.0) {
-//                couponDiscount=couponDiscount/binding.recyclerView.getAdapter().getItemCount();
-                double d1 = Double.parseDouble(this.binding.tvTotalPrice.getText().toString().split(this.symbol)[1]);
-                double d2 = this.couponDiscount.doubleValue();
-                binding.tvTotalPrice.setText(symbol + " " + Math.round(d1 - d2));
-                binding.llCouponApply.setVisibility(View.VISIBLE);
-                binding.tvCouponDiscount.setText("-" + Math.round(couponDiscount));
-                binding.couponImg.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.close));
-                binding.couponImg.setBackground(ContextCompat.getDrawable((Context) getActivity(), R.drawable.drawable_circle));
-                binding.couponImg.setBackgroundTintList(getActivity().getColorStateList(android.R.color.white));
-                binding.llaa.setBackground(getActivity().getDrawable(R.drawable.drawable_gradient_line));
-                binding.couponImg.setOnClickListener(this);
-                binding.tvApply.setText("Applied code:" + coponCode);
-                this.binding.tvApply.setTextColor(getActivity().getResources().getColor(R.color.colorWhite));
-            } else {
-                binding.llCouponApply.setVisibility(View.GONE);
-                binding.tvApply.setTextColor(getActivity().getResources().getColor(R.color.colorBlack));
-                binding.tvApply.setText("Apply Coupon");
-                binding.llaa.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorBagFragBackground));
-                binding.couponImg.setOnClickListener(null);
-                binding.couponImg.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.back_buttom));
-            }
-
-    }
-    
-
-    private void setOffersText(List<String> message) {
-        if (message.size() > 0) {
-            if (message.size() == 1) {
-                binding.offers.setText("Bank Offer");
-            } else {
-                binding.offers.setText("Bank Offers");
-            }
-
-            OfferAdapter adapter = new OfferAdapter(getActivity(), message);
-            binding.OffersRV.setAdapter(adapter);
-
-        }
-
-
-    }
-
-    private void settingTotalPrice(List<CartListModel.ProductListRetrievedSuccessfully> cartListModelList) {
-        float total;
-        float grandTotal = 0;
-        for (int i = 0; i < cartListModelList.size(); i++) {
-            total = Float.parseFloat(cartListModelList.get(i).getActualPrice()) * Integer.parseInt(cartListModelList.get(i).getQuantity());
-            grandTotal = grandTotal + total;
-
-        }
-        binding.tvOrderTotal.setText("" + Math.round(grandTotal*convertedPrice));
-        binding.tvTotalPrice.setText(symbol+" "+ Math.round(Double.parseDouble(binding.tvOrderTotal.getText().toString())));
-
-    }
-
-    private void setCartListAdapter(final List<CartListModel.ProductListRetrievedSuccessfully> cartListModelList) {
-
-        if (cartListModelList != null && cartListModelList.size() > 0) {
-
-            binding.scrollView.setVisibility(View.VISIBLE);
-            binding.tvPlaceOrder.setVisibility(View.VISIBLE);
+    private void setDataToUI(CartListModel data) {
+        cartListModelList = data.getProductListRetrievedSuccessfully();
+        if (cartListModelList.isEmpty()) hideSectionVisiblity();
+        else {
             binding.llBagListEmpty.setVisibility(View.GONE);
+            binding.tvPlaceOrder.setVisibility(View.VISIBLE);
+            binding.scrollView.setVisibility(View.VISIBLE);
+            tvBadge.setVisibility(View.VISIBLE);
+            tvBadge.setText(String.valueOf(cartListModelList.size()));
+        }
 
-            cartListAdapter = new CartListAdapter(getActivity(), cartListModelList);
+        // Cart Items
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.recyclerView.setAdapter(new CartListAdapter(getActivity(), cartListModelList, this));
 
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-            binding.recyclerView.setLayoutManager(linearLayoutManager);
-            binding.recyclerView.setAdapter(cartListAdapter);
-            grandTotal = cartListAdapter.getPrice();
-            cartListAdapter.setListener(new CartListAdapter.CartItemClickListener() {
-                @Override
-                public void onRemoveItemClick(View view, int pos) {
-                    if (SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false") ||
-                        SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) {
-                        productId = cartListModelList.get(pos).getProductId();
-                        removeOfflineProducts(productId, pos, binding.mainRl,cartListModelList.get(pos).getSize());
-                    } else {
-                        productId = cartListModelList.get(pos).getProductId();
-                        removeToCartApi(productId, pos, binding.mainRl,cartListModelList.get(pos).getSize()!=null?cartListModelList.get(pos).getSize():"");
-                    }
-                }
-
-                @Override
-                public void onMoveToWishListItemClick(View view, int pos) {
-                    if (SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false") || SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) {
-                        openLoginSignUpBottomSheetWhenUserNotLogedIn();
-                    } else {
-                        productId = cartListModelList.get(pos).getProductId();
-                        final MyDialog myDialog = new MyDialog(getActivity());
-                        callAddToWishlistApi(productId,cartListModelList.get(pos).getSize()!=null?cartListModelList.get(pos).getSize():"");
-                    }
-                }
-
-                @Override
-                public void onImageItemClick(View view, int pos) {
-                    productId = cartListModelList.get(pos).getProductId();
-                    startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("product_id", productId));
-                }
-
-                @Override
-                public void setTotalPrice(View view, Map<String, String> map,String size) {
-                    cartProduct_id = "";
-                    cartProduct_quantity = "";
-                    double total;
-                    Double grandToal = 0.0;
-                    for (int i = 0; i < map.size(); i++) {
-                        String key = String.valueOf(map.keySet().toArray()[i]);
-                        String value = String.valueOf(map.values().toArray()[i]);
-                        cartProduct_id += key;
-                        cartProduct_quantity += value;
-                        Log.e(size,"cartProduct_quantity"+cartProduct_quantity);
-
-                        if (map.size() - 1 > i) {
-                            cartProduct_id += ",";
-                            cartProduct_quantity += ",";
-                        }
-
-                        for (int y = 0; y < cartListModelList.size(); y++) {
-                            if (cartListModelList.get(y).getProductId().equalsIgnoreCase(key) ) {
-                                total = Double.parseDouble(cartListModelList.get(y).getActualPrice()) * Double.parseDouble(map.get(key));
-                                grandToal = grandToal + total;
-                            }
-                        }
-                    }
-                    quantities=cartProduct_quantity;
-                    SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.quantity,quantities);
-
-
-                    callCartListApi(giftwrap2);
-                }
-            });
-
+        // Billing
+        for (int i = 0; i < cartListModelList.size(); i++) {
+            total += Double.parseDouble(""+cartListModelList.get(i).getActualPrice()) * Double.parseDouble(""+cartListModelList.get(i).getQuantity());
+            couponDiscount += (Double.parseDouble(cartListModelList.get(i).getDiscount_coupon()));
+            coponCode=cartListModelList.get(i).getCoupon_code();
+            if(gift_wrapup_status.equalsIgnoreCase("yes")) giftWrapPrice += Integer.parseInt("30");
+        }
+        if(giftWrapPrice>0.0) binding.llGiftWrapPrice.setVisibility(View.VISIBLE);
+        if (couponDiscount > 0.0) {
+            binding.llCouponApply.setVisibility(View.VISIBLE);
+            binding.couponImg.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.close));
+            binding.llaa.setBackground(getActivity().getDrawable(R.drawable.drawable_gradient_line));
+            binding.couponImg.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.drawable_circle));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) binding.couponImg.setBackgroundTintList(getActivity().getColorStateList(android.R.color.white));
+            this.binding.tvApply.setTextColor(getActivity().getResources().getColor(R.color.colorWhite));
+            binding.tvApply.setText("Applied code:" + coponCode);
+            binding.couponImg.setOnClickListener(this);
 
         } else {
-            binding.llBagListEmpty.setVisibility(View.VISIBLE);
-            binding.scrollView.setVisibility(View.GONE);
-            binding.tvPlaceOrder.setVisibility(View.GONE);
+            binding.llCouponApply.setVisibility(View.GONE);
+            binding.couponImg.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.back_buttom));
+            binding.llaa.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorBagFragBackground));
+            binding.tvApply.setTextColor(getActivity().getResources().getColor(R.color.colorBlack));
+            binding.tvApply.setText("Apply Coupon");
+            binding.couponImg.setOnClickListener(null);
         }
 
+        subTotal=total+giftWrapPrice-couponDiscount;
+        binding.tvOrderTotal.setText("" + Math.round(total*convertedPrice));
+        binding.tvGiftWrapPrice.setText("+" + Math.round(giftWrapPrice*convertedPrice));
+        binding.tvCouponDiscount.setText("-" + Math.round(couponDiscount*convertedPrice));
+        binding.tvTotalPrice.setText(symbol+" "+ Math.round(subTotal*convertedPrice));
     }
-
-
+    private void hideSectionVisiblity() {
+        binding.scrollView.setVisibility(View.GONE);
+        binding.llBagListEmpty.setVisibility(View.VISIBLE);
+        binding.tvPlaceOrder.setVisibility(View.GONE);
+        tvBadge.setVisibility(View.GONE);
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.gift_wrapup_status, "no");
+        SharedPreferenceWriter.getInstance(getActivity()).writeBooleanValue(GlobalVariables.COUPON_APPLIED, false);
+    }
     private void removeOfflineProducts(String productId, int pos,View view,String existingSize) {
-        String product_id = "", color_name = "",sizes = "", quantity = "";
-
-        int size= 0;
         List<ProductDetails> details = GuestUserData.getInstance().getHugeData();
-
         if (details!=null && details.size()>0) {
             for (int i = 0; i < details.size(); i++) {
-
                 if (details.get(i).getProduct_id().equalsIgnoreCase(productId) && details.get(i).getSize().equalsIgnoreCase(existingSize)) {
                     details=GuestUserData.getInstance().removeData(i);
                     cartListModelList.remove(pos);
-                    cartListAdapter.notifyDataSetChanged();
+                    binding.recyclerView.getAdapter().notifyItemRemoved(pos);
                     CommonUtil.setUpSnackbarMessage(view,"Product Removed",getActivity());
                 }
             }
-
-
-
-            if (cartListModelList.size() == 0) {
-                binding.scrollView.setVisibility(View.GONE);
-                binding.llBagListEmpty.setVisibility(View.VISIBLE);
-                binding.tvPlaceOrder.setVisibility(View.GONE);
-                tvBadge.setVisibility(View.GONE);
-
-            }
-            else
-            {
-                tvBadge.setText(""+details.size());
-            }
-
 
             List<String> productList=new ArrayList<>();
             List<String> sizeList=new ArrayList<>();
@@ -614,375 +398,144 @@ public class BagFragment extends Fragment implements View.OnClickListener {
             SharedPreferenceWriter.getInstance(requireActivity()).writeStringValue(GlobalVariables.size, TextUtils.join(",",sizeList));
             SharedPreferenceWriter.getInstance(requireActivity()).writeStringValue(GlobalVariables.quantity,TextUtils.join(",",quantityList));
 
-
+            if (cartListModelList.isEmpty()) hideSectionVisiblity();
+            else tvBadge.setText(""+details.size());
         }
     }
-
-
-            private void callAddToWishlistApi (String productId,String size){
-                final MyDialog myDialog = new MyDialog(getActivity());
-                myDialog.showDialog();
-
-                String token = SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.TOKEN);
-                String userId = SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.USER_ID);
-
-
-                Retrofit retrofit = ApiClient.getClient();
-                ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-
-                Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(token, userId, productId,size);
-                call.enqueue(new Callback<MyWishListResponse>() {
-                    @Override
-                    public void onResponse(Call<MyWishListResponse> call, Response<MyWishListResponse> response) {
-
-                        if (response.isSuccessful()) {
-                            myDialog.hideDialog();
-
-                            if (response.body().getStatus().equals("SUCCESS")) {
-                                callCartListApi(giftwrap2);//hit api
-                            }
-
-                        } else {
-                            myDialog.hideDialog();
-                            Toast.makeText(getActivity(), R.string.service_error, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<MyWishListResponse> call, Throwable t) {
-                        myDialog.hideDialog();
-                    }
-                });
-            }
-
-
-
-            private void removeToCartApi(final String productId,final int pos,final View view,String size){
-                final MyDialog myDialog = new MyDialog(getActivity());
-                myDialog.showDialog();
-
-                String token = SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.TOKEN);
-                String userId = SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.USER_ID);
-
-                Retrofit retrofit = ApiClient.getClient();
-                ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-
-                Call<CartListModelResponse> call = apiInterface.removeToCart(userId, token, productId,size);
-                call.enqueue(new Callback<CartListModelResponse>() {
-                    @Override
-                    public void onResponse(Call<CartListModelResponse> call, Response<CartListModelResponse> response) {
-
-                        if (response.isSuccessful()) {
-                            myDialog.hideDialog();
-
-                            if (response.body().getStatus().equalsIgnoreCase("SUCCESS")) {
-                                cartListModelList.clear();
-                                callCartListApi(giftwrap2);
-
-                            } else if (response.body().getStatus().equalsIgnoreCase("Failure")) {
-
-                                Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            myDialog.hideDialog();
-                            final Snackbar mSnackbar = Snackbar.make(view, R.string.service_error, Snackbar.LENGTH_INDEFINITE);
-                            mSnackbar.setActionTextColor(ContextCompat.getColor(getActivity(), R.color.colorWhite));
-                            mSnackbar.setAction("RETRY", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-
-                                    removeToCartApi(productId, pos, view,size);
-                                    Snackbar snackbar = Snackbar.make(view, "Please wait!", Snackbar.LENGTH_LONG);
-                                    snackbar.getView().setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.drawable_gradient_line));
-                                    snackbar.show();
-                                }
-                            });
-                            mSnackbar.getView().setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.drawable_gradient_line));
-                            mSnackbar.show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<CartListModelResponse> call, Throwable t) {
-                        myDialog.hideDialog();
-                    }
-                });
-            }
-
-
     private void openLoginSignUpBottomSheetWhenUserNotLogedIn() {
-        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity());
-        View view1 = this.getLayoutInflater().inflate(R.layout.pop_up_bottom_sheet_login_when_user_not_loged_in, null);
-        bottomSheetDialog.setContentView(view1);
+        bottomSheetDialog = new BottomSheetDialog(requireActivity());
+        PopUpBottomSheetLoginWhenUserNotLogedInBinding binding= PopUpBottomSheetLoginWhenUserNotLogedInBinding.inflate(LayoutInflater.from(requireActivity()), null);
+        bottomSheetDialog.setContentView(binding.getRoot());
         bottomSheetDialog.getWindow().findViewById(R.id.design_bottom_sheet).setBackgroundResource(android.R.color.transparent);
-        // bottomSheetDialog.setCancelable(false);
-        // bottomSheetDialog.setCanceledOnTouchOutside(true);
-
-        ImageView ivCross = view1.findViewById(R.id.ivCross);
-        Button loginButton = view1.findViewById(R.id.btnLogin);
-        Button signUpButton = view1.findViewById(R.id.btnSignUp);
-        ImageView ivFb = view1.findViewById(R.id.ivFb);
-        ImageView ivGoogle = view1.findViewById(R.id.ivGoogle);
-        final CheckBox chbSelect = view1.findViewById(R.id.chbSelect);
-
-        ivCross.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetDialog.dismiss();
-            }
-        });
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("from","bagFragment"));
-            }
-        });
-
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), SignUpActivity.class));
-            }
-        });
-
-        ivFb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                facebookLogin();
-                bottomSheetDialog.dismiss();
-            }
-        });
-
-        ivGoogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                googleSignIn();
-                bottomSheetDialog.dismiss();
-            }
-        });
-
-        chbSelect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(isChecked){
-                    isChecked=false;
-                    chbSelect.setButtonDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.sale_box));
-
-                }else {
-                    isChecked=true;
-                    chbSelect.setButtonDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.new_rect));
-                }
-            }
-        });
-
-
-
+        binding.ivCross.setOnClickListener(this);
+        binding.btnLogin.setOnClickListener(this);
+        binding.btnSignUp.setOnClickListener(this);
+        binding.ivFb.setOnClickListener(this);
+        binding.ivGoogle.setOnClickListener(this);
         bottomSheetDialog.show();
     }
-
-    private void googleSignIn() {
-        mGoogleSignInClient.signOut(); //log out
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);// Activity is started with requestCode RC_SIGN_IN which is 901
-    }
-
     private void facebookLogin() {
         LoginManager.getInstance().setLoginBehavior(LoginBehavior.NATIVE_WITH_FALLBACK);
-        //it will not take cache Email
-        LoginManager.getInstance().logOut(); //log out
+        LoginManager.getInstance().logOut();
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList( "public_profile", "email"));
+    }
+    private void googleSignIn() {
+        mGoogleSignInClient.signOut();
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+    private void getBasicProfile(LoginResult loginResult) {
+        GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), this);
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,email");
+        request.setParameters(parameters);
+        request.executeAsync();
+    }
+    private void changeGiftWrapStatus() {
+        if(gift_wrapup_status.equalsIgnoreCase("yes"))
+        {
+            gift_wrapup_status="no";
+            binding.llgiftwrap.setBackground(null);
+            binding.llgiftwrap.setOnClickListener(this);
+            binding.llgiftwrap.setBackgroundColor(getActivity().getResources().getColor(R.color.colorBagFragBackground));
+            binding.tvApplyy.setTextColor(getActivity().getResources().getColor(R.color.colorBlack));
+            binding.giftWrapIv.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.back_buttom));
+            SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.gift_wrapup_status,"no");
+            binding.giftWrapIv.setBackground(null);
+            binding.giftWrapIv.setBackgroundTintList(null);
+            binding.giftWrapIv.setOnClickListener(null);
+            dialog.showDialog();
+            callCartListApi();
+        }
+    }
+    private void removeGiftWrap() {
+        binding.llgiftwrap.setOnClickListener(null);
+        gift_wrapup_status="yes";
+        binding.llgiftwrap.setBackground(getActivity().getDrawable(R.drawable.drawable_gradient_line));
+        binding.tvApplyy.setTextColor(getActivity().getResources().getColor(R.color.colorWhite));
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.gift_wrapup_status,"yes");
+        binding.giftWrapIv.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.close));
+        binding.giftWrapIv.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.drawable_circle));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) binding.giftWrapIv.setBackgroundTintList(getActivity().getColorStateList(android.R.color.white));
+        binding.giftWrapIv.setOnClickListener(this);
+        dialog.showDialog();
+        callCartListApi();
+    }
+
+    private void intentForOrderConfirmation() {
+        BillingHelper.getInstance().saveBillingData(new BillingModel(productIds, quantities, coponCode, ""+Math.round(couponDiscount), ""+Math.round(giftWrapPrice*convertedPrice), "", ""+Math.round(total*convertedPrice), ""+Math.round(subTotal*convertedPrice)));
+        Intent intent = new Intent(getActivity(), OrderConfirmationActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+
+    @Override
+    public void onSuccess(LoginResult loginResult) {
+        getBasicProfile(loginResult);
+    }
+
+    @Override
+    public void onCancel() {
+        Toast.makeText(requireActivity(), "Cancelled", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onError(FacebookException error) {
+        Toast.makeText(requireActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCompleted(JSONObject object, GraphResponse response) {
+        if (HelperClass.showInternetAlert(getActivity())) callLoginApiForSocial(object.optString("name"), object.optString("id"), object.optString("email"),  "https://graph.facebook.com/" +  object.optString("id") + "/picture?type=large", "Facebook");
+    }
+
+    @Override
+    public void onRemoveItemClick(View view, int pos) {
+        if(CommonUtil.isUserLogin(requireActivity())) removeOfflineProducts(cartListModelList.get(pos).getProductId(), pos, binding.mainRl,cartListModelList.get(pos).getSize());
+        else removeToCartApi(cartListModelList.get(pos).getProductId(),cartListModelList.get(pos).getSize()!=null?cartListModelList.get(pos).getSize():"");
+    }
+
+    @Override
+    public void onMoveToWishListItemClick(View view, int pos) {
+        if(CommonUtil.isUserLogin(requireActivity())) openLoginSignUpBottomSheetWhenUserNotLogedIn();
+        else callAddToWishlistApi(cartListModelList.get(pos).getProductId(),cartListModelList.get(pos).getSize()!=null?cartListModelList.get(pos).getSize():"");
+    }
+
+    @Override
+    public void onImageItemClick(View view, int pos) {
+        startActivity(new Intent(getActivity(), ProductDetailActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("product_id", cartListModelList.get(pos).getProductId()));
+    }
+
+    @Override
+    public void setTotalPrice(View view, Map<String, String> map, String size) {
+        dialog.showDialog();
+        productIds=TextUtils.join(",",map.keySet().toArray());
+        quantities=TextUtils.join(",",map.values().toArray());
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.quantity,quantities);
+        callCartListApi();
+    }
+
+    private void handleSignInResult(Task<GoogleSignInAccount> task) {
+        try {
+            GoogleSignInAccount account = task.getResult(ApiException.class);
+            if (HelperClass.showInternetAlert(getActivity())) {
+                callLoginApiForSocial(account.getGivenName(), account.getId(), account.getEmail(),account.getPhotoUrl().toString(),"Google");
+            }
+        } catch (ApiException e) {
+            CommonUtil.setUpSnackbarMessage(binding.getRoot(),e.getMessage(),requireActivity());
+        }
     }
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        callbackManager.onActivityResult(requestCode, resultCode, data);//for facebook
+        callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
-        }
-
-
-        if(resultCode==RESULT_OK)
-        {
-            if(requestCode==121 && HelperClass.showInternetAlert(getActivity())) {
-                callCartListApi(giftwrap2);
-            }
-        }
-
-    }
-
-    private void handleSignInResult(Task<GoogleSignInAccount> task) {
-        try {
-            GoogleSignInAccount account = task.getResult(ApiException.class);
-            String userProfile = account.getPhotoUrl().toString();
-            String email = account.getEmail();
-            String gid = account.getId();
-            String name = account.getGivenName();
-
-            if (HelperClass.showInternetAlert(getActivity())) {
-                callLoginApiForSocial(name, gid, email,userProfile,"Google");
-            }
-
-        } catch (ApiException e) {
+        switch (requestCode){
+            case RC_SIGN_IN: handleSignInResult(GoogleSignIn.getSignedInAccountFromIntent(data)); break;
+            case 121: if(HelperClass.showInternetAlert(getActivity())) { dialog.showDialog(); callCartListApi(); } break;
         }
     }
-
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-
-            case R.id.tvPlaceOrder:
-            if (SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false")|| SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) {
-                 openLoginSignUpBottomSheetWhenUserNotLogedIn();
-            } else {
-                settingProductIdQuantity();
-                callingIntent("PlaceOrderAddressActivity",binding.tvTotalPrice.getText().toString().split(symbol)[1],cartProduct_id,cartProduct_quantity);
-            }
-            break;
-
-            case R.id.tvWishList:
-            if (SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false")|| SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) openLoginSignUpBottomSheetWhenUserNotLogedIn();
-            else startActivity(new Intent(getActivity(), MyWishListActivity.class));
-            break;
-
-            case R.id.llaa:
-            settingProductIdQuantity();
-            callingIntent("ApplyCouponActivity",binding.tvTotalPrice.getText().toString().split(symbol)[1],cartProduct_id,cartProduct_quantity);
-            break;
-
-            case R.id.ivBack:
-
-            break;
-
-
-            case R.id.llgiftwrap:
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                removeGiftWrap();
-            }
-            break;
-
-
-            case R.id.couponImg:
-            if(!coponCode.equalsIgnoreCase(""))
-            {
-                if(HelperClass.isInternetConnected(getActivity()))
-                {
-                    cancelCouponApi();
-                }
-            }
-            break;
-
-
-            case R.id.giftWrapIv:
-            if(SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.gift_wrapup_status).equalsIgnoreCase("yes"))
-            {
-                giftwrap2="0";
-                binding.llgiftwrap.setBackground(null);
-                binding.llgiftwrap.setOnClickListener(this);
-                binding.llgiftwrap.setBackgroundColor(getActivity().getResources().getColor(R.color.colorBagFragBackground));
-                binding.tvApplyy.setTextColor(getActivity().getResources().getColor(R.color.colorBlack));
-                binding.giftWrapIv.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.back_buttom));
-                SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.gift_wrapup_status,"no");
-                binding.giftWrapIv.setBackground(null);
-                binding.giftWrapIv.setBackgroundTintList(null);
-                binding.giftWrapIv.setOnClickListener(null);
-                callCartListApi(giftwrap2);
-            }
-            break;
-        }
-    }
-
-
-
-    private void cancelCouponApi() {
-        final MyDialog myDialog = new MyDialog((Context)getActivity());
-        myDialog.showDialog();
-        Retrofit retrofit = ApiClient.getClient();
-        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-        Call<CancelCouponModel> call=apiInterface.cancelCoupon(userId);
-        call.enqueue(new Callback<CancelCouponModel>() {
-
-
-            public void onResponse(Call<CancelCouponModel> call, Response<CancelCouponModel> response) {
-                if (getActivity() != null) myDialog.hideDialog();
-                if (response.isSuccessful()) {
-                    if (response.body().getStatus().equals("SUCCESS")) {
-                        callCartListApi(giftwrap2);
-                    } else {
-                        Toast.makeText(getActivity(),response.body().getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                }else {
-                    Toast.makeText(getActivity(), "", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            public void onFailure(Call<CancelCouponModel> param1Call, Throwable param1Throwable) {
-                myDialog.hideDialog();
-                Log.e("msg", param1Throwable.getMessage());
-            }
-        });
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private void removeGiftWrap() {
-        binding.llgiftwrap.setOnClickListener(null);
-        giftwrap2="1";
-        binding.llgiftwrap.setBackground(getActivity().getDrawable(R.drawable.drawable_gradient_line));
-        binding.tvApplyy.setTextColor(getActivity().getResources().getColor(R.color.colorWhite));
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.gift_wrapup_status,"yes");
-        binding.giftWrapIv.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.close));
-        binding.giftWrapIv.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.drawable_circle));
-        binding.giftWrapIv.setBackgroundTintList(getActivity().getColorStateList(android.R.color.white));
-        binding.giftWrapIv.setOnClickListener(this);
-        callCartListApi(giftwrap2);
-    }
-
-    private void settingProductIdQuantity() {
-        if(cartProduct_id.equalsIgnoreCase("") || cartProduct_quantity.equalsIgnoreCase(""))
-        {
-
-            for(int i=0;i<cartListModelList.size();i++)
-            {
-                cartProduct_id+=cartListModelList.get(i).getProductId();
-                cartProduct_quantity+=cartListModelList.get(i).getQuantity();
-
-                if(cartListModelList.size()-1>i)
-                {
-                    cartProduct_id+=",";
-                    cartProduct_quantity+=",";
-
-                }
-
-            }
-
-        }
-
-    }
-
-    private void callingIntent(String class_name, String total_price, String product_id, String product_quantity) {
-        BillingHelper.getInstance().saveBillingData(new BillingModel(product_id, product_quantity, ""+coponCode, ""+Math.round(couponDiscount),
-                                                                     binding.tvGiftWrapPrice.getText().toString().length()>1?binding.tvGiftWrapPrice.getText().toString().substring(1):"",
-                                                                     "",
-                                                                     binding.tvOrderTotal.getText().toString(), total_price));
-
-        Intent intent = null;
-        if (class_name.equalsIgnoreCase("PlaceOrderAddressActivity")) {
-            intent = new Intent(getActivity(), OrderConfirmationActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        } else if (class_name.equalsIgnoreCase("ApplyCouponActivity")) {
-            intent = new Intent(getActivity(), ApplyCouponActivity.class);
-            startActivityForResult(intent, 121);
-        }
-    }
-
-
-
-
-
 }

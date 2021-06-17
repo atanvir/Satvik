@@ -52,15 +52,15 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
     private double grand_total;
     private LayoutInflater inflater;
     final ListPopupWindow listPopupWindow;
-    private CartItemClickListener listener;
     private Map<String, String> quantity;
     private String symbol;
-    private TotalPriceListener totalPriceListener;
+    private CartItemClickListener listener;
 
-    public CartListAdapter(Context context, List<CartListModel.ProductListRetrievedSuccessfully> cartListModelList) {
+    public CartListAdapter(Context context, List<CartListModel.ProductListRetrievedSuccessfully> cartListModelList,CartItemClickListener listener) {
         this.context = context;
         this.cartListModelList = cartListModelList;
         this.quantity = new HashMap<String, String>();
+        this.listener=listener;
         this.listPopupWindow = new ListPopupWindow(context);
         this.convertedPrice = Double.valueOf(Double.parseDouble(SharedPreferenceWriter.getInstance(context).getString("converted_amount")));
         this.symbol = SharedPreferenceWriter.getInstance(context).getString("symbol");
@@ -307,18 +307,6 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         void onMoveToWishListItemClick(View view, int pos);
         void onImageItemClick(View view,int pos);
         void setTotalPrice(View view,Map<String,String> map,String size);
-
     }
 
-    public void setListener(CartItemClickListener listener) {
-        this.listener = listener;
-    }
-
-    protected interface TotalPriceListener{
-        void getTotalPrice(double totalPrice);
-    }
-
-    public void setTotalPriceListener(TotalPriceListener totalPriceListener) {
-        this.totalPriceListener = totalPriceListener;
-    }
 }

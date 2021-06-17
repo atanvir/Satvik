@@ -78,7 +78,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private CallbackManager callbackManager;
     private BottomSheetDialog bottomSheetDialog;
     private static final int RC_SIGN_IN = 901;
-    private int clickCount = 0,counts,height = 0, sliderPostion=-1;
+    private int clickCount = 0,counts, sliderPostion=-1;
     private ProductDetailsResponse data;
     private ListPopupWindow listPopupWindow;
     private GoogleSignInClient mGoogleSignInClient;
@@ -314,7 +314,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
         binding.viewPager.setAdapter(new SliderAdapter(this, data.getProductdetails().getImageList()));
         binding.indicator.setupWithViewPager(binding.viewPager, true);
-        new Timer().schedule(new TimerTask() { @Override public void run() { sliderHandler.post(sliderRunnable); }},2000);
+        new Timer().schedule(new TimerTask() { @Override public void run() { sliderHandler.post(sliderRunnable); }},2000,2000);
 
         // Product Detail
         binding.tvName.setText(data.getProductdetails().getName());
