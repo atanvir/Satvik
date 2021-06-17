@@ -27,7 +27,6 @@ public class IHelpCenterImplementation extends AppCompatActivity implements IHel
 
     @Override
     public void mailUs(Context context,String subject) {
-
         ShareCompat.IntentBuilder.from((Activity) context)
                 .setType("message/rfc822")
                 .addEmailTo("customecare@soulahe.com")
@@ -43,7 +42,7 @@ public class IHelpCenterImplementation extends AppCompatActivity implements IHel
     public void callus(Context context) {
         if(showPermission(context))
         {
-            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "198"));
+            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "+918929529529"));
             Log.e("context:", String.valueOf(context));
             context.startActivity(intent);
 

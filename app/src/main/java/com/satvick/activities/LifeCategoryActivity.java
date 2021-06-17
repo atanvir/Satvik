@@ -15,7 +15,6 @@ import com.satvick.R;
 import com.satvick.adapters.LifeCommonCategoryAdapter;
 import com.satvick.databinding.ActivityLifeCategoryBinding;
 import com.satvick.databinding.ActivityLifeTabBinding;
-import com.satvick.databinding.ActivityProductDetailsBinding;
 import com.satvick.model.LifeResponseModel;
 import com.satvick.model.LifeTabBean;
 import com.satvick.model.TabModel;

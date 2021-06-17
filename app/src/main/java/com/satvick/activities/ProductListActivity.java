@@ -407,7 +407,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         listingAdapter.setListener(new ProductListingAdapter.ProductListItemClickListener() {
             @Override
             public void onProductItemClick(View view, int pos) {
-                startActivity(new Intent(ProductListActivity.this, ProductDetailsActivityFinal.class).putExtra("product_id", productListingResponseList.get(pos).getProductId()));
+                startActivity(new Intent(ProductListActivity.this, ProductDetailActivity.class).putExtra("product_id", productListingResponseList.get(pos).getProductId()));
             }
 
             @Override

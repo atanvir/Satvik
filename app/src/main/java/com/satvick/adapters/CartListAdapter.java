@@ -209,7 +209,6 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                     myDialog.hideDialog();
                     listener.setTotalPrice(view,quantity,cartListModelList.get(getAdapterPosition).getSize());
                     listPopupWindow.dismiss();
-
                 }
                 else {
 

@@ -36,6 +36,7 @@ import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.satvick.utils.CommonUtil;
 import com.satvick.utils.HelperClass;
@@ -594,12 +595,21 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private void fireBaseAction(String editedPhone) {
         StartFireBaseLogin();
 
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                binding.ccpSinUp.getFullNumberWithPlus()+editedPhone,// Phone number to verify
-                60,                // Timeout duration
-                TimeUnit.SECONDS,   // Unit of timeout
-                this,      // Activity (for callback binding)
-                mCallback);// OnVerificationStateChangedCallback
+//        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+//                binding.ccpSinUp.getFullNumberWithPlus()+editedPhone,// Phone number to verify
+//                60,                // Timeout duration
+//                TimeUnit.SECONDS,   // Unit of timeout
+//                this,      // Activity (for callback binding)
+//                mCallback);// OnVerificationStateChangedCallback
+
+        mAuth.setLanguageCode("en");
+        PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mAuth)
+                .setPhoneNumber(binding.ccpSinUp.getFullNumberWithPlus()+editedPhone)       // Phone number to verify
+                .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                .setActivity(this)                 // Activity (for callback binding)
+                .setCallbacks(mCallback)          // OnVerificationStateChangedCallbacks
+                .build();
+        PhoneAuthProvider.verifyPhoneNumber(options);
     }
 
     private void StartFireBaseLogin() {
@@ -611,7 +621,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             }
             @Override
             public void onVerificationFailed(FirebaseException e) {
-                Toast.makeText(EditProfileActivity.this, "Number verification failed!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
@@ -640,14 +650,10 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
         //start multipart for image
         RequestBody profile_body;
-        MultipartBody.Part profilePart;
+        MultipartBody.Part profilePart = null;
 
         if (fileFlyer != null) {
-            profile_body = RequestBody.create(MediaType.parse("image"), fileFlyer);
-            profilePart = MultipartBody.Part.createFormData("image", fileFlyer.getName(), profile_body);
-        } else {
-            profile_body = RequestBody.create(MediaType.parse("image"), "");
-            profilePart = MultipartBody.Part.createFormData("image", "", profile_body);
+            profilePart = MultipartBody.Part.createFormData("image", fileFlyer.getName(), RequestBody.create(MediaType.parse("image/*"), fileFlyer));
         }
         //end multipart image
 
@@ -661,7 +667,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                     EditProfileModel data = response.body();
                     if (data.getStatus().equals("SUCCESS")) {
                         setEditedData(data);//set data
-                        startActivity(new Intent(EditProfileActivity.this, MainActivity.class).putExtra("from", "EditProfileFragment"));
+                        startActivity(new Intent(EditProfileActivity.this, MainActivity.class).putExtra("edit", "EditProfileFragment"));
                     } else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
                         Toast.makeText(EditProfileActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }

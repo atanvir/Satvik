@@ -4,6 +4,7 @@ package com.satvick.retrofit;
 import com.google.gson.JsonObject;
 import com.satvick.ccavenue.RSAResponseModel;
 import com.satvick.model.AddAddressModel;
+import com.satvick.model.AddressValidModel;
 import com.satvick.model.ApplyCouponModel;
 import com.satvick.model.ArticleModel;
 import com.satvick.model.CODAvailableModel;
@@ -520,4 +521,8 @@ public interface ApiInterface {
     Call<ShippingChargesModel> getShippingCharges(@Field("user_id") String user_id,
                                                   @Field("address_id") String address_id,
                                                   @Field("giftwrap") String gift_wrap);
+
+
+    @GET("pincode/{pincode}")
+    Call<AddressValidModel> getValidAddress(@Path("pincode") String pincode);
 }

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.satvick.activities.ReferEarnActivity;
 import com.satvick.fragments.more.SubscriptionFragment;
 import com.satvick.model.ViewProfileResponse;
 import com.satvick.R;
@@ -25,7 +26,6 @@ import com.satvick.activities.LoginActivity;
 import com.satvick.activities.MyOrderActivity;
 import com.satvick.activities.MyWishListActivity;
 import com.satvick.activities.NotificationActivity;
-import com.satvick.activities.ReferAndEarnActivity;
 import com.satvick.activities.SettingsActivity;
 import com.satvick.database.SharedPreferenceKey;
 import com.satvick.database.SharedPreferenceWriter;
@@ -40,7 +40,6 @@ import com.satvick.utils.HelperClass;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 import static com.satvick.utils.HelperClass.getCacheData;
 
@@ -49,6 +48,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
     private ViewProfileResponse data;
     private String token,userId;
     private MyDialog dialog;
+    private ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
     private SubscriptionFragment subscriptionFragment= new SubscriptionFragment();
 
     @Override
@@ -89,8 +89,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
 
     private void callViewProfileApi() {
         dialog.showDialog();
-        Retrofit retrofit = ApiClient.getClient();
-        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
         Call<ViewProfileModel> call = apiInterface.getViewProfileResult(token, userId);
         call.enqueue(this);
     }
@@ -98,6 +96,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
 
     private void setUI(ViewProfileModel data) {
         this.data=data.getViewProfileResponse();
+        if(data.getViewProfileResponse().getImage().contains("/users-photos/")){
+            data.getViewProfileResponse().setImage("https://soulahe.com//public/"+data.getViewProfileResponse().getImage());
+        }
         Glide.with(requireActivity()).load(this.data.getImage()).into(binding.imageView15);
         binding.tvName.setText(this.data.getName());
     }
@@ -115,7 +116,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
             case R.id.LLCoupon: startNewActivity(CouponsActivity.class); break;
             case R.id.LLSetting: startNewActivity(SettingsActivity.class); break;
             case R.id.tvLogOut: logout(); break;
-            case R.id.LLRefer: startNewActivity(ReferAndEarnActivity.class); break;
+            case R.id.LLRefer: startNewActivity(ReferEarnActivity.class); break;
         }
     }
 

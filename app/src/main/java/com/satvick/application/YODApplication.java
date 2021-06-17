@@ -33,9 +33,7 @@ public class YODApplication extends Application {
         return this.mCurrentActivity;
     }
 
-    public ArrayList<ProductDetails> getHugeData() {
-        return this.newsList;
-    }
+
 
     public boolean isVisible() {
         return this.activityVisible;
@@ -50,18 +48,11 @@ public class YODApplication extends Application {
         this.customFontFamily.addFont("lato_bold", "D-DIN-Bold.otf");
     }
 
-    public ArrayList<ProductDetails> removeData(int paramInt) {
-        newsList.remove(paramInt);
-        return this.newsList;
-    }
 
     public void setCurrentActivity(Activity paramActivity) {
         this.mCurrentActivity = paramActivity;
     }
 
-    public void setHugeData(ArrayList<ProductDetails> paramArrayList) {
-        this.newsList = paramArrayList;
-    }
 
     public void setVisible(Boolean paramBoolean) {
         this.activityVisible = paramBoolean;

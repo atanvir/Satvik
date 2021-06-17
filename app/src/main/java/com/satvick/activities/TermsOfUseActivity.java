@@ -1,6 +1,7 @@
 package com.satvick.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 
 import javax.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;import com.satvick.R;
+import com.satvick.retrofit.MyDialog;
 
 public class TermsOfUseActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -17,6 +19,7 @@ public class TermsOfUseActivity extends AppCompatActivity implements View.OnClic
     ImageView ivBack;
 
     String url = "";
+    private MyDialog dailog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -25,6 +28,8 @@ public class TermsOfUseActivity extends AppCompatActivity implements View.OnClic
         webView = findViewById(R.id.webview);
         ivBack = findViewById(R.id.ivBack);
         url = "https://soulahe.com/tandc";
+
+        dailog= new MyDialog(this);
 
         webView.setWebViewClient(new CustomWebViewClient());
         WebSettings webSetting = webView.getSettings();
@@ -46,7 +51,7 @@ public class TermsOfUseActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, MainActivity.class).putExtra("from","moreFragment"));
+        super.onBackPressed();
     }
 
 
@@ -55,6 +60,18 @@ public class TermsOfUseActivity extends AppCompatActivity implements View.OnClic
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             view.loadUrl(url);
             return true;
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+            dailog.showDialog();
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            dailog.hideDialog();
         }
     }
 }

@@ -12,6 +12,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -127,6 +128,7 @@ public class LifeDescriptionActivity extends AppCompatActivity implements View.O
     }
 
     public void init(){
+        binding.tvDescription.setMovementMethod(LinkMovementMethod.getInstance());
         binding.toolbar.tvTitle.setText(/*getIntent().getStringExtra("title")*/"Satvik Life");
     }
 

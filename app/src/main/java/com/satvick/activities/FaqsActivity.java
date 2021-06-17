@@ -53,7 +53,7 @@ public class FaqsActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, MainActivity.class).putExtra("from", "moreFragment"));
+        super.onBackPressed();
     }
 
     private class CustomWebViewClient extends WebViewClient {

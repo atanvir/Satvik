@@ -57,7 +57,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/rl"
             android:fillViewport="true"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_marginTop="@dimen/dp_20">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -145,7 +145,7 @@
                                     android:layout_below="@+id/tv11"
                                     android:gravity="start|center"
                                     android:lines="2"
-                                    android:text="Login or Sign Up at Yard of Deals &amp; Share a unique referral code with your friends. "
+                                    android:text="Login or Sign Up at Soulahe &amp; Share a unique referral code with your friends. "
                                     android:textColor="@color/colorPureBlack"
                                     android:textSize="@dimen/sp_11"
                                     app:font="@{`lato_bold`}" />

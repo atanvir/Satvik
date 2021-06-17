@@ -164,7 +164,6 @@
                         android:id="@+id/tvDescription"
                         android:layout_width="0dp"
                         android:clickable="true"
-                        android:autoLink="all"
                         android:linksClickable="true"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"

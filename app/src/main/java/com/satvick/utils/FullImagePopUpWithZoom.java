@@ -2,12 +2,22 @@ package com.satvick.utils;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
+import androidx.annotation.Nullable;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
 import com.satvick.R;
 
@@ -20,20 +30,20 @@ import java.util.List;
 public class FullImagePopUpWithZoom extends Dialog {
     //remember,here we must take context
     Context context;
-    TouchImageView imageView;
+    PhotoView imageView;
     ImageView ivClose;
+    ProgressBar progressBar;
     int[] image;
    // List<Integer> color;
     int position;
 
-    List<String> color;
+    String imageUrl;
 
 
-    public FullImagePopUpWithZoom(Context context,List<String> color, int position) {
+    public FullImagePopUpWithZoom(Context context,String imageUrl) {
         super(context);
         this.context=context;
-        this.color=color;
-        this.position=position;
+        this.imageUrl=imageUrl;
     }
 
     @Override
@@ -47,8 +57,21 @@ public class FullImagePopUpWithZoom extends Dialog {
                 ViewGroup.LayoutParams.MATCH_PARENT);
         getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-        imageView=(TouchImageView)findViewById(R.id.imageView);
-        Picasso.with(context).load(color.get(position)).into(imageView);
+        imageView=findViewById(R.id.imageView);
+        progressBar=findViewById(R.id.progressBar);
+        Glide.with(context).load(imageUrl).listener(new RequestListener<Drawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable @org.jetbrains.annotations.Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                progressBar.setVisibility(View.GONE);
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                progressBar.setVisibility(View.GONE);
+                return false;
+            }
+        }).into(imageView);
         ivClose=(ImageView)findViewById(R.id.ivClose);
         ivClose.setOnClickListener(new View.OnClickListener() {
             @Override

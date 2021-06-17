@@ -19,7 +19,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.satvick.R;
-import com.satvick.activities.ProductDetailsActivityFinal;
+import com.satvick.activities.ProductDetailActivity;
 import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.ItemProductDetailRecyclerBinding;
 import com.satvick.model.SimilarProduct;
@@ -91,20 +91,20 @@ public class ProductDescriptionRecycler1Adapter extends RecyclerView.Adapter<Pro
         holder.binding.spTxt.setText(symbol+" "+Math.round(Double.parseDouble(productdetailsList.get(position).getSp())*convertedPrice));
         holder.binding.mrpTxt.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         holder.binding.mrpTxt.setText(symbol+" "+Math.round(Double.parseDouble(productdetailsList.get(position).getMrp())*convertedPrice));
-        if(productdetailsList.get(position).getPercentage()==0)
+        if(productdetailsList.get(position).getDiscount()==0)
         {
             holder.binding.offTxt.setVisibility(View.GONE);
             holder.binding.mrpTxt.setVisibility(View.GONE);
         }
         else
         {
-            holder.binding.offTxt.setText(""+productdetailsList.get(position).getPercentage()+"% OFF");
+            holder.binding.offTxt.setText(""+productdetailsList.get(position).getDiscount()+"% OFF");
         }
 
         holder.binding.rlMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, ProductDetailsActivityFinal.class).putExtra("product_id",String.valueOf(productdetailsList.get(position).getProductId())));
+                context.startActivity(new Intent(context, ProductDetailActivity.class).putExtra("product_id",String.valueOf(productdetailsList.get(position).getProductId())));
 
             }
         });

@@ -20,7 +20,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.satvick.R;
-import com.satvick.activities.ProductDetailsActivityFinal;
+import com.satvick.activities.ProductDetailActivity;
 import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.ItemWomenSectionFlashSaleBinding;
 import com.satvick.model.InnerPagesModel;
@@ -104,7 +104,7 @@ public class MenSectionFlashSaleAdapter extends RecyclerView.Adapter<MenSectionF
             @Override
             public void onClick(View view) {
 
-                Intent intent=new Intent(context, ProductDetailsActivityFinal.class);
+                Intent intent=new Intent(context, ProductDetailActivity.class);
                 intent.putExtra(GlobalVariables.product_id,flashSaleList.get(position).getProduct_id());
                 context.startActivity(intent);
 

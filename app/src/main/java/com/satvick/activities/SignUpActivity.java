@@ -27,6 +27,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.hbb20.CountryCodePicker;
 import com.juanpabloprado.countrypicker.CountryPicker;
@@ -310,8 +311,16 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         Log.e("phone_number",binding.ccpSinUp.getFullNumberWithPlus()+binding.edtPhone.getText().toString());
 
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(binding.ccpSinUp.getFullNumberWithPlus()+binding.edtPhone.getText().toString(),// Phone number to verify
-                                                            60, TimeUnit.SECONDS, this, mCallback);
+
+        mAuth.setLanguageCode("en");
+        PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mAuth)
+                .setPhoneNumber(binding.ccpSinUp.getFullNumberWithPlus()+binding.edtPhone.getText().toString())       // Phone number to verify
+                .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                .setActivity(this)                 // Activity (for callback binding)
+                .setCallbacks(mCallback)          // OnVerificationStateChangedCallbacks
+                .build();
+        PhoneAuthProvider.verifyPhoneNumber(options);
+
 
 
     }
@@ -324,19 +333,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         }
         @Override
         public void onVerificationFailed(FirebaseException e) {
-
-            Log.w("Failed", "onVerificationFailed", e);
-
-            if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                Log.e("invalid_request",e.getMessage());
-                // Invalid request
-                // ...
-            } else if (e instanceof FirebaseTooManyRequestsException) {
-
-                Log.e("sms_limit",e.getMessage());
-                // The SMS quota for the project has been exceeded
-                // ...
-            }
+            Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
 
@@ -386,6 +383,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         SharedPreferenceWriter.getInstance(SignUpActivity.this).writeStringValue(SharedPreferenceKey.COUNTRY, signUpModel.getSignup().getCountry());
                         SharedPreferenceWriter.getInstance(SignUpActivity.this).writeStringValue(SharedPreferenceKey.CURRENT_LOGIN, "true");
                         SharedPreferenceWriter.getInstance(SignUpActivity.this).writeBooleanValue(SharedPreferenceKey.NOTIFICATION_STATUS, true);
+                        SharedPreferenceWriter.getInstance(SignUpActivity.this).writeStringValue(GlobalVariables.product_id, "");
+                        SharedPreferenceWriter.getInstance(SignUpActivity.this).writeStringValue(GlobalVariables.quantity, "");
+                        SharedPreferenceWriter.getInstance(SignUpActivity.this).writeStringValue(GlobalVariables.size, "");
+                        SharedPreferenceWriter.getInstance(SignUpActivity.this).writeStringValue(GlobalVariables.color_name, "");
 
                         //send at profile fragment,profile fragment is loaded at MainActivity
                         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);

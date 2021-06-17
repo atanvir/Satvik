@@ -165,7 +165,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_70"
                 android:layout_marginTop="@dimen/dp_10"
-                android:button="@drawable/new_rect"
+                android:button="@drawable/selector_checkbox"
                 android:padding="@dimen/dp_10"
                 android:text="I have a referral registration code"
                 android:textColor="@color/colorBlack"

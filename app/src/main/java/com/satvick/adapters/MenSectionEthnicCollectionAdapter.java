@@ -21,7 +21,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.satvick.R;
-import com.satvick.activities.ProductDetailsActivityFinal;
+import com.satvick.activities.ProductDetailActivity;
 import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.ItemWomenSectionEthnicCollectionBinding;
 import com.satvick.model.InnerPagesModel;
@@ -97,7 +97,7 @@ public class MenSectionEthnicCollectionAdapter extends RecyclerView.Adapter<MenS
         viewHolder.binding.rlWmnSecEthnicCollection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(context, ProductDetailsActivityFinal.class);
+                Intent intent=new Intent(context, ProductDetailActivity.class);
                 intent.putExtra(GlobalVariables.product_id,otherData1.get(position).getProduct_id());
                 context.startActivity(intent);
             }

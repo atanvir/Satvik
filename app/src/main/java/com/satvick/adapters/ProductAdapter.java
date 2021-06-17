@@ -17,12 +17,9 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.satvick.R;
-import com.satvick.activities.ProductDetailsActivityFinal;
-import com.satvick.activities.ProductListActivity;
+import com.satvick.activities.ProductDetailActivity;
 import com.satvick.databinding.AdapterProductBinding;
 import com.satvick.model.ProductBean;
-import com.satvick.model.ProductDetails;
-import com.satvick.utils.GlobalVariables;
 
 import java.util.List;
 
@@ -80,7 +77,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.clMain :
-                Intent intent=new Intent(context, ProductDetailsActivityFinal.class);
+                Intent intent=new Intent(context, ProductDetailActivity.class);
                 intent.putExtra("from","HomeFragmentAfterLogin");
                 intent.putExtra("product_id", list.get(getAdapterPosition()).getProduct_id());
                 context.startActivity(intent);

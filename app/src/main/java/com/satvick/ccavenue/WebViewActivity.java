@@ -175,10 +175,12 @@ public class WebViewActivity extends AppCompatActivity {
                                 if (getIntent().getStringExtra("cameFrom").equalsIgnoreCase(OrderConfirmationActivity.class.getSimpleName())) orderPlaceApi(paymentResponse.getIndipay().getTracking_id());
                                 else placeLifeOrderApi(paymentResponse.getIndipay().getTracking_id());
                             }else{
-                                CommonUtil.setUpSnackbarMessage(binding.getRoot(),paymentResponse.getIndipay().getStatus_message(),WebViewActivity.this);
+                                finish();
+                                Toast.makeText(WebViewActivity.this, paymentResponse.getIndipay().getStatus_message(), Toast.LENGTH_SHORT).show();
                             }
                         }else{
-                            CommonUtil.setUpSnackbarMessage(binding.getRoot(),"No Such Response Found",WebViewActivity.this);
+                            Toast.makeText(WebViewActivity.this, "Payment Cancelled !", Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     }
 

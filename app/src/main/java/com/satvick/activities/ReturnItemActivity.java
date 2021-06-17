@@ -128,6 +128,7 @@ public class ReturnItemActivity extends AppCompatActivity implements View.OnClic
         binding.tvSizeContent.setText(mSize);
         binding.tvSize.setText(getIntent().getStringExtra("size_label")+":");
         binding.tvLocation.setText(mLocation);
+
 //        if(mDiscountedPrice.equalsIgnoreCase("0"))
 //        {
 //            binding.tvOff.setVisibility(View.GONE);

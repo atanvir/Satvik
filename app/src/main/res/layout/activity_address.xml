@@ -187,6 +187,8 @@
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
                         android:gravity="start"
                         android:paddingTop="@dimen/_10sdp"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:hint="@string/locality"
                         android:imeOptions="actionNext"
                         android:inputType="textCapWords|textNoSuggestions"
@@ -224,6 +226,9 @@
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:gravity="start"
                         android:paddingTop="@dimen/_10sdp"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+
                         android:hint="@string/city"
                         android:imeOptions="actionNext"
                         android:inputType="textCapWords|textNoSuggestions"
@@ -262,6 +267,9 @@
                         android:gravity="start"
                         android:paddingTop="@dimen/_10sdp"
                         android:hint="@string/state"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+
                         android:imeOptions="actionNext"
                         android:inputType="textCapWords|textNoSuggestions"
                         android:maxLength="40"

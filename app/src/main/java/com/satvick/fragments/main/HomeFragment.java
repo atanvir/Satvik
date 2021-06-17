@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +56,7 @@ import com.satvick.adapters.MainCategoryAdapter;
 import com.satvick.database.SharedPreferenceKey;
 import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.FragmentHomeAfterLoginBinding;
+import com.satvick.databinding.PopUpBottomSheetLoginWhenUserNotLogedInBinding;
 import com.satvick.fcm.MyFirebaseMessagingService;
 import com.satvick.model.CategoriesBeans;
 import com.satvick.model.HomeResponseModel;
@@ -82,30 +84,19 @@ import retrofit2.Retrofit;
 
 import static com.satvick.utils.HelperClass.showInternetAlert;
 
-public class HomeFragment extends Fragment implements View.OnClickListener, MyFirebaseMessagingService.ShowDot, FacebookCallback<LoginResult> {
+public class HomeFragment extends Fragment implements View.OnClickListener, MyFirebaseMessagingService.ShowDot, FacebookCallback<LoginResult>, GraphRequest.GraphJSONObjectCallback, ViewTreeObserver.OnScrollChangedListener {
 
-
-    private int lay_height = 0;
+    private Runnable sliderRunnable;
+    private Handler sliderHandler=new Handler(Looper.myLooper());
     private TextView tvBadge;
-    int height = 0;
-    int sc = 0;
-    boolean isDialogOpen = true;
-    boolean isFirstTime;
-
+    int sliderPostion=-1;
     private Dialog dialog;
-
-    SharedPreferences sharedpreferences;
-    private String token = "";
-    private String userId = "";
-
-
-    boolean isChecked = true;
-    private String commaSeparatedProductId = "";
-
-    CallbackManager callbackManager;
+    private CallbackManager callbackManager;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 901;
     private  FragmentHomeAfterLoginBinding binding;
+    private MyDialog dailog ;
+    private ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
     public HomeFragment(){
 
@@ -126,29 +117,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         init();
         initCtrl();
-        if(showInternetAlert(getActivity())) callHomeApi(binding.mainRl);
+        if(showInternetAlert(getActivity())) callHomeApi();
     }
 
     private void init() {
-        // Facebook
+        dailog=new MyDialog(requireActivity());
         callbackManager = CallbackManager.Factory.create();
-
-        // Google
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-
-        // UI
-        sharedpreferences = getActivity().getSharedPreferences("kAppPreferences", Context.MODE_PRIVATE);
-        isFirstTime = sharedpreferences.getBoolean("kIsFirstTime", true);//Retrieve a boolean value from the preferences.
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putBoolean("kIsFirstTime", false);
-        editor.apply();
+        SharedPreferenceWriter.getInstance(requireActivity()).writeBooleanValue("kIsFirstTime",true);
         MyFirebaseMessagingService.setListner(HomeFragment.this);
         if(SharedPreferenceWriter.getInstance(getActivity()).getBoolean("DOT", false)) binding.ivDot.setVisibility(View.VISIBLE);
-        if (isFirstTime) loginBottomSheet();
         mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
-        commaSeparatedProductId = SharedPreferenceWriter.getInstance(getActivity()).getString("Ids");
-        token = HelperClass.getCacheData(requireActivity()).first;
-        userId =HelperClass.getCacheData(requireActivity()).second;
     }
 
     @Override
@@ -165,7 +144,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
     @Override
     public void onCancel() {
         Toast.makeText(requireActivity(), "Cancel", Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
@@ -174,22 +152,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
     }
 
 
-
-
     private void getBasicProfile(LoginResult loginResult) {
-        GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),
-                new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject object, GraphResponse response) {
-                        String name = object.optString("name");
-                        String fbid = object.optString("id");
-                        String email = object.optString("email");
-                        String profilePhoto = "https://graph.facebook.com/"+fbid+"/picture?type=large";
-                        if (showInternetAlert(getActivity())) {
-                            callLoginApiForSocial(name, fbid, email,profilePhoto,"Facebook");
-                        }
-                    }
-                });
+        GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), this);
         Bundle parameters = new Bundle();
         parameters.putString("fields", "id,name,email");
         request.setParameters(parameters);
@@ -197,12 +161,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
     }
 
     private void callLoginApiForSocial(final String name, final String fbid, final String email,final String profilePhoto,final String socialType) {
-        String deviceToken = SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.DEVICE_TOKEN);
-        final MyDialog myDialog=new MyDialog(getActivity());
-        myDialog.showDialog();
-        Retrofit retrofit = ApiClient.getClient();
-        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-        Call<SocialLoginModel> call = apiInterface.socialLogin(fbid, socialType,deviceToken,"android", name, email,profilePhoto,"",
+        dailog.showDialog();
+        Call<SocialLoginModel> call = apiInterface.socialLogin(fbid, socialType,
+                                                                SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.DEVICE_TOKEN),
+                                                                "android", name, email,profilePhoto,"",
                                                                 SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.product_id),
                                                                 SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.color_name),
                                                                 SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.quantity),
@@ -210,40 +172,47 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
         call.enqueue(new Callback<SocialLoginModel>() {
             @Override
             public void onResponse(Call<SocialLoginModel> call, Response<SocialLoginModel> response) {
-
+                dailog.hideDialog();
                 if (response.isSuccessful()) {
-                    myDialog.hideDialog();
                     if (response.body().getStatus().equals("SUCCESS")) {
-                        SharedPreferenceWriter.getInstance(getActivity()).getString(commaSeparatedProductId, "");
-                        SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.BATCH_COUNT, "");
-                        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.FULL_NAME, response.body().getSociallogin().getName());
-                        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.EMAIL, (String) response.body().getSociallogin().getEmail());
-                        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.IMAGE, response.body().getSociallogin().getImage());
-                        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.USER_ID, "" + response.body().getSociallogin().getId());
-                        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.TOKEN, response.body().getSociallogin().getToken());
-                        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.CRTEATED_AT, response.body().getSociallogin().getCreatedAt());
-                        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.UPDATED_AT, response.body().getSociallogin().getUpdatedAt());
-                        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.CURRENT_LOGIN, "true");
-                        SharedPreferenceWriter.getInstance(getActivity()).writeBooleanValue(SharedPreferenceKey.NOTIFICATION_STATUS, true);
-
+                        saveUserData(response);
                         Intent intent = new Intent(getActivity(), MainActivity.class).putExtra("from", "LoginButton");
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         getActivity().finish();
                     }
                     else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
-                        CommonUtil.setUpSnackbarMessage(binding.mainRl,"Internal Server Error",getActivity());
+                        CommonUtil.setUpSnackbarMessage(binding.mainRl,response.body().getMessage(),getActivity());
                     }
                 } else {
-                    Toast.makeText(getActivity(), R.string.service_error, Toast.LENGTH_SHORT).show();
+                    CommonUtil.setUpSnackbarMessage(binding.mainRl,"Internal Server Error",getActivity());
+
                 }
             }
 
             @Override
             public void onFailure(Call<SocialLoginModel> call, Throwable t) {
-                myDialog.hideDialog();
+                dailog.hideDialog();
+                CommonUtil.setUpSnackbarMessage(binding.mainRl,t.getMessage(),getActivity());
             }
         });
+    }
+
+    private void saveUserData(Response<SocialLoginModel> response) {
+        SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.BATCH_COUNT, "");
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.FULL_NAME, response.body().getSociallogin().getName());
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.EMAIL, (String) response.body().getSociallogin().getEmail());
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.IMAGE, response.body().getSociallogin().getImage());
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.USER_ID, "" + response.body().getSociallogin().getId());
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.TOKEN, response.body().getSociallogin().getToken());
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.CRTEATED_AT, response.body().getSociallogin().getCreatedAt());
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.UPDATED_AT, response.body().getSociallogin().getUpdatedAt());
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.CURRENT_LOGIN, "true");
+        SharedPreferenceWriter.getInstance(getActivity()).writeBooleanValue(SharedPreferenceKey.NOTIFICATION_STATUS, true);
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.product_id,"");
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.color_name,"");
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.quantity,"");
+        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.size,"");
     }
 
 
@@ -253,43 +222,45 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
         binding.ivNotification.setOnClickListener(this);
         binding.ivWishList.setOnClickListener(this);
         LoginManager.getInstance().registerCallback(callbackManager,this);
+        binding.nestedScrollbar.getViewTreeObserver().addOnScrollChangedListener(this);
     }
 
 
 
-    private void callHomeApi(final View view) {
-        final MyDialog myDialog=new MyDialog(getActivity());
-        myDialog.showDialog();
-        Retrofit retrofit = ApiClient.getClient();
-        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-        Call<HomeResponseModel> call = apiInterface.getHomeResult(userId, token);
+    private void callHomeApi() {
+        dailog.showDialog();
+        Call<HomeResponseModel> call = apiInterface.getHomeResult(HelperClass.getCacheData(requireActivity()).second, HelperClass.getCacheData(requireActivity()).first);
         call.enqueue(new Callback<HomeResponseModel>() {
             public void onResponse(Call<HomeResponseModel> call, Response<HomeResponseModel> response) {
-                if(getActivity()!=null) {
-                    myDialog.hideDialog();
+                    dailog.hideDialog();
                     if (response.isSuccessful()) {
                         if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setDataToUI(response.body());
                         else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.mainRl,response.body().getMessage(), requireActivity());
                     }
                     else CommonUtil.setUpSnackbarMessage(binding.mainRl,"Internal Server Error", requireActivity());
-
-                }
             }
 
             @Override
             public void onFailure(Call<HomeResponseModel> call, Throwable t) {
-                Log.e("exception",""+t.getLocalizedMessage());
-                myDialog.hideDialog();
+                dailog.hideDialog();
                 CommonUtil.setUpSnackbarMessage(binding.mainRl,t.getMessage(),requireActivity());
             }
         });
     }
 
     private void setDataToUI(HomeResponseModel model) {
+        if(CommonUtil.isUserLogin(requireActivity())){
+         int count=SharedPreferenceWriter.getInstance(requireActivity()).getInt(GlobalVariables.count);
 
-        if (model.getHomescreenapi().getNumOfAddtocart() > 0) {
-            tvBadge.setVisibility(View.VISIBLE);
-            tvBadge.setText("" + model.getHomescreenapi().getNumOfAddtocart());
+         if(count>0) {
+             tvBadge.setVisibility(View.VISIBLE);
+             tvBadge.setText("" + count);
+         }
+        }else {
+            if (model.getHomescreenapi().getNumOfAddtocart() > 0) {
+                tvBadge.setVisibility(View.VISIBLE);
+                tvBadge.setText("" + model.getHomescreenapi().getNumOfAddtocart());
+            }
         }
 
         //     <------------ Main Category ---------------->
@@ -300,7 +271,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
             binding.rvMainCategory.setAdapter(new MainCategoryAdapter(requireActivity(),categoryList));
         }
 
-     //     <------------ Sub Category ---------------->
+        //     <------------ Sub Category ---------------->
         List<CategoriesBeans> list=new ArrayList<>();
         list.add(new CategoriesBeans("Product of the week","flashsale",false,model.getHomescreenapi().getFlashSale()));
         list.add(new CategoriesBeans("Best Seller","Best Seller",true,model.getHomescreenapi().getBestSeller()));
@@ -310,13 +281,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
 
 
 
-    //     <------------ Banner ---------------->
+       //     <------------ Banner ---------------->
         if(!model.getHomescreenapi().getBanners().isEmpty())
         {
             binding.vpBanner.setAdapter(new AutoSlideViewPagerBannerAdapter(getActivity(), model.getHomescreenapi().getBanners()));
             binding.tlBanner.setupWithViewPager(binding.vpBanner, true);
-            Timer timer = new Timer();
-            timer.scheduleAtFixedRate(new SliderTimerBanner(), 2000, 3000);
+            sliderRunnable = new Runnable(){
+                @Override
+                public void run() {
+                    if (sliderPostion == model.getHomescreenapi().getBanners().size()-1) sliderPostion = 0; else sliderPostion++;
+                    binding.vpBanner.setCurrentItem(sliderPostion, true); }
+            };
+            new Timer().schedule(new TimerTask() { @Override public void run() { sliderHandler.post(sliderRunnable); }},2000);
         }
         else binding.rlBanner.setVisibility(View.GONE);
 
@@ -327,226 +303,98 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
     }
 
 
-    private void loginBottomSheet() {
-        binding.nestedScrollbar.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-
-            @Override
-            public void onScrollChanged() {
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        int scrollX = binding.nestedScrollbar.getScrollX(); //for horizontalScrollView
-                        int scrollY = binding.nestedScrollbar.getScrollY(); //for verticalScrollView
-                        sc = scrollY + height;
-                        Log.v("bottom", lay_height + "  Y=" + sc + "  " + scrollY + "   " + height);
-                        if (sc>1000) {
-                           if(dialog==null||!dialog.isShowing()) {
-                               if(isDialogOpen)
-                               {
-                                   dialog = openLoginSignUpBottomSheet();
-                                   isDialogOpen=false;
-                               }
-                           }
-                           }
-                    }
-                });
-            }
-        });
-
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putBoolean("kIsFirstTime", false);
-        editor.apply();
-    }
-
 
     private Dialog openLoginSignUpBottomSheet() {
-        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity());
-        View view1 = this.getLayoutInflater().inflate(R.layout.pop_up_bottom_sheet_login_when_user_not_loged_in, null);
-        bottomSheetDialog.setContentView(view1);
-        bottomSheetDialog.getWindow().findViewById(R.id.design_bottom_sheet).setBackgroundResource(android.R.color.transparent);
-        bottomSheetDialog.setCancelable(true);
-        bottomSheetDialog.setCanceledOnTouchOutside(true);
-
-        ImageView ivCross = view1.findViewById(R.id.ivCross);
-        Button loginButton = view1.findViewById(R.id.btnLogin);
-        Button signUpButton = view1.findViewById(R.id.btnSignUp);
-        ImageView ivFb = view1.findViewById(R.id.ivFb);
-        ImageView ivGoogle = view1.findViewById(R.id.ivGoogle);
-        final CheckBox chbSelect = view1.findViewById(R.id.chbSelect);
-
-
-        ivCross.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetDialog.dismiss();
-                isDialogOpen=false;
-            }
-        });
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), LoginActivity.class));
-            }
-        });
-
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), SignUpActivity.class));
-            }
-        });
-
-        ivFb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                facebookLogin();
-                bottomSheetDialog.dismiss();
-            }
-        });
-
-
-        ivGoogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                googleSignIn();
-                bottomSheetDialog.dismiss();
-            }
-        });
-
-
-        chbSelect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(isChecked){
-                    isChecked=false;
-                    chbSelect.setButtonDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.sale_box));
-
-                }else {
-                    isChecked=true;
-                    chbSelect.setButtonDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.new_rect));
-                }
-            }
-        });
-
-        bottomSheetDialog.show();
-
-        return bottomSheetDialog;
+        dialog = new BottomSheetDialog(requireActivity());
+        PopUpBottomSheetLoginWhenUserNotLogedInBinding binding= PopUpBottomSheetLoginWhenUserNotLogedInBinding.inflate(LayoutInflater.from(requireActivity()), null);
+        dialog.setContentView(binding.getRoot());
+        dialog.getWindow().findViewById(R.id.design_bottom_sheet).setBackgroundResource(android.R.color.transparent);
+        binding.ivCross.setOnClickListener(this);
+        binding.btnLogin.setOnClickListener(this);
+        binding.btnSignUp.setOnClickListener(this);
+        binding.ivFb.setOnClickListener(this);
+        binding.ivGoogle.setOnClickListener(this);
+        dialog.show();
+        return dialog;
     }
 
     private void googleSignIn() {
-        mGoogleSignInClient.signOut(); //log out
+        mGoogleSignInClient.signOut();
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);// Activity is started with requestCode RC_SIGN_IN which is 901
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     private void facebookLogin() {
         LoginManager.getInstance().setLoginBehavior(LoginBehavior.NATIVE_WITH_FALLBACK);
-        //it will not take cache Email
-        LoginManager.getInstance().logOut(); //log out
+        LoginManager.getInstance().logOut();
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile","email"));
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //Finally, in your onActivityResult method, call callbackManager.
-        //onActivityResult to pass the login results to the LoginManager via callbackManager.
-        callbackManager.onActivityResult(requestCode, resultCode, data);//for facebook
+        callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-        try {
-            //for camera intent
-            if (requestCode == 1) {
-                try {
-                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                    Log.e("data",bitmap.toString());
-                } catch (Exception e) {
-                }
-            }
-        }catch (Exception e)
-        {
-
-        }
-
-        // for google
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach a listener.
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
+        switch (requestCode){
+            case RC_SIGN_IN: handleSignInResult(GoogleSignIn.getSignedInAccountFromIntent(data)); break;
         }
     }
-
-
 
     private void handleSignInResult(Task<GoogleSignInAccount> task) {
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
-            String userProfile = account.getPhotoUrl().toString();
-            String email = account.getEmail();
-            String gid = account.getId();
-            String name = account.getGivenName();
-
-            if (showInternetAlert(getActivity())) {
-                callLoginApiForSocial(name, gid, email,userProfile,"Google");
-            }
-
-            // Signed in successfully,show authenticated UI.
+            if (showInternetAlert(getActivity())) callLoginApiForSocial(account.getGivenName(), account.getId(), account.getEmail(),account.getPhotoUrl().toString(),"Google");
         } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            // Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+            Toast.makeText(requireActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-
-
-    private class SliderTimerBanner extends TimerTask {
-
-        @Override
-        public void run() {
-            if (getActivity() == null)
-                return;
-                  getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if(binding.vpBanner.getAdapter()!=null) {
-                        if (binding.vpBanner.getCurrentItem() < binding.vpBanner.getAdapter().getCount() - 1) {
-                            binding.vpBanner.setCurrentItem(binding.vpBanner.getCurrentItem() + 1);
-                        } else {
-                            binding.vpBanner.setCurrentItem(0);
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.ivCross: dialog.dismiss(); break;
+            case R.id.btnLogin: dialog.dismiss(); startActivity(new Intent(requireActivity(),LoginActivity.class)); break;
+            case R.id.btnSignUp: dialog.dismiss(); startActivity(new Intent(requireActivity(),SignUpActivity.class)); break;
+            case R.id.ivFb: dialog.dismiss(); facebookLogin(); break;
+            case R.id.ivGoogle: dialog.dismiss(); googleSignIn(); break;
             case R.id.ivSearch: getActivity().startActivity(new Intent(getActivity(), SearchScreenActivity.class)); break;
 
             case R.id.ivNotification:
+            if(CommonUtil.isUserLogin(requireActivity())) openLoginSignUpBottomSheet();
+            else{
                 SharedPreferenceWriter.getInstance(getActivity()).writeBooleanValue("DOT", false);
                 binding.ivDot.setVisibility(View.GONE);
                 getActivity().startActivity(new Intent(getActivity(), NotificationActivity.class));
-                break;
+            }
+            break;
 
             case R.id.ivWishList:
-                if (SharedPreferenceWriter.getInstance(getActivity()).
-                        getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false")||
-                        SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) {
-
-                    openLoginSignUpBottomSheet();
-                } else {
-                    getActivity().startActivity(new Intent(getActivity(), MyWishListActivity.class));
-                }
-                break;
-
+            if(CommonUtil.isUserLogin(requireActivity())) openLoginSignUpBottomSheet();
+            else getActivity().startActivity(new Intent(getActivity(), MyWishListActivity.class));
+            break;
         }
     }
 
+    @Override
+    public void onCompleted(JSONObject object, GraphResponse response) {
+        if (showInternetAlert(getActivity())) {
+            callLoginApiForSocial(object.optString("name"), object.optString("id"), object.optString("email"),"https://graph.facebook.com/"+object.optString("id")+"/picture?type=large","Facebook");
+        }
+    }
 
+    @Override
+    public void onScrollChanged() {
 
+        if (binding.nestedScrollbar.getScrollY()>1000) {
+            if (dialog == null || !dialog.isShowing()) {
+
+                if (SharedPreferenceWriter.getInstance(requireActivity()).getBoolean("kIsFirstTime", false) && CommonUtil.isUserLogin(requireActivity())) {
+                    dialog = openLoginSignUpBottomSheet();
+                    SharedPreferenceWriter.getInstance(requireActivity()).writeBooleanValue("kIsFirstTime", false);
+                    binding.nestedScrollbar.getViewTreeObserver().removeOnScrollChangedListener(this);
+                }
+            }
+            binding.nestedScrollbar.getViewTreeObserver().removeOnScrollChangedListener(this);
+
+        }
+    }
 }

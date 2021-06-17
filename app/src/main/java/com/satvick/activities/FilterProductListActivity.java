@@ -551,14 +551,14 @@ public class FilterProductListActivity extends AppCompatActivity implements View
         sizeNameCheckedList.clear();
 
         for (int i = 0; i < sizeList.size(); i++) {
-            SizeCheckedListModel sizeCheckedListModel = new SizeCheckedListModel(sizeList.get(i));
-            sizeNameCheckedList.add(sizeCheckedListModel);
+            if(!sizeList.get(i).equalsIgnoreCase("")) {
+                SizeCheckedListModel sizeCheckedListModel = new SizeCheckedListModel(sizeList.get(i));
+                sizeNameCheckedList.add(sizeCheckedListModel);
+            }
         }
-
 
         filterProductListAdapter = new FilterProductListBySizeAdapter(this, sizeNameCheckedList);
         linearLayoutManager = new LinearLayoutManager(FilterProductListActivity.this);
-
         binding.filterRecyclerview.setLayoutManager(linearLayoutManager);
         binding.filterRecyclerview.setAdapter(filterProductListAdapter);
 

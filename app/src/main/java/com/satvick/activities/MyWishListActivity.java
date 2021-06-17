@@ -329,7 +329,7 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
         Retrofit retrofit = ApiClient.getClient();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 
-        Call<CartListModelResponse> call = apiInterface.getAddToCartResult(token, userId, productId, colorName, sizeName, "1");
+        Call<CartListModelResponse> call = apiInterface.getAddToCartResult(token, userId, productId, colorName, sizeName==null?"":sizeName, "1");
         call.enqueue(new Callback<CartListModelResponse>() {
             @Override
             public void onResponse(Call<CartListModelResponse> call, Response<CartListModelResponse> response) {
@@ -437,7 +437,7 @@ public class MyWishListActivity extends AppCompatActivity implements View.OnClic
         Retrofit retrofit = ApiClient.getClient();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 
-        Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(token, userId, wishlistproduct.getList().get(pos).getProductId(),wishlistproduct.getList().get(pos).getSize());
+        Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(token, userId, wishlistproduct.getList().get(pos).getProductId(),wishlistproduct.getList().get(pos).getSize()==null?"":wishlistproduct.getList().get(pos).getSize());
         call.enqueue(new Callback<MyWishListResponse>() {
             @Override
             public void onResponse(Call<MyWishListResponse> call, Response<MyWishListResponse> response) {

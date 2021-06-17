@@ -14,50 +14,37 @@ import com.satvick.R;
 import com.satvick.databinding.ActivityOtherBinding;
 
 public class OtherActivity extends AppCompatActivity implements View.OnClickListener {
-    ActivityOtherBinding binding;
+    private ActivityOtherBinding binding;
     private IHelpCenter center;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_other);
+        binding=ActivityOtherBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         init();
-
+        initCtrl();
     }
 
     private void init() {
+        center=new IHelpCenterImplementation();
+    }
 
+    private void initCtrl(){
         binding.rlMobileApp.setOnClickListener(this);
         binding.rlQuery.setOnClickListener(this);
         binding.rlOther.setOnClickListener(this);
         binding.ivBack.setOnClickListener(this);
-        center=new IHelpCenterImplementation();
-
-
-
     }
 
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.ivBack:
-                onBackPressed();
-                break;
-
-            case R.id.rlMobileApp:
-                center.showBottomSheet(this,binding.MobileAppText.getText().toString());
-                break;
-
-            case R.id.rlQuery:
-                center.showBottomSheet(this,binding.QueryText.getText().toString());
-                break;
-
-            case R.id.rlOther:
-                center.showBottomSheet(this,binding.OtherText.getText().toString());
-                break;
-
-
+            case R.id.ivBack: onBackPressed(); break;
+            case R.id.rlMobileApp: center.showBottomSheet(this,binding.MobileAppText.getText().toString()); break;
+            case R.id.rlQuery: center.showBottomSheet(this,binding.QueryText.getText().toString()); break;
+            case R.id.rlOther: center.showBottomSheet(this,binding.OtherText.getText().toString()); break;
         }
     }
 
@@ -65,6 +52,6 @@ public class OtherActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this,HelpCenterActivity.class).putExtra("from","OtherActivity"));
+        super.onBackPressed();
     }
 }

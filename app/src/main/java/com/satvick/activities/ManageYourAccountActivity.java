@@ -12,8 +12,7 @@ import com.satvick.R;
 import com.satvick.databinding.ActivityManageYourAccountBinding;
 
 public class ManageYourAccountActivity extends AppCompatActivity implements View.OnClickListener {
-
-    ActivityManageYourAccountBinding binding;
+    private ActivityManageYourAccountBinding binding;
     private IHelpCenter center;
 
     @Override

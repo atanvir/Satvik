@@ -22,6 +22,9 @@ import com.google.android.material.snackbar.Snackbar;
 import com.satvick.R;
 import com.satvick.activities.MyOrderActivity;
 import com.satvick.activities.OrderManageActivity;
+import com.satvick.activities.ProductDetailActivity;
+import com.satvick.database.SharedPreferenceKey;
+import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.PopUpCancellationRequestBinding;
 
 public class CommonUtil {
@@ -92,5 +95,67 @@ public class CommonUtil {
         dialog.show();
     }
 
+    public static void commonMessagePopup(Context context,String message, String status) {
+        final Dialog dialog = new Dialog(context, android.R.style.Theme_Black);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(R.layout.common_mesage_popup);
+        ImageView closeiv = dialog.findViewById(R.id.closeiv);
+        TextView messagetxt = dialog.findViewById(R.id.messagetxt);
+        LottieAnimationView lottieAnimationView = dialog.findViewById(R.id.lottieAnimationView);
+        if(message.contains("Please select any ")){
+            if (message.equalsIgnoreCase("Please select any "+message.split("Please select any ")[1])) {
+                lottieAnimationView.setAnimation("warning.json");
+                messagetxt.setText(message);
 
+            }
+        } else if (message.equalsIgnoreCase(context.getString(R.string.please_select_color))) {
+            lottieAnimationView.setAnimation("warning.json");
+            messagetxt.setText(message);
+
+        } else if (message.equalsIgnoreCase(context.getString(R.string.added_to_cart))) {
+            lottieAnimationView.setAnimation("done.json");
+            messagetxt.setText(message);
+        } else if (message.equalsIgnoreCase(context.getString(R.string.added_to_cart_already))) {
+            lottieAnimationView.setAnimation("warning.json");
+            messagetxt.setText(message);
+        } else if (message.equalsIgnoreCase(context.getString(R.string.out_of_stock))) {
+            lottieAnimationView.setAnimation("warning.json");
+            messagetxt.setText(message);
+        } else {
+            if (status.equalsIgnoreCase(GlobalVariables.SUCCESS)) {
+                lottieAnimationView.setAnimation("done.json");
+                messagetxt.setText(message);
+            } else if (status.equalsIgnoreCase(GlobalVariables.FAILURE)) {
+                lottieAnimationView.setAnimation("error.json");
+                messagetxt.setText(message);
+            }
+
+        }
+
+        Button okbtn = dialog.findViewById(R.id.okbtn);
+
+        closeiv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+
+            }
+        });
+
+
+        okbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+
+    public static Boolean isUserLogin(Context context) {
+       return  (SharedPreferenceWriter.getInstance(context).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false") || SharedPreferenceWriter.getInstance(context).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")); }
 }

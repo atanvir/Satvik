@@ -45,11 +45,10 @@ import com.satvick.activities.LoginActivity;
 import com.satvick.activities.MainActivity;
 import com.satvick.activities.MyWishListActivity;
 import com.satvick.activities.OrderConfirmationActivity;
-import com.satvick.activities.ProductDetailsActivityFinal;
+import com.satvick.activities.ProductDetailActivity;
 import com.satvick.activities.SignUpActivity;
 import com.satvick.adapters.CartListAdapter;
 import com.satvick.adapters.OfferAdapter;
-import com.satvick.application.YODApplication;
 import com.satvick.database.SharedPreferenceKey;
 import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.FragmentBagBinding;
@@ -66,6 +65,7 @@ import com.satvick.retrofit.MyDialog;
 import com.satvick.utils.BillingHelper;
 import com.satvick.utils.CommonUtil;
 import com.satvick.utils.GlobalVariables;
+import com.satvick.utils.GuestUserData;
 import com.satvick.utils.HelperClass;
 
 import org.json.JSONObject;
@@ -364,7 +364,7 @@ public class BagFragment extends Fragment implements View.OnClickListener {
 
                         setGiftWrapPrice(cartListModelList);
                         couponAppliedOrNot(cartListModelList);
-                        setShippingCarges(cartListModelList);
+                        //setShippingCarges(cartListModelList);
 
 
                     } else {
@@ -425,7 +425,9 @@ public class BagFragment extends Fragment implements View.OnClickListener {
                 coponCode = list.get(i).getCoupon_code();
                 couponDiscount = couponDiscount + (Double.parseDouble(list.get(i).getDiscount_coupon()) * convertedPrice);
             }
+        }
             if (couponDiscount > 0.0) {
+//                couponDiscount=couponDiscount/binding.recyclerView.getAdapter().getItemCount();
                 double d1 = Double.parseDouble(this.binding.tvTotalPrice.getText().toString().split(this.symbol)[1]);
                 double d2 = this.couponDiscount.doubleValue();
                 binding.tvTotalPrice.setText(symbol + " " + Math.round(d1 - d2));
@@ -446,7 +448,7 @@ public class BagFragment extends Fragment implements View.OnClickListener {
                 binding.couponImg.setOnClickListener(null);
                 binding.couponImg.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.back_buttom));
             }
-        }
+
     }
     
 
@@ -520,7 +522,7 @@ public class BagFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void onImageItemClick(View view, int pos) {
                     productId = cartListModelList.get(pos).getProductId();
-                    startActivity(new Intent(getActivity(), ProductDetailsActivityFinal.class).putExtra("product_id", productId));
+                    startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("product_id", productId));
                 }
 
                 @Override
@@ -534,6 +536,8 @@ public class BagFragment extends Fragment implements View.OnClickListener {
                         String value = String.valueOf(map.values().toArray()[i]);
                         cartProduct_id += key;
                         cartProduct_quantity += value;
+                        Log.e(size,"cartProduct_quantity"+cartProduct_quantity);
+
                         if (map.size() - 1 > i) {
                             cartProduct_id += ",";
                             cartProduct_quantity += ",";
@@ -546,6 +550,9 @@ public class BagFragment extends Fragment implements View.OnClickListener {
                             }
                         }
                     }
+                    quantities=cartProduct_quantity;
+                    SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.quantity,quantities);
+
 
                     callCartListApi(giftwrap2);
                 }
@@ -563,15 +570,15 @@ public class BagFragment extends Fragment implements View.OnClickListener {
 
     private void removeOfflineProducts(String productId, int pos,View view,String existingSize) {
         String product_id = "", color_name = "",sizes = "", quantity = "";
+
         int size= 0;
-        ArrayList<ProductDetails> details = ((YODApplication) getActivity().getApplication()).getHugeData();
+        List<ProductDetails> details = GuestUserData.getInstance().getHugeData();
 
         if (details!=null && details.size()>0) {
             for (int i = 0; i < details.size(); i++) {
 
                 if (details.get(i).getProduct_id().equalsIgnoreCase(productId) && details.get(i).getSize().equalsIgnoreCase(existingSize)) {
-                    details.remove(i);
-                    details=YODApplication.getInstance().removeData(i);
+                    details=GuestUserData.getInstance().removeData(i);
                     cartListModelList.remove(pos);
                     cartListAdapter.notifyDataSetChanged();
                     CommonUtil.setUpSnackbarMessage(view,"Product Removed",getActivity());
@@ -579,20 +586,6 @@ public class BagFragment extends Fragment implements View.OnClickListener {
             }
 
 
-
-            for(int i=0;i<details.size();i++)
-            {
-                product_id += details.get(i).getProduct_id();
-                color_name += details.get(i).getColor_name();
-                quantity += details.get(i).getQuantity();
-                sizes+=details.get(i).getSize();
-                if (details.size() - 1 > i) {
-                    product_id += ",";
-                    color_name += ",";
-                    quantity += ",";
-                    sizes+=",";
-                }
-            }
 
             if (cartListModelList.size() == 0) {
                 binding.scrollView.setVisibility(View.GONE);
@@ -606,30 +599,20 @@ public class BagFragment extends Fragment implements View.OnClickListener {
                 tvBadge.setText(""+details.size());
             }
 
-            try{
-            if(details.size()>0)
-            {
-                size= details.size();
-            }else
-            {
-                size=0;
+
+            List<String> productList=new ArrayList<>();
+            List<String> sizeList=new ArrayList<>();
+            List<String> quantityList=new ArrayList<>();
+            for(int i=0;i<details.size();i++){
+                productList.add(details.get(i).getProduct_id());
+                sizeList.add(details.get(i).getSize());
+                quantityList.add(details.get(i).getQuantity());
             }
-            }catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-
-            Log.e("produt",product_id);
-            Log.e("color_name",color_name);
-            Log.e("size",""+size);
-            Log.e("quantity",""+quantity);
-
-
-            SharedPreferenceWriter.getInstance(getActivity()).writeIntValue(GlobalVariables.count, size);
-            SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.product_id, product_id);
-            SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.color_name, color_name);
-            SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.size, ""+sizes);
-            SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.quantity, quantity);
+            SharedPreferenceWriter.getInstance(requireActivity()).writeIntValue(GlobalVariables.count, details.size());
+            SharedPreferenceWriter.getInstance(requireActivity()).writeStringValue(GlobalVariables.product_id, TextUtils.join(",",productList));
+            SharedPreferenceWriter.getInstance(requireActivity()).writeStringValue(GlobalVariables.color_name, "");
+            SharedPreferenceWriter.getInstance(requireActivity()).writeStringValue(GlobalVariables.size, TextUtils.join(",",sizeList));
+            SharedPreferenceWriter.getInstance(requireActivity()).writeStringValue(GlobalVariables.quantity,TextUtils.join(",",quantityList));
 
 
         }

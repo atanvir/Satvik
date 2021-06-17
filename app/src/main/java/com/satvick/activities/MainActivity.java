@@ -64,14 +64,18 @@ public class MainActivity extends AppCompatActivity implements  BottomNavigation
 
         // Deep Linked clicked
         if (getIntent().getBooleanExtra("isDeepLink", false)) {
-            Intent intent = new Intent(this, ProductDetailsActivityFinal.class);
+            Intent intent = new Intent(this, ProductDetailActivity.class);
             intent.putExtra("product_id", getIntent().getStringExtra("product_id"));
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }else if(getIntent().getStringExtra("screen")!=null){
             binding.navigation.setSelectedItemId(R.id.bag);
             loadFragment(bagFragment);
+        }else if(getIntent().getStringExtra("edit")!=null){
+            binding.navigation.setSelectedItemId(R.id.profile);
+            loadFragment(profileFragment);
         }else{
+            binding.navigation.setSelectedItemId(R.id.home);
             loadFragment(homeFragment);
         }
     }

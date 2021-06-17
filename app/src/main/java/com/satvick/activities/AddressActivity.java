@@ -15,7 +15,9 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -39,6 +41,7 @@ import com.satvick.database.SharedPreferenceKey;
 import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.ActivityAddressBinding;
 import com.satvick.model.AddAddressModel;
+import com.satvick.model.AddressValidModel;
 import com.satvick.model.EditAddressModel;
 import com.satvick.model.PinCodeModel;
 import com.satvick.model.ViewAddressModel;
@@ -55,12 +58,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddressActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
+import static com.satvick.retrofit.ApiClient.BASE_URL;
+import static com.satvick.retrofit.ApiClient.PIN_CODE_URL;
+
+public class AddressActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener, TextWatcher {
     private ActivityAddressBinding binding;
     private MyDialog dialog;
-    private ApiInterface apiInterface;
+    private ApiInterface apiInterface=ApiClient.getClient().create(ApiInterface.class);
     private String addressType="";
     private ViewAddressModel.Viewaddress address;
+    private Boolean isValidPincode;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,10 +80,10 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
 
     private void init() {
         dialog = new MyDialog(this);
-        apiInterface = ApiClient.getClient().create(ApiInterface.class);
         address=getIntent().getParcelableExtra("data");
 
         if(address!=null) {
+            isValidPincode=true;
             binding.chbSelectPerson.setVisibility(View.GONE);
             binding.tvLabelAddressType.setVisibility(View.GONE);
             binding.radioGroup.setVisibility(View.GONE);
@@ -102,6 +109,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
         binding.tvCancel.setOnClickListener(this);
         binding.tvSave.setOnClickListener(this);
         binding.edtAddress.setOnClickListener(this);
+        binding.edtPinCode.addTextChangedListener(this);
     }
 
 
@@ -179,6 +187,9 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
         else if(binding.edtPinCode.getText().toString().length()!=6){
             validate=false;
             CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please Enter Valid Pin Code",AddressActivity.this);
+        }else if(isValidPincode){
+            validate=false;
+            CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please Enter Valid Pin Code",AddressActivity.this);
         }
 
 
@@ -250,16 +261,16 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
     private void editAddress() {
         dialog.showDialog();
         Call<EditAddressModel> call = apiInterface.getEditAddressResult(HelperClass.getCacheData(this).second,
-                HelperClass.getCacheData(this).first,
-                binding.edtName.getText().toString(),
-                binding.edtMobile.getText().toString(),
-                binding.edtPinCode.getText().toString(),
-                binding.edtAddress.getText().toString(),
-                binding.edtLocality.getText().toString(),
-                binding.edtCity.getText().toString(),
-                binding.edtState.getText().toString(),
-                addressType,binding.chbSelectPerson.isChecked()==true?"0":"1",
-                ""+address.getId(),address.getCountry(),address.getLatitude(),address.getLongitude());
+                                                                        HelperClass.getCacheData(this).first,
+                                                                        binding.edtName.getText().toString(),
+                                                                        binding.edtMobile.getText().toString(),
+                                                                        binding.edtPinCode.getText().toString(),
+                                                                        binding.edtAddress.getText().toString(),
+                                                                        binding.edtLocality.getText().toString(),
+                                                                        binding.edtCity.getText().toString(),
+                                                                        binding.edtState.getText().toString(),
+                                                                        addressType,binding.chbSelectPerson.isChecked()==true?"0":"1",
+                                                                        ""+address.getId(),address.getCountry(),address.getLatitude(),address.getLongitude());
         call.enqueue(new Callback<EditAddressModel>() {
             @Override
             public void onResponse(Call<EditAddressModel> call, Response<EditAddressModel> response) {
@@ -287,4 +298,51 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        isValidPincode=false;
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        if(editable.toString().length()==6){
+            getCurrentStateApi();
+        }
+    }
+
+    private void getCurrentStateApi() {
+        dialog.showDialog();
+        Call<AddressValidModel> call=ApiClient.getClient(PIN_CODE_URL).create(ApiInterface.class).getValidAddress(binding.edtPinCode.getText().toString());
+        call.enqueue(new Callback<AddressValidModel>() {
+            @Override
+            public void onResponse(Call<AddressValidModel> call, Response<AddressValidModel> response) {
+                dialog.hideDialog();
+                if(response.isSuccessful()){
+                    if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)){
+                        isValidPincode=true;
+                        binding.edtLocality.setText(response.body().getPostOffice().get(response.body().getPostOffice().size()-1).getName());
+                        binding.edtCity.setText(response.body().getPostOffice().get(response.body().getPostOffice().size()-1).getRegion());
+                        binding.edtState.setText(response.body().getPostOffice().get(response.body().getPostOffice().size()-1).getState());
+                    }else{
+                        isValidPincode=false;
+                    }
+
+                }else{
+                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!",AddressActivity.this);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddressValidModel> call, Throwable t) {
+                dialog.hideDialog();
+                CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),AddressActivity.this);
+
+            }
+        });
+    }
 }

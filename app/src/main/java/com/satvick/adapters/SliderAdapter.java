@@ -102,7 +102,7 @@ public class SliderAdapter extends PagerAdapter {
 
         view.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                new FullImagePopUpWithZoom(context,color,position).show();
+                new FullImagePopUpWithZoom(context,imgUrl).show();
             }
         });
 
