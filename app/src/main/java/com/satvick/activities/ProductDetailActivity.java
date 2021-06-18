@@ -682,7 +682,8 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                if (binding.scrollView.getScrollY() <=500 || binding.scrollView.getScrollY() <=310) binding.llButtonStart.setVisibility(View.VISIBLE);
+                Log.e("data","--->"+binding.scrollView.getScrollY());
+                if (binding.scrollView.getScrollY() <=384) binding.llButtonStart.setVisibility(View.VISIBLE);
                 else binding.llButtonStart.setVisibility(View.GONE);
             }
         });
