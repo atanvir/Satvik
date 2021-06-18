@@ -648,6 +648,7 @@
                                 android:drawableEnd="@drawable/updown_rrr"
                                 android:drawablePadding="@dimen/dp_5"
                                 android:gravity="center"
+                                android:padding="7dp"
                                 android:text="1"
                                 android:textColor="@color/colorExremeLite"
                                 android:textSize="14dp"

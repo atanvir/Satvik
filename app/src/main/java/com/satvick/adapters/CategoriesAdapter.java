@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.satvick.R;
-import com.satvick.activities.InternalActivity;
+import com.satvick.activities.ProductCategoriesActivity;
 import com.satvick.activities.ProductListActivity;
 import com.satvick.databinding.AdapterCategoriesBinding;
 import com.satvick.model.CategoriesBeans;
@@ -75,7 +75,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.My
                     context.startActivity(intent);
 
                 }else {
-                    Intent intent = new Intent(context, InternalActivity.class);
+                    Intent intent = new Intent(context, ProductCategoriesActivity.class);
                     intent.putExtra("from", "HomeFragmentAfterLogin");
                     intent.putExtra("filterData", list.get(getAdapterPosition()).getCategory_slug());
                     intent.putExtra("type", list.get(getAdapterPosition()).getCategory_slug());

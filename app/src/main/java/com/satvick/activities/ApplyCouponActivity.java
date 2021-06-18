@@ -32,13 +32,19 @@ import retrofit2.Retrofit;
 public class ApplyCouponActivity extends AppCompatActivity implements View.OnClickListener, Callback<ApplyCouponModel> {
     private ActivityApplyCouponBinding binding;
     private MyDialog dialog;
+    private ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding= ActivityApplyCouponBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        init();
         initCtrl();
+    }
+
+    private void init(){
+        dialog=new MyDialog(this);
     }
 
     private void initCtrl(){
@@ -46,33 +52,24 @@ public class ApplyCouponActivity extends AppCompatActivity implements View.OnCli
         binding.ivBack.setOnClickListener(this);
     }
 
-    private void callApplyCouponApi() {
-        dialog=new MyDialog(this);
-        dialog.showDialog();
-        Retrofit retrofit = ApiClient.getClient();
-        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-        Call<ApplyCouponModel> call = apiInterface.getApplyCouponResult(binding.edtCoupon.getText().toString(),
-                                                                        BillingHelper.getInstance().getBillingData().getTOTAL(),
-                                                                        HelperClass.getCacheData(this).second,
-                                                                        HelperClass.getCacheData(this).first);
-        call.enqueue(this);
-    }
-
-
-
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-        case R.id.btnApplyCode: if (!TextUtils.isEmpty(binding.edtCoupon.getText().toString())) callApplyCouponApi(); else Toast.makeText(this,"Please enter coupon code",Toast.LENGTH_SHORT).show(); break;
+        case R.id.btnApplyCode: if (!TextUtils.isEmpty(binding.edtCoupon.getText().toString())) applyCouponApi(); else Toast.makeText(this,"Please enter coupon code",Toast.LENGTH_SHORT).show(); break;
         case R.id.ivBack: onBackPressed(); break;
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    private void applyCouponApi() {
+        dialog.showDialog();
+        Call<ApplyCouponModel> call = apiInterface.getApplyCouponResult(binding.edtCoupon.getText().toString(),
+                BillingHelper.getInstance().getBillingData().getTOTAL(),
+                HelperClass.getCacheData(this).second,
+                HelperClass.getCacheData(this).first);
+        call.enqueue(this);
     }
+
 
     @Override
     public void onResponse(Call<ApplyCouponModel> call, Response<ApplyCouponModel> response) {
@@ -87,5 +84,10 @@ public class ApplyCouponActivity extends AppCompatActivity implements View.OnCli
     public void onFailure(Call<ApplyCouponModel> call, Throwable t) {
         dialog.hideDialog();
         CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),ApplyCouponActivity.this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

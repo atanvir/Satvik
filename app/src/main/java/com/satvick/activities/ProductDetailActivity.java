@@ -66,7 +66,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProductDetailActivity extends AppCompatActivity implements View.OnClickListener, ViewTreeObserver.OnScrollChangedListener, SelectSizeProductDetailsAdapter.SelectSizeListener, FacebookCallback<LoginResult>, GraphRequest.GraphJSONObjectCallback, AdapterView.OnItemClickListener {
+public class ProductDetailActivity extends AppCompatActivity implements View.OnClickListener, ViewTreeObserver.OnScrollChangedListener, SelectSizeProductDetailsAdapter.SelectSizeListener, FacebookCallback<LoginResult>, GraphRequest.GraphJSONObjectCallback, AdapterView.OnItemClickListener, ViewTreeObserver.OnGlobalLayoutListener {
 
     private ActivityProductDetailBinding binding;
     private MyDialog dailog ;
@@ -88,6 +88,9 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private SelectSizeProductDetailsAdapter selectSizeProductDetailsAdapter;
     private String sizeName = "" ,sizeText=null,symbol,selectedQuantity = "1",productId = "",commaSeparatedProductId = "";
     private List<ProductDetails> savedProductsList;
+    private boolean isProductAddedToCart=false;
+    private int bannerHeight,productDetailHeight;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -128,9 +131,20 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         binding.layoutProductDetail7.setOnClickListener(this);
         binding.layoutProductDetail8.setOnClickListener(this);
         binding.layoutProductDetail9.setOnClickListener(this);
-        binding.scrollView.getViewTreeObserver().addOnScrollChangedListener(this);
         listPopupWindow.setOnItemClickListener(this);
+        binding.viewPagerProuctDetail.getViewTreeObserver().addOnGlobalLayoutListener(this);
+        binding.layoutProductDetail.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                productDetailHeight=binding.layoutProductDetail.getHeight();
+                binding.layoutProductDetail.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+
+        binding.scrollView.getViewTreeObserver().addOnScrollChangedListener(this);
+
     }
+
 
     private void callAddToWishlistApi() {
         dailog.showDialog();
@@ -183,9 +197,11 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
                         CommonUtil.commonMessagePopup(ProductDetailActivity.this,response.body().getMessage(), GlobalVariables.SUCCESS);
                         if (response.body().getAddtocart().getTotalItemsInCart() > 0) {
+                            isProductAddedToCart=true;
                             binding.notificationBadge.setVisibility(View.VISIBLE);
                             binding.notificationBadge.setText(String.valueOf(response.body().getAddtocart().getTotalItemsInCart()));
                         } else binding.notificationBadge.setVisibility(View.GONE);
+
                     } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(),ProductDetailActivity.this);
                 } else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!",ProductDetailActivity.this);
             }
@@ -225,7 +241,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private void callProductDetailsApi() {
         dailog.showDialog();
         Call<ProductDetailsResponse> call = apiInterface.getProductDetailsResult(HelperClass.getCacheData(this).first,
-                HelperClass.getCacheData(this).second, productId);
+                                                                                 HelperClass.getCacheData(this).second, productId);
         call.enqueue(new Callback<ProductDetailsResponse>() {
             @Override
             public void onResponse(Call<ProductDetailsResponse> call, Response<ProductDetailsResponse> response) {
@@ -314,7 +330,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
         binding.viewPager.setAdapter(new SliderAdapter(this, data.getProductdetails().getImageList()));
         binding.indicator.setupWithViewPager(binding.viewPager, true);
-        new Timer().schedule(new TimerTask() { @Override public void run() { sliderHandler.post(sliderRunnable); }},2000,2000);
+//        new Timer().schedule(new TimerTask() { @Override public void run() { sliderHandler.post(sliderRunnable); }},2000,2000);
 
         // Product Detail
         binding.tvName.setText(data.getProductdetails().getName());
@@ -365,6 +381,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         }
 
         // Add To Bag
+        Log.e("quantity",""+data.getProductdetails().getQuantity());
         if (data.getProductdetails().getQuantity().equalsIgnoreCase("0") ||
             !(Integer.parseInt(data.getProductdetails().getQuantity()) > 0)) {
             outOfStock = true;
@@ -523,6 +540,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
             case R.id.llAddToWishList2: binding.llAddToWishList.performClick(); break;
             case R.id.llAddToBagOrCart: addToBag(); break;
             case R.id.llAddToBagOrCart2: binding.llAddToBagOrCart.performClick(); break;
+
             case R.id.ivAddToBagOrCart:
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("screen", ProductDetailActivity.class.getSimpleName());
@@ -594,9 +612,11 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 }
 
                 if (!isProductExists) {
+
                     if (!isProductMatch) {
 
                         savedProductsList.add(new ProductDetails(productId, "", sizeName, selectedQuantity));
+
                         GuestUserData.getInstance().setHugeData(savedProductsList);
                         List<String> productList=new ArrayList<>();
                         List<String> sizeList=new ArrayList<>();
@@ -612,10 +632,12 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                         SharedPreferenceWriter.getInstance(getApplicationContext()).writeStringValue(GlobalVariables.size, TextUtils.join(",",sizeList));
                         SharedPreferenceWriter.getInstance(getApplicationContext()).writeStringValue(GlobalVariables.quantity,TextUtils.join(",",quantityList));
 
+                        isProductAddedToCart=true;
+
                         CommonUtil.commonMessagePopup(this,getString(R.string.added_to_cart),"SUCCESS");
                         binding.notificationBadge.setText(String.valueOf(savedProductsList.size()));
                         if (savedProductsList.size() == 0) binding.notificationBadge.setVisibility(View.GONE);
-                        else { binding.notificationBadge.setVisibility(View.VISIBLE);}
+                        else { binding.notificationBadge.setVisibility(View.VISIBLE); }
 
                     } else CommonUtil.commonMessagePopup(this, getString(R.string.added_to_cart_already), "");
                 } else CommonUtil.commonMessagePopup(this, getString(R.string.added_to_cart_already), "");
@@ -628,10 +650,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         boolean ret=false;
         for(int i=0;i<savedProductsList.size();i++){
             if(savedProductsList.get(i).getProduct_id().equalsIgnoreCase(productId)){
-                if(savedProductsList.get(i).getSize().equalsIgnoreCase(sizeName)){
-                    ret=true;
-                    break;
-                }
+                if(savedProductsList.get(i).getSize().equalsIgnoreCase(sizeName)){ ret=true; break; }
             }
         }
         return ret;
@@ -663,8 +682,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-
-                if (binding.scrollView.getScrollY() <= 340) binding.llButtonStart.setVisibility(View.VISIBLE);
+                if (binding.scrollView.getScrollY() <=500 || binding.scrollView.getScrollY() <=310) binding.llButtonStart.setVisibility(View.VISIBLE);
                 else binding.llButtonStart.setVisibility(View.GONE);
             }
         });
@@ -696,6 +714,18 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         binding.tvSelectQty.setText(selectedQuantity);
         clickCount = clickCount - 1;
         listPopupWindow.dismiss();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(isProductAddedToCart) startActivity(new Intent(this,MainActivity.class));
+        else super.onBackPressed();
+    }
+
+    @Override
+    public void onGlobalLayout() {
+        bannerHeight=binding.viewPagerProuctDetail.getHeight();
+        binding.viewPagerProuctDetail.getViewTreeObserver().removeOnGlobalLayoutListener(this);
     }
 }
 

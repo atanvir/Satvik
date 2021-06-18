@@ -126,11 +126,11 @@
     <string name="rsa_url">RSA Key Url</string>
     <!--<string name="access_code_key">AVTG82GA78AU95GTUA</string>-->
     <!--    <string name="access_code_key">AVIJ88GJ45BW78JIWB</string>-->
-<!--    <string name="access_code_key">AVPK04IC25AQ00KPQA</string>-->
+    <!--    <string name="access_code_key">AVPK04IC25AQ00KPQA</string>-->
     <string name="access_code_key">AVSA03IB48BY04ASYB</string>
 
     <!--    <string name="merchant_id_key">204482</string>-->
-<!--    <string name="merchant_id_key">340993</string>-->
+    <!--    <string name="merchant_id_key">340993</string>-->
     <string name="merchant_id_key">340993</string>
     <!--<string name="redirect_url_key">http://youdomain.com/payment-response.php</string>-->
     <string name="redirect_url_key">https://soulahe.com/api/indipay/response</string>

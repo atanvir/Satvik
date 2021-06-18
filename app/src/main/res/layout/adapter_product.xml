@@ -60,7 +60,9 @@
                 android:padding="@dimen/_5sdp"
                 android:textColor="@color/colorBlack"
                 android:textSize="14dp"
-                android:text="Ayurvedic"
+                android:text="Ayurvedic ajksajkajkjkasjkajkjkasjkasakasjkasjkjkasjkasjkasjkasasjkaks"
+                android:maxLines="2"
+                android:ellipsize="end"
                 android:textAlignment="center"
                 app:font="@{`lato_regular`}" />
 

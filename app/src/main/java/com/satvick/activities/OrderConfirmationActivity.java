@@ -51,6 +51,7 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
                       UPDATE_ADDRESS_REQUEST=21;
 
     private List<ViewAddressModel.Viewaddress> addressList;
+    private boolean isValidPinCode=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +133,7 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) loadBilling(response.body().getGetshippingcharges().getPayment());
                     else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(), response.body().getMessage(),OrderConfirmationActivity.this);
-                } else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Sorry we do not serve this area! Please change your delivery address",OrderConfirmationActivity.this);
+                } else { isValidPinCode=false; CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Sorry we do not serve this area! Please change your delivery address",OrderConfirmationActivity.this); }
             }
 
             @Override
@@ -144,13 +145,12 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
     }
 
     private void loadBilling(ShippingChargesModel.ChargesModel.PaymentModel model) {
-
+        isValidPinCode=true;
         binding.llDeliveryCharges.setVisibility(View.VISIBLE);
         BillingHelper.getInstance().getBillingData().setSHIPPING_CHARGES(model.getShipping());
-        BillingHelper.getInstance().getBillingData().setSUB_TOTAL(model.getPayableWithShipAndGift());
+        BillingHelper.getInstance().getBillingData().setSUB_TOTAL(""+Math.round(Double.parseDouble(model.getPayableWithShipAndGift())));
 
         if(Double.parseDouble(model.getPayable())>1000) {
-
             String subTotal= String.valueOf(Double.parseDouble(BillingHelper.getInstance().getBillingData().SUB_TOTAL) - Double.parseDouble(BillingHelper.getInstance().getBillingData().SHIPPING_CHARGES));
             binding.tvDeliveryCharges.setText("-"+BillingHelper.getInstance().getBillingData().SHIPPING_CHARGES);
             binding.tvTotal.setText("₹" + " " + subTotal);
@@ -176,7 +176,8 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
             case R.id.ivBack: onBackPressed(); break;
 
             case R.id.llContinue:
-            if(viewAddress==null) CommonUtil.setUpSnackbarMessage(binding.mainRl, "Please add at least one address first", OrderConfirmationActivity.this);
+            if(viewAddress==null) CommonUtil.setUpSnackbarMessage(binding.getRoot(), "Please add at least one address first", OrderConfirmationActivity.this);
+            else if(!isValidPinCode) CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Sorry we do not serve this area! Please change your delivery address",this);
             else generateOrderIdApi();
             break;
         }

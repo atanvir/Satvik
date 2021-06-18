@@ -89,6 +89,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private String mFullName="";
 
     private String mEmail = "";
+    private boolean isValidAge;
     private String mPhone = "";
     private String mGender="";
     private String mDob="";
@@ -177,6 +178,13 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                 SimpleDateFormat simpleDateFormat=new SimpleDateFormat("dd/MM/yyyy");
                 Date date= null;
                 try {
+                    ;
+                    if(Calendar.getInstance().get(Calendar.YEAR)-year>9){
+                        isValidAge=true;
+                    }else{
+                        isValidAge=false;
+                    }
+
                     date = simpleDateFormat.parse(dayOfMonth+"/"+(month+1)+"/"+year);
                     StringBuilder builder=new StringBuilder();
                     builder.append(simpleDateFormat.format(date));
@@ -359,6 +367,13 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             ret=false;
 
         }
+        else if(!isValidAge)
+        {
+            showMessage("Please enter valid age more than 10 years ");
+            ret=false;
+
+        }
+
         else if(fileFlyer==null  && mUserImage.isEmpty())
         {
             showMessage("Please upload image");

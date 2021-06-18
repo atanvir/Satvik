@@ -74,6 +74,8 @@
                 android:layout_centerInParent="true"
                 android:layout_marginTop="@dimen/dp_2"
                 android:text="Yellow Solid"
+                android:maxLines="2"
+                android:ellipsize="end"
                 android:textAlignment="center"
                 android:textColor="@color/colorExremeLite"
                 android:textSize="14dp"

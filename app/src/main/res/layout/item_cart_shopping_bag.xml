@@ -233,7 +233,6 @@
                                         android:id="@+id/llQuantity"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/dp_1"
                                         android:layout_toRightOf="@+id/llSize"
                                         android:orientation="horizontal">
 
@@ -243,6 +242,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_marginStart="@dimen/dp_10"
                                             android:text="Qty: "
+                                            android:layout_gravity="center_vertical"
                                             android:textColor="@color/colorExremeLite"
                                             android:textSize="14dp"
                                             app:font="@{`lato_regular`}" />
@@ -258,11 +258,12 @@
 
                                             <TextView
                                                 android:id="@+id/tvSelectQty"
-                                                android:layout_width="35dp"
+                                                android:layout_width="@dimen/dp_45"
                                                 android:layout_height="wrap_content"
                                                 android:drawableEnd="@drawable/updown_rrr"
                                                 android:gravity="center"
                                                 android:text="1"
+                                                android:padding="@dimen/dp_3"
                                                 android:textColor="@color/colorExremeLite"
                                                 android:textSize="14dp"
                                                 app:font="@{`lato_regular`}" />

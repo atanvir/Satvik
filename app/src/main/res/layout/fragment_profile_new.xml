@@ -343,6 +343,7 @@
                         android:id="@+id/LLRefer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         android:layout_marginHorizontal="5dp"
                         android:orientation="horizontal"
                         android:padding="15dp">

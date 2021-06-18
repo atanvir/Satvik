@@ -97,7 +97,7 @@
             android:layout_below="@+id/view2"
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:fillViewport="true"
             android:layout_above="@+id/tvPlaceOrder"
             android:layout_marginTop="@dimen/dp_5"
@@ -107,11 +107,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_30"
+                    android:visibility="gone"
+                    android:elevation="@dimen/_5sdp"
+                    android:layout_centerInParent="true"
+                    />
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/rlT"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:layout_marginStart="@dimen/dp_10"
                     android:layout_marginEnd="@dimen/dp_10"
                     android:background="@color/colorBagFragBackground">
@@ -245,25 +254,38 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-                <androidx.recyclerview.widget.RecyclerView
-                        android:layout_below="@+id/rlT"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rlT"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_0"
+                    android:layout_marginEnd="@dimen/dp_10">
+
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerView"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp_10"
-                        android:layout_marginTop="@dimen/dp_0"
-                        android:layout_marginEnd="@dimen/dp_10" />
+                        app:layout_constrainedHeight="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                 <TextView
                     android:id="@+id/tvA"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/recyclerView"
+                    android:layout_below="@+id/cl"
                     android:layout_marginStart="@dimen/dp_10"
                     android:layout_marginTop="@dimen/dp_20"
                     android:layout_marginBottom="@dimen/dp_10"
+                    android:layout_centerVertical="true"
                     android:text="OPTIONS"
+
                     android:textColor="@color/colorBlack"
                     android:textSize="14dp"
                     app:font="@{`lato_regular`}" />

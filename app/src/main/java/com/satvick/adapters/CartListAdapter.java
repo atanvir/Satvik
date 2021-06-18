@@ -185,8 +185,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         listPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, final View view, int i, long l) {
-                final MyDialog myDialog = new MyDialog(context);
-                myDialog.showDialog();
+
                 String selectedMenu = selectedMenuList.get(i);
                 viewHolder.binding.tvSelectQty.setText(selectedMenu);
                 clickCount = clickCount - 1;
@@ -202,7 +201,6 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
 
                 if (SharedPreferenceWriter.getInstance(context).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false") ||
                         SharedPreferenceWriter.getInstance(context).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) {
-                    myDialog.hideDialog();
                     listener.setTotalPrice(view, quantity, cartListModelList.get(getAdapterPosition).getSize());
                     listPopupWindow.dismiss();
                 } else {

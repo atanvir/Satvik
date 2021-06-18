@@ -42,7 +42,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class InternalActivity extends AppCompatActivity implements View.OnClickListener {
+public class ProductCategoriesActivity extends AppCompatActivity implements View.OnClickListener {
 
     ActivityMenBinding binding;
 
@@ -109,14 +109,14 @@ public class InternalActivity extends AppCompatActivity implements View.OnClickL
         binding.tvTitle.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 
 
-        if (SharedPreferenceWriter.getInstance(InternalActivity.this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false")||
-                SharedPreferenceWriter.getInstance(InternalActivity.this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) {
+        if (SharedPreferenceWriter.getInstance(ProductCategoriesActivity.this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false")||
+                SharedPreferenceWriter.getInstance(ProductCategoriesActivity.this).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")) {
             userId = "1";
         } else {
-            userId = SharedPreferenceWriter.getInstance(InternalActivity.this).getString(SharedPreferenceKey.USER_ID);
+            userId = SharedPreferenceWriter.getInstance(ProductCategoriesActivity.this).getString(SharedPreferenceKey.USER_ID);
         }
 
-        if (HelperClass.showInternetAlert(InternalActivity.this)) {
+        if (HelperClass.showInternetAlert(ProductCategoriesActivity.this)) {
             callInnerPagesApi(binding.mainRl);//hit api
         }
 
@@ -248,23 +248,23 @@ public class InternalActivity extends AppCompatActivity implements View.OnClickL
                         setDressesAndJumpSuitsRecyclerView(otherData2);
                         setGymTeesMenAdapter(otherData3);
                     } else {
-                        Toast.makeText(InternalActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProductCategoriesActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     myDialog.hideDialog();
                     final Snackbar mSnackbar = Snackbar.make(view, R.string.service_error, Snackbar.LENGTH_INDEFINITE);
-                    mSnackbar.setActionTextColor(ContextCompat.getColor(InternalActivity.this,R.color.colorWhite));
+                    mSnackbar.setActionTextColor(ContextCompat.getColor(ProductCategoriesActivity.this,R.color.colorWhite));
                     mSnackbar.setAction("RETRY", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
                             callInnerPagesApi(view);
                             Snackbar snackbar=Snackbar.make(view,"Please wait!",Snackbar.LENGTH_LONG);
-                            snackbar.getView().setBackground(ContextCompat.getDrawable(InternalActivity.this,R.drawable.drawable_gradient_line));
+                            snackbar.getView().setBackground(ContextCompat.getDrawable(ProductCategoriesActivity.this,R.drawable.drawable_gradient_line));
                             snackbar.show();
                         }
                     });
-                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(InternalActivity.this,R.drawable.drawable_gradient_line));
+                    mSnackbar.getView().setBackground(ContextCompat.getDrawable(ProductCategoriesActivity.this,R.drawable.drawable_gradient_line));
                     mSnackbar.show();
                     return;
                 }
@@ -279,11 +279,11 @@ public class InternalActivity extends AppCompatActivity implements View.OnClickL
     private void setBanner(List<InnerPagesModel.Bannerlist> bannerList) {
         int banner_size=bannerList.size();
 
-        Glide.with(InternalActivity.this).load(bannerList.get(0).getImage()).into(binding.ivBanner2);
+        Glide.with(ProductCategoriesActivity.this).load(bannerList.get(0).getImage()).into(binding.ivBanner2);
         if(banner_size==2)
         {
             binding.ivBanner3.setVisibility(View.VISIBLE);
-          Glide.with(InternalActivity.this).load(bannerList.get(1).getImage()).into(binding.ivBanner3);
+          Glide.with(ProductCategoriesActivity.this).load(bannerList.get(1).getImage()).into(binding.ivBanner3);
         }
          else
             {
@@ -411,11 +411,11 @@ public class InternalActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.ivSearch:
-                startActivity(new Intent(InternalActivity.this,SearchScreenActivity.class));
+                startActivity(new Intent(ProductCategoriesActivity.this,SearchScreenActivity.class));
                 break;
 
             case R.id.tvFlashSaleViewAll:
-                Intent intent=new Intent(InternalActivity.this,ProductListActivity.class);
+                Intent intent=new Intent(ProductCategoriesActivity.this,ProductListActivity.class);
                 intent.putExtra("from",GlobalVariables.flashSale);
                 intent.putExtra(GlobalVariables.section_name,"Flash Sale");
                 startActivity(intent);
@@ -463,14 +463,14 @@ public class InternalActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.ivSave:
-                startActivity(new Intent(InternalActivity.this, MyWishListActivity.class));
+                startActivity(new Intent(ProductCategoriesActivity.this, MyWishListActivity.class));
                 break;
 
         }
     }
 
     private void callIntent(String subcatid,String section_name) {
-        Intent intent=new Intent(InternalActivity.this,ProductListActivity.class);
+        Intent intent=new Intent(ProductCategoriesActivity.this,ProductListActivity.class);
         intent.putExtra("from","MenActivity");
         intent.putExtra(GlobalVariables.subcatid,subcatid);
         intent.putExtra(GlobalVariables.section_name,section_name);

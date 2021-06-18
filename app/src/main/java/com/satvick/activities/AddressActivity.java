@@ -187,7 +187,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
         else if(binding.edtPinCode.getText().toString().length()!=6){
             validate=false;
             CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please Enter Valid Pin Code",AddressActivity.this);
-        }else if(isValidPincode){
+        }else if(!isValidPincode){
             validate=false;
             CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please Enter Valid Pin Code",AddressActivity.this);
         }

@@ -6,15 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.satvick.R;
-import com.satvick.activities.InternalActivity;
+import com.satvick.activities.ProductCategoriesActivity;
 import com.satvick.activities.LifeActivity;
-import com.satvick.activities.MainActivity;
 import com.satvick.databinding.ItemSlidingHome2Binding;
 import com.satvick.model.ProductBean;
 
@@ -73,7 +70,7 @@ public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapte
                     intent.putExtra("title","Satvik Life");
                     context.startActivity(intent);
                 }else {
-                    Intent intent = new Intent(context, InternalActivity.class);
+                    Intent intent = new Intent(context, ProductCategoriesActivity.class);
                     intent.putExtra("from", "HomeFragmentAfterLoginMen");
                     intent.putExtra("filterData", list.get(getAdapterPosition()).getSlug());
                     intent.putExtra("type", "Category");

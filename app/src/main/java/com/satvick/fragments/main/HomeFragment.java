@@ -286,14 +286,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
         {
             binding.vpBanner.setAdapter(new AutoSlideViewPagerBannerAdapter(getActivity(), model.getHomescreenapi().getBanners()));
             binding.tlBanner.setupWithViewPager(binding.vpBanner, true);
-            sliderRunnable = new Runnable(){
-                @Override
-                public void run() {
-                    if (sliderPostion == model.getHomescreenapi().getBanners().size()-1) sliderPostion = 0; else sliderPostion++;
-                    binding.vpBanner.setCurrentItem(sliderPostion, true); }
-            };
-            new Timer().schedule(new TimerTask() { @Override public void run() { sliderHandler.post(sliderRunnable); }},2000);
+//            sliderRunnable = new Runnable(){
+//                @Override
+//                public void run() {
+//                    if (sliderPostion == model.getHomescreenapi().getBanners().size()-1) sliderPostion = 0; else sliderPostion++;
+//                    binding.vpBanner.setCurrentItem(sliderPostion, true); }
+//            };
+//            new Timer().schedule(new TimerTask() { @Override public void run() { sliderHandler.post(sliderRunnable); }},2000,2000);
         }
+
         else binding.rlBanner.setVisibility(View.GONE);
 
     }
@@ -351,6 +352,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+
             case R.id.ivCross: dialog.dismiss(); break;
             case R.id.btnLogin: dialog.dismiss(); startActivity(new Intent(requireActivity(),LoginActivity.class)); break;
             case R.id.btnSignUp: dialog.dismiss(); startActivity(new Intent(requireActivity(),SignUpActivity.class)); break;
@@ -360,7 +362,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
 
             case R.id.ivNotification:
             if(CommonUtil.isUserLogin(requireActivity())) openLoginSignUpBottomSheet();
-            else{
+            else {
                 SharedPreferenceWriter.getInstance(getActivity()).writeBooleanValue("DOT", false);
                 binding.ivDot.setVisibility(View.GONE);
                 getActivity().startActivity(new Intent(getActivity(), NotificationActivity.class));
@@ -376,9 +378,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
 
     @Override
     public void onCompleted(JSONObject object, GraphResponse response) {
-        if (showInternetAlert(getActivity())) {
-            callLoginApiForSocial(object.optString("name"), object.optString("id"), object.optString("email"),"https://graph.facebook.com/"+object.optString("id")+"/picture?type=large","Facebook");
-        }
+        if (showInternetAlert(getActivity())) callLoginApiForSocial(object.optString("name"), object.optString("id"), object.optString("email"),"https://graph.facebook.com/"+object.optString("id")+"/picture?type=large","Facebook");
     }
 
     @Override

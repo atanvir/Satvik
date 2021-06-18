@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.util.SparseArray;
@@ -21,8 +22,10 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.satvick.R;
+import com.satvick.activities.ZoomImageActivity;
 import com.satvick.utils.FullImagePopUpWithZoom;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SliderAdapter extends PagerAdapter {
@@ -102,7 +105,8 @@ public class SliderAdapter extends PagerAdapter {
 
         view.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                new FullImagePopUpWithZoom(context,imgUrl).show();
+//                new FullImagePopUpWithZoom(context,imgUrl).show();
+                context.startActivity(new Intent(context, ZoomImageActivity.class).putStringArrayListExtra("images",new ArrayList<String>(color)));
             }
         });
 

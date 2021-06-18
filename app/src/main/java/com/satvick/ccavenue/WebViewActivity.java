@@ -147,6 +147,7 @@ public class WebViewActivity extends AppCompatActivity {
             class MyJavaScriptInterface {
                 @JavascriptInterface
                 public void processHTML(String html) {
+                    Log.e("html",html);
 //                    String sdk= "<head><head></head><body><pre style=\"word-wrap: break-word; white-space: pre-wrap;\">{\"status\":\"SUCCESS\",\"indipay\":{\"order_id\":\"G8W\",\"tracking_id\":\"110181627297\",\"order_status\":\"Success\",\"status_message\":\"SUCCESS\"},\"message\":\"Payment Response\",\"requestKey\":\"api/indipay/response\"}</pre></body></head>";
                     PaymentResponseModel paymentResponse = null;
                     try {
