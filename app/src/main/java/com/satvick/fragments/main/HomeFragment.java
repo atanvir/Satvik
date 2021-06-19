@@ -174,20 +174,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
             public void onResponse(Call<SocialLoginModel> call, Response<SocialLoginModel> response) {
                 dailog.hideDialog();
                 if (response.isSuccessful()) {
-                    if (response.body().getStatus().equals("SUCCESS")) {
-                        saveUserData(response);
-                        Intent intent = new Intent(getActivity(), MainActivity.class).putExtra("from", "LoginButton");
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        getActivity().finish();
-                    }
-                    else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
-                        CommonUtil.setUpSnackbarMessage(binding.mainRl,response.body().getMessage(),getActivity());
-                    }
-                } else {
-                    CommonUtil.setUpSnackbarMessage(binding.mainRl,"Internal Server Error",getActivity());
-
-                }
+                    if (response.body().getStatus().equals("SUCCESS")) CommonUtil.saveData(requireActivity(),response);
+                    else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.mainRl,response.body().getMessage(),getActivity());
+                } else CommonUtil.setUpSnackbarMessage(binding.mainRl,"Internal Server Error",getActivity());
             }
 
             @Override

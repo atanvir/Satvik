@@ -227,7 +227,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
             public void onResponse(Call<SocialLoginModel> call, Response<SocialLoginModel> response) {
                 dailog.hideDialog();
                 if (response.isSuccessful()) {
-                    if (response.body().getStatus().equals("SUCCESS")) saveData(response);
+                    if (response.body().getStatus().equals("SUCCESS")) CommonUtil.saveData(ProductDetailActivity.this,response);
                     else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.mainRl, response.body().getMessage(), ProductDetailActivity.this);
                 } else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!",ProductDetailActivity.this);
             }
@@ -488,31 +488,6 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     }
 
 
-    private void saveData(Response<SocialLoginModel> response) {
-        SharedPreferenceWriter.getInstance(ProductDetailActivity.this).getString(commaSeparatedProductId, "");
-        SharedPreferenceWriter.getInstance(ProductDetailActivity.this).getString(SharedPreferenceKey.BATCH_COUNT, "");
-        SharedPreferenceWriter.getInstance(ProductDetailActivity.this).writeStringValue(SharedPreferenceKey.FULL_NAME, response.body().getSociallogin().getName());
-        SharedPreferenceWriter.getInstance(ProductDetailActivity.this).writeStringValue(SharedPreferenceKey.EMAIL, (String) response.body().getSociallogin().getEmail());
-        SharedPreferenceWriter.getInstance(ProductDetailActivity.this).writeStringValue(SharedPreferenceKey.IMAGE, response.body().getSociallogin().getImage());
-        SharedPreferenceWriter.getInstance(ProductDetailActivity.this).writeStringValue(SharedPreferenceKey.USER_ID, "" + response.body().getSociallogin().getId());
-        SharedPreferenceWriter.getInstance(ProductDetailActivity.this).writeStringValue(SharedPreferenceKey.TOKEN, response.body().getSociallogin().getToken());
-        SharedPreferenceWriter.getInstance(ProductDetailActivity.this).writeStringValue(SharedPreferenceKey.CRTEATED_AT, response.body().getSociallogin().getCreatedAt());
-        SharedPreferenceWriter.getInstance(ProductDetailActivity.this).writeStringValue(SharedPreferenceKey.UPDATED_AT, response.body().getSociallogin().getUpdatedAt());
-        SharedPreferenceWriter.getInstance(ProductDetailActivity.this).writeStringValue(SharedPreferenceKey.CURRENT_LOGIN, "true");
-        SharedPreferenceWriter.getInstance(ProductDetailActivity.this).writeBooleanValue(SharedPreferenceKey.NOTIFICATION_STATUS, true);
-        SharedPreferenceWriter.getInstance(ProductDetailActivity.this).writeStringValue(GlobalVariables.color_name,"");
-        SharedPreferenceWriter.getInstance(ProductDetailActivity.this).writeStringValue(GlobalVariables.quantity,"");
-        SharedPreferenceWriter.getInstance(ProductDetailActivity.this).writeStringValue(GlobalVariables.size,"");
-        SharedPreferenceWriter.getInstance(ProductDetailActivity.this).writeStringValue(GlobalVariables.product_id,"");
-
-        Intent intent = new Intent(ProductDetailActivity.this, MainActivity.class).putExtra("from", "LoginButton");
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
-
-    }
-
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -682,7 +657,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                Log.e("data","--->"+binding.scrollView.getScrollY());
+
                 if (binding.scrollView.getScrollY() <=384) binding.llButtonStart.setVisibility(View.VISIBLE);
                 else binding.llButtonStart.setVisibility(View.GONE);
             }

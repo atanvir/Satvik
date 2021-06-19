@@ -285,10 +285,7 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
                 dialog.hideDialog();
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
-                        saveData(response);
-                        Intent intent = new Intent(getActivity(), MainActivity.class).putExtra("screen", "BagFragment");
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
+                        CommonUtil.saveData(requireActivity(),response);
                     } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
                         CommonUtil.setUpSnackbarMessage(binding.getRoot(), response.body().getMessage(), getActivity());
                     }
@@ -331,22 +328,7 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
             }
         });
     }
-    private void saveData(Response<SocialLoginModel> response) {
-        SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.BATCH_COUNT, "");
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.FULL_NAME, response.body().getSociallogin().getName());
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.EMAIL, (String) response.body().getSociallogin().getEmail());
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.IMAGE, response.body().getSociallogin().getImage());
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.USER_ID, "" + response.body().getSociallogin().getId());
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.TOKEN, response.body().getSociallogin().getToken());
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.CRTEATED_AT, response.body().getSociallogin().getCreatedAt());
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.UPDATED_AT, response.body().getSociallogin().getUpdatedAt());
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.CURRENT_LOGIN, "true");
-        SharedPreferenceWriter.getInstance(getActivity()).writeBooleanValue(SharedPreferenceKey.NOTIFICATION_STATUS, true);
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.product_id,"");
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.color_name,"");
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.quantity,"");
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.size,"");
-    }
+
     private void setDataToUI(CartListModel data) {
         cartListModelList = data.getProductListRetrievedSuccessfully();
         if (cartListModelList.isEmpty()) hideSectionVisiblity();
@@ -372,6 +354,7 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
             coponCode=cartListModelList.get(i).getCoupon_code();
             if(gift_wrapup_status.equalsIgnoreCase("yes")) giftWrapPrice += Integer.parseInt("30");
         }
+
         if(giftWrapPrice>0.0) binding.llGiftWrapPrice.setVisibility(View.VISIBLE);
         else binding.llGiftWrapPrice.setVisibility(View.GONE);
         if (couponDiscount > 0.0) {
@@ -394,7 +377,6 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
         }
 
         subTotal=total+giftWrapPrice-couponDiscount;
-        Log.e("subTotal",""+subTotal);
         binding.tvOrderTotal.setText("" + Math.round(total*convertedPrice));
         binding.tvGiftWrapPrice.setText("+" + Math.round(giftWrapPrice*convertedPrice));
         binding.tvCouponDiscount.setText("-" + Math.round(couponDiscount*convertedPrice));

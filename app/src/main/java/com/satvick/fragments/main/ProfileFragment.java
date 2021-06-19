@@ -44,6 +44,7 @@ import retrofit2.Response;
 import static com.satvick.utils.HelperClass.getCacheData;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener, Callback<ViewProfileModel> {
+
     private FragmentProfileNewBinding binding;
     private ViewProfileResponse data;
     private String token,userId;
@@ -64,15 +65,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
         if (HelperClass.showInternetAlert(getActivity())) callViewProfileApi();
     }
 
-
-
     private void init() {
         dialog=new MyDialog(requireActivity());
         token= getCacheData(requireActivity()).first;
         userId=getCacheData(requireActivity()).second;
     }
 
-    private void initCtrl(){
+    private void initCtrl() {
         binding.LLOrders.setOnClickListener(this);
         binding.LLWishList.setOnClickListener(this);
         binding.LLAddress.setOnClickListener(this);
@@ -176,10 +175,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
             if (data.getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) { setUI(data); }
             else Toast.makeText(requireActivity(), data.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        else{
-            Toast.makeText(requireActivity(), "Internal Server Error", Toast.LENGTH_SHORT).show();
-        }
-
+        else { Toast.makeText(requireActivity(), "Internal Server Error", Toast.LENGTH_SHORT).show(); }
     }
 
     @Override

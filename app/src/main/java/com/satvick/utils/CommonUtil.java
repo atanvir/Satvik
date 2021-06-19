@@ -20,12 +20,17 @@ import androidx.databinding.DataBindingUtil;
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.satvick.R;
+import com.satvick.activities.MainActivity;
 import com.satvick.activities.MyOrderActivity;
 import com.satvick.activities.OrderManageActivity;
 import com.satvick.activities.ProductDetailActivity;
+import com.satvick.activities.ProductListActivity;
 import com.satvick.database.SharedPreferenceKey;
 import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.PopUpCancellationRequestBinding;
+import com.satvick.model.SocialLoginModel;
+
+import retrofit2.Response;
 
 public class CommonUtil {
 
@@ -158,4 +163,26 @@ public class CommonUtil {
 
     public static Boolean isUserLogin(Context context) {
        return  (SharedPreferenceWriter.getInstance(context).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("false") || SharedPreferenceWriter.getInstance(context).getString(SharedPreferenceKey.CURRENT_LOGIN).equalsIgnoreCase("")); }
+
+    public static void saveData(Context context,Response<SocialLoginModel> response) {
+        SharedPreferenceWriter.getInstance(context).getString(SharedPreferenceKey.BATCH_COUNT, "");
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.FULL_NAME, response.body().getSociallogin().getName());
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.EMAIL, (String) response.body().getSociallogin().getEmail());
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.IMAGE, response.body().getSociallogin().getImage());
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.USER_ID, "" + response.body().getSociallogin().getId());
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.TOKEN, response.body().getSociallogin().getToken());
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.CRTEATED_AT, response.body().getSociallogin().getCreatedAt());
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.UPDATED_AT, response.body().getSociallogin().getUpdatedAt());
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.CURRENT_LOGIN, "true");
+        SharedPreferenceWriter.getInstance(context).writeBooleanValue(SharedPreferenceKey.NOTIFICATION_STATUS, true);
+        SharedPreferenceWriter.getInstance(context).writeStringValue(GlobalVariables.product_id,"");
+        SharedPreferenceWriter.getInstance(context).writeStringValue(GlobalVariables.color_name,"");
+        SharedPreferenceWriter.getInstance(context).writeStringValue(GlobalVariables.quantity,"");
+        SharedPreferenceWriter.getInstance(context).writeStringValue(GlobalVariables.size,"");
+
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+    }
+
 }
