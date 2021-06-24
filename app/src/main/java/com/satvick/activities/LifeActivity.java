@@ -40,9 +40,12 @@ import retrofit2.Retrofit;
 
 import static com.satvick.utils.HelperClass.showInternetAlert;
 
-public class LifeActivity extends YouTubeBaseActivity implements View.OnClickListener, YouTubePlayer.OnInitializedListener, YouTubePlayer.PlayerStateChangeListener {
+public class LifeActivity extends YouTubeBaseActivity implements View.OnClickListener, YouTubePlayer.OnInitializedListener, YouTubePlayer.PlayerStateChangeListener, Callback<LifeResponseModel> {
     private ActivityLifeTabBinding binding;
     private YouTubePlayer youTubePlayer;
+    private MyDialog dailog;
+    private ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +64,7 @@ public class LifeActivity extends YouTubeBaseActivity implements View.OnClickLis
        }
 
     public void init(){
+        dailog=new MyDialog(this);
         binding.toolbar.tvTitle.setText(getIntent().getStringExtra("title"));
     }
 
@@ -76,29 +80,9 @@ public class LifeActivity extends YouTubeBaseActivity implements View.OnClickLis
     }
 
     private void lifeApi() {
-        final MyDialog myDialog=new MyDialog(LifeActivity.this);
-        myDialog.showDialog();
-        Retrofit retrofit = ApiClient.getClient();
-        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
+        dailog.showDialog();
         Call<LifeResponseModel> call = apiInterface.appsatvicklife();
-        call.enqueue(new Callback<LifeResponseModel>() {
-            public void onResponse(Call<LifeResponseModel> call, Response<LifeResponseModel> response) {
-                    myDialog.hideDialog();
-                    if (response.isSuccessful()) {
-                        if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setDataToUI(response.body());
-                        else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(), LifeActivity.this);
-                    }
-                    else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error", LifeActivity.this);
-
-            }
-
-            @Override
-            public void onFailure(Call<LifeResponseModel> call, Throwable t) {
-                Log.e("exception",""+t.getLocalizedMessage());
-                myDialog.hideDialog();
-                CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),LifeActivity.this);
-            }
-        });
+        call.enqueue(this);
     }
 
     private void setDataToUI(LifeResponseModel body) {
@@ -125,13 +109,10 @@ public class LifeActivity extends YouTubeBaseActivity implements View.OnClickLis
     private List<LifeTabBean> getSubCategories(List<LifeResponseModel.RandomBlog> randomBlogs) {
         List<LifeTabBean> list=new ArrayList<>();
         for(int i=0;i<randomBlogs.size();i++){
-            list.add(new LifeTabBean(randomBlogs.get(i).getId(),
-                    randomBlogs.get(i).getImage(),
-                    randomBlogs.get(i).getTitle(),
-                    randomBlogs.get(i).getSlug(),
-                    randomBlogs.get(i).getPaymentMode(),
-                    randomBlogs.get(i).getPrice(),
-                    randomBlogs.get(i).getShortDesc()));
+            list.add(new LifeTabBean(randomBlogs.get(i).getId(), randomBlogs.get(i).getImage(),
+                                     randomBlogs.get(i).getTitle(), randomBlogs.get(i).getSlug(),
+                                     randomBlogs.get(i).getPaymentMode(), randomBlogs.get(i).getPrice(),
+                                     randomBlogs.get(i).getShortDesc()));
         }
         return list;
     }
@@ -162,7 +143,6 @@ public class LifeActivity extends YouTubeBaseActivity implements View.OnClickLis
 
     @Override
     public void onBackPressed() {
-//        youTubePlayer.release();
         super.onBackPressed();
     }
 
@@ -195,5 +175,21 @@ public class LifeActivity extends YouTubeBaseActivity implements View.OnClickLis
     @Override
     public void onError(YouTubePlayer.ErrorReason errorReason) {
 
+    }
+
+    @Override
+    public void onResponse(Call<LifeResponseModel> call, Response<LifeResponseModel> response) {
+        dailog.hideDialog();
+        if (response.isSuccessful()) {
+            if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setDataToUI(response.body());
+            else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(), LifeActivity.this);
+        }
+        else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error", LifeActivity.this);
+    }
+
+    @Override
+    public void onFailure(Call<LifeResponseModel> call, Throwable t) {
+        dailog.hideDialog();
+        CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(), LifeActivity.this);
     }
 }

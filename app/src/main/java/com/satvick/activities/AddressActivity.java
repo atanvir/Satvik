@@ -118,8 +118,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
         switch (view.getId()) {
             case R.id.ivBack: onBackPressed(); break;
             case R.id.tvCancel: finish(); break;
-            case R.id.tvSave:
-            if (checkValidation()) pinCodeApi(); break;
+            case R.id.tvSave: if (checkValidation()) pinCodeApi(); break;
         }
         }
 
@@ -227,16 +226,16 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
 
     private void saveAddress() {
         Call<AddAddressModel> call = apiInterface.getAddAddressResult(HelperClass.getCacheData(this).second,
-                HelperClass.getCacheData(this).first,
-                binding.edtName.getText().toString(),
-                binding.edtMobile.getText().toString(),
-                binding.edtPinCode.getText().toString(),
-                binding.edtAddress.getText().toString(),
-                binding.edtLocality.getText().toString(),
-                binding.edtCity.getText().toString(),
-                binding.edtState.getText().toString(),
-                addressType,binding.chbSelectPerson.isChecked()==true?"0":"1",
-                "0","India","0.0","0.0");
+                                                                      HelperClass.getCacheData(this).first,
+                                                                      binding.edtName.getText().toString(),
+                                                                      binding.edtMobile.getText().toString(),
+                                                                      binding.edtPinCode.getText().toString(),
+                                                                      binding.edtAddress.getText().toString(),
+                                                                      binding.edtLocality.getText().toString(),
+                                                                      binding.edtCity.getText().toString(),
+                                                                      binding.edtState.getText().toString(),
+                                                                      addressType,binding.chbSelectPerson.isChecked()==true?"0":"1",
+                                                                      "0","India","0.0","0.0");
         call.enqueue(new Callback<AddAddressModel>() {
             @Override
             public void onResponse(Call<AddAddressModel> call, Response<AddAddressModel> response) {

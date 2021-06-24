@@ -34,6 +34,7 @@ import com.satvick.model.ViewProfileModel;
 import com.satvick.retrofit.ApiClient;
 import com.satvick.retrofit.ApiInterface;
 import com.satvick.retrofit.MyDialog;
+import com.satvick.utils.CommonUtil;
 import com.satvick.utils.GlobalVariables;
 import com.satvick.utils.HelperClass;
 
@@ -47,14 +48,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
 
     private FragmentProfileNewBinding binding;
     private ViewProfileResponse data;
-    private String token,userId;
-    private MyDialog dialog;
     private ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
     private SubscriptionFragment subscriptionFragment= new SubscriptionFragment();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile_new, container, false);
+        binding = FragmentProfileNewBinding.inflate(inflater,container, false);
         return binding.getRoot();
     }
 
@@ -66,9 +65,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
     }
 
     private void init() {
-        dialog=new MyDialog(requireActivity());
-        token= getCacheData(requireActivity()).first;
-        userId=getCacheData(requireActivity()).second;
     }
 
     private void initCtrl() {
@@ -87,18 +83,20 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
 
 
     private void callViewProfileApi() {
-        dialog.showDialog();
-        Call<ViewProfileModel> call = apiInterface.getViewProfileResult(token, userId);
+        binding.progressBar.setVisibility(View.VISIBLE);
+        Call<ViewProfileModel> call = apiInterface.getViewProfileResult(getCacheData(requireActivity()).first,
+                                                                        getCacheData(requireActivity()).second);
         call.enqueue(this);
     }
 
-
     private void setUI(ViewProfileModel data) {
         this.data=data.getViewProfileResponse();
-        if(data.getViewProfileResponse().getImage().contains("/users-photos/")){
-            data.getViewProfileResponse().setImage("https://soulahe.com//public/"+data.getViewProfileResponse().getImage());
+        if(data.getViewProfileResponse().getImage()!=null) {
+            if (data.getViewProfileResponse().getImage().contains("/users-photos/")) {
+                data.getViewProfileResponse().setImage("https://soulahe.com//public/" + data.getViewProfileResponse().getImage());
+            }
+            Glide.with(requireActivity()).load(this.data.getImage()).into(binding.imageView15);
         }
-        Glide.with(requireActivity()).load(this.data.getImage()).into(binding.imageView15);
         binding.tvName.setText(this.data.getName());
     }
 
@@ -106,25 +104,18 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.LLOrders: startNewActivity(MyOrderActivity.class,"CancelOrderActivity"); break;
-            case R.id.LLWishList: startNewActivity(MyWishListActivity.class); break;
-            case R.id.LLAddress: startNewActivity(SavedAddressActivity.class); break;
+            case R.id.LLWishList: CommonUtil.startNewActivity(requireActivity(),MyWishListActivity.class); break;
+            case R.id.LLAddress: CommonUtil.startNewActivity(requireActivity(),SavedAddressActivity.class); break;
             case R.id.LLArticles :  requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content, subscriptionFragment).addToBackStack(ProfileFragment.class.getSimpleName()).commit(); break;
             case R.id.LLProfileDetails: loadProfileDetail(); break;
-            case R.id.LLNotification: startNewActivity(NotificationActivity.class); break;
+            case R.id.LLNotification: CommonUtil.startNewActivity(requireActivity(),NotificationActivity.class); break;
             case R.id.LLHelpCenter: startNewActivity(HelpCenterActivity.class,"ProfileFrag"); break;
-            case R.id.LLCoupon: startNewActivity(CouponsActivity.class); break;
-            case R.id.LLSetting: startNewActivity(SettingsActivity.class); break;
+            case R.id.LLCoupon: CommonUtil.startNewActivity(requireActivity(),CouponsActivity.class); break;
+            case R.id.LLSetting: CommonUtil.startNewActivity(requireActivity(),SettingsActivity.class); break;
             case R.id.tvLogOut: logout(); break;
-            case R.id.LLRefer: startNewActivity(ReferEarnActivity.class); break;
+            case R.id.LLRefer: CommonUtil.startNewActivity(requireActivity(),ReferEarnActivity.class); break;
         }
     }
-
-    public void startNewActivity(Class className){
-        Intent intent=new Intent(requireActivity(),className);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
-
 
     public void startNewActivity(Class className,String from){
         Intent intent=new Intent(requireActivity(),className);
@@ -133,26 +124,18 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
         startActivity(intent);
     }
 
-
     private void loadProfileDetail() {
-        if(data!=null) {
-            Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("email", data.getEmail());
-            bundle.putString("name", data.getName());
-            bundle.putString("phone", data.getPhone());
-            bundle.putString("image", data.getImage());
-            bundle.putString("dob", data.getDob());
-            bundle.putString("gender", data.getGender());
-            intent.putExtras(bundle);
-            startActivity(intent);
-        }
+        Intent intent = new Intent(requireActivity(), EditProfileActivity.class);
+        intent.putExtra("email",  data.getEmail()!=null?data.getEmail():"");
+        intent.putExtra("name",   data.getName()!=null?data.getName():"");
+        intent.putExtra("phone",  data.getPhone()!=null?data.getPhone():"");
+        intent.putExtra("image",  data.getImage()!=null?data.getImage():"");
+        intent.putExtra("dob",    data.getDob()!=null?data.getDob():"");
+        intent.putExtra("gender", data.getGender()!=null?data.getGender():"");
+        startActivity(intent);
     }
 
     private void logout() {
-        Intent intent1 = new Intent(getActivity(),LoginActivity.class);
-        intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent1);
         SharedPreferenceWriter.getInstance(getActivity()).writeIntValue(GlobalVariables.count, 0);
         SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.product_id, "");
         SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.color_name, "");
@@ -164,23 +147,29 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
         SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.USER_ID, "");
         SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.BATCH_COUNT, "");
         SharedPreferenceWriter.getInstance(getActivity()).writeStringValue("Ids","");
-        getActivity().finish();
+
+        Intent intent1 = new Intent(getActivity(),LoginActivity.class);
+        startActivity(intent1);
+
+        requireActivity().finish();
     }
 
     @Override
     public void onResponse(Call<ViewProfileModel> call, Response<ViewProfileModel> response) {
-        dialog.hideDialog();
-        if (response.isSuccessful()) {
-            ViewProfileModel data = response.body();
-            if (data.getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) { setUI(data); }
-            else Toast.makeText(requireActivity(), data.getMessage(), Toast.LENGTH_SHORT).show();
+        if(getActivity()!=null) {
+            binding.progressBar.setVisibility(View.GONE);
+            if (response.isSuccessful()) {
+                if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setUI(response.body());
+                else CommonUtil.setUpSnackbarMessage(binding.getRoot(), response.body().getMessage(), requireActivity());
+            } else CommonUtil.setUpSnackbarMessage(binding.getRoot(), "Internal Server Error", requireActivity());
         }
-        else { Toast.makeText(requireActivity(), "Internal Server Error", Toast.LENGTH_SHORT).show(); }
     }
 
     @Override
     public void onFailure(Call<ViewProfileModel> call, Throwable t) {
-        dialog.hideDialog();
-        Toast.makeText(requireActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
+        if(getActivity()!=null) {
+            binding.progressBar.setVisibility(View.GONE);
+            CommonUtil.setUpSnackbarMessage(binding.getRoot(), t.getMessage(), requireActivity());
+        }
     }
 }

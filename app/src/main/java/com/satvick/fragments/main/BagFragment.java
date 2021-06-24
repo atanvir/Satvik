@@ -77,7 +77,6 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
     private FragmentBagBinding binding;
     private String productIds = "",symbol="", coponCode = "",colorNames = "", sizes = "", quantities = "",gift_wrapup_status="";
     private List<CartListModel.ProductListRetrievedSuccessfully> cartListModelList = new ArrayList<>();
-    private MyDialog dialog;
     private ApiInterface apiInterface=ApiClient.getClient().create(ApiInterface.class);
     private TextView tvBadge;
     private double convertedPrice=0.0, total = 0.0,giftWrapPrice = 0.0,couponDiscount=0.0,subTotal=0.0;
@@ -100,11 +99,10 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         init();
         initCtrl();
-        if (HelperClass.showInternetAlert(getActivity())) { dialog.showDialog(); callCartListApi();}
+        if (HelperClass.showInternetAlert(getActivity())) { binding.progressBar.setVisibility(View.VISIBLE); callCartListApi();}
     }
 
     private void init() {
-        dialog=new MyDialog(requireActivity());
         callbackManager = CallbackManager.Factory.create();
         mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build());
 
@@ -141,11 +139,11 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
         switch (view.getId()) {
 
         case R.id.ivCross: bottomSheetDialog.dismiss(); break;
-        case R.id.btnLogin: bottomSheetDialog.dismiss(); startActivity(new Intent(requireActivity(),LoginActivity.class)); break;
-        case R.id.btnSignUp: bottomSheetDialog.dismiss(); startActivity(new Intent(requireActivity(),SignUpActivity.class)); break;
+        case R.id.btnLogin: bottomSheetDialog.dismiss(); CommonUtil.startNewActivity(requireActivity(),LoginActivity.class); break;
+        case R.id.btnSignUp: bottomSheetDialog.dismiss(); CommonUtil.startNewActivity(requireActivity(),SignUpActivity.class); break;
         case R.id.ivFb: bottomSheetDialog.dismiss(); facebookLogin(); break;
         case R.id.ivGoogle: bottomSheetDialog.dismiss(); googleSignIn(); break;
-        case R.id.ivSearch: getActivity().startActivity(new Intent(getActivity(), SearchScreenActivity.class)); break;
+        case R.id.ivSearch: CommonUtil.startNewActivity(requireActivity(), SearchScreenActivity.class); break;
 
         case R.id.tvPlaceOrder:
         if(CommonUtil.isUserLogin(requireActivity())) openLoginSignUpBottomSheetWhenUserNotLogedIn();
@@ -154,7 +152,7 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
 
         case R.id.tvWishList:
         if(CommonUtil.isUserLogin(requireActivity())) openLoginSignUpBottomSheetWhenUserNotLogedIn();
-        else startActivity(new Intent(getActivity(), MyWishListActivity.class));
+        else CommonUtil.startNewActivity(requireActivity(), MyWishListActivity.class);
         break;
 
         case R.id.llaa: startActivityForResult(new Intent(getActivity(), ApplyCouponActivity.class), 121); break;
@@ -172,53 +170,54 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
                                                                   gift_wrapup_status.equalsIgnoreCase("yes")?"1":"0");
         call.enqueue(new Callback<CartListModel>() {
             public void onResponse(Call<CartListModel> call, Response<CartListModel> response) {
-                dialog.hideDialog();
-                if (response.isSuccessful()) {
-                    if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setDataToUI(response.body());
-                    else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(),"FAILURE",requireActivity());
-                } else {
-                    CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!",requireActivity());
+                if(getActivity()!=null) {
+                    binding.progressBar.setVisibility(View.GONE);
+                    if (response.isSuccessful()) {
+                        if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setDataToUI(response.body());
+                        else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(), "FAILURE", requireActivity());
+                    } else CommonUtil.setUpSnackbarMessage(binding.getRoot(), "Internal Server Error!", requireActivity());
                 }
             }
 
             @Override
             public void onFailure(Call<CartListModel> call, Throwable t) {
-                dialog.hideDialog();
+                if(getActivity()!=null) {
+                    binding.progressBar.setVisibility(View.GONE);
+                }
               //  CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),requireActivity());
             }
         });
     }
     private void removeToCartApi(String productId,String size){
-        dialog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<CartListModelResponse> call = apiInterface.removeToCart(HelperClass.getCacheData(requireActivity()).second,
                                                                      HelperClass.getCacheData(requireActivity()).first,
                                                                      productId,size);
         call.enqueue(new Callback<CartListModelResponse>() {
             @Override
             public void onResponse(Call<CartListModelResponse> call, Response<CartListModelResponse> response) {
-
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
                         cartListModelList.clear();
                         callCartListApi();
                     } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
-                        dialog.hideDialog();
+                        binding.progressBar.setVisibility(View.GONE);
                         CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(),requireActivity());}
                 } else {
-                    dialog.hideDialog();
+                    binding.progressBar.setVisibility(View.GONE);
                     CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!",requireActivity());
                 }
             }
 
             @Override
             public void onFailure(Call<CartListModelResponse> call, Throwable t) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),requireActivity());
             }
         });
     }
     private void updateCartApi(int pos,String quantity) {
-        dialog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<UpdateCartQuantity> call = apiInterface.updatecart(HelperClass.getCacheData(requireActivity()).first,
                                                                 HelperClass.getCacheData(requireActivity()).second,
                                                                 cartListModelList.get(pos).getProductId(), quantity,
@@ -229,24 +228,24 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)){ callCartListApi();}
                     else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
-                        dialog.hideDialog();
+                        binding.progressBar.setVisibility(View.GONE);
                         CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(),requireActivity());
                     }
                 }else{
-                    dialog.hideDialog();
+                    binding.progressBar.setVisibility(View.GONE);
                     CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!",requireActivity());
                 }
             }
 
             @Override
             public void onFailure(Call<UpdateCartQuantity> call, Throwable t) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),requireActivity());
             }
         });
     }
     private void cancelCouponApi() {
-        dialog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<CancelCouponModel> call=apiInterface.cancelCoupon(HelperClass.getCacheData(requireActivity()).second);
         call.enqueue(new Callback<CancelCouponModel>() {
             public void onResponse(Call<CancelCouponModel> call, Response<CancelCouponModel> response) {
@@ -254,23 +253,23 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
                     if (response.body().getStatus().equalsIgnoreCase("SUCCESS")) {
                         callCartListApi();
                     } else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
-                        dialog.hideDialog();
+                        binding.progressBar.setVisibility(View.GONE);
                         CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(),requireActivity());
                     }
                 }else {
-                    dialog.hideDialog();
+                    binding.progressBar.setVisibility(View.GONE);
                     CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!",requireActivity());
                 }
             }
 
             public void onFailure(Call<CancelCouponModel> call, Throwable t) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),requireActivity());
             }
         });
     }
     private void callLoginApiForSocial(final String name, final String fbid, final String email, final String profilePhoto, final String socialType) {
-        dialog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<SocialLoginModel> call = apiInterface.socialLogin(fbid, socialType,
                                                                 SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.DEVICE_TOKEN),
                                                                 "android", name, email, profilePhoto, "",
@@ -282,7 +281,7 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
         call.enqueue(new Callback<SocialLoginModel>() {
             @Override
             public void onResponse(Call<SocialLoginModel> call, Response<SocialLoginModel> response) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
                         CommonUtil.saveData(requireActivity(),response);
@@ -296,13 +295,13 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
 
             @Override
             public void onFailure(Call<SocialLoginModel> call, Throwable t) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),requireActivity());
             }
         });
     }
     private void callAddToWishlistApi (String productId,String size){
-        dialog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(HelperClass.getCacheData(requireActivity()).first,
                                                                             HelperClass.getCacheData(requireActivity()).second,
                                                                             productId,size);
@@ -312,18 +311,18 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equals("SUCCESS")) callCartListApi();
                     else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
-                        dialog.hideDialog();
+                        binding.progressBar.setVisibility(View.GONE);
                         CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(),requireActivity());
                     }
                 } else {
-                    dialog.hideDialog();
+                    binding.progressBar.setVisibility(View.GONE);
                     CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!",requireActivity());
                 }
             }
 
             @Override
             public void onFailure(Call<MyWishListResponse> call, Throwable t) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),requireActivity());
             }
         });
@@ -394,6 +393,7 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
         SharedPreferenceWriter.getInstance(getActivity()).writeBooleanValue(GlobalVariables.COUPON_APPLIED, false);
     }
     private void removeOfflineProducts(String productId, int pos,View view,String existingSize) {
+        binding.progressBar.setVisibility(View.VISIBLE);
         List<ProductDetails> details = GuestUserData.getInstance().getHugeData();
         if (details!=null && details.size()>0) {
             for (int i = 0; i < details.size(); i++) {
@@ -421,6 +421,7 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
 
             if (cartListModelList.isEmpty()) hideSectionVisiblity();
             else tvBadge.setText(""+details.size());
+            binding.progressBar.setVisibility(View.GONE);
         }
     }
     private void openLoginSignUpBottomSheetWhenUserNotLogedIn() {
@@ -465,7 +466,7 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
             binding.giftWrapIv.setBackground(null);
             binding.giftWrapIv.setBackgroundTintList(null);
             binding.giftWrapIv.setOnClickListener(null);
-            dialog.showDialog();
+            binding.progressBar.setVisibility(View.VISIBLE);
             callCartListApi();
         }
     }
@@ -479,7 +480,7 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
         binding.giftWrapIv.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.drawable_circle));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) binding.giftWrapIv.setBackgroundTintList(getActivity().getColorStateList(android.R.color.white));
         binding.giftWrapIv.setOnClickListener(this);
-        dialog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         callCartListApi();
     }
 
@@ -531,7 +532,7 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
 
     @Override
     public void setTotalPrice(View view, Map<String, String> map, String size) {
-        dialog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         productIds=TextUtils.join(",",map.keySet().toArray());
         quantities=TextUtils.join(",",map.values().toArray());
         SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.quantity,quantities);
@@ -562,7 +563,7 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
             case RC_SIGN_IN: handleSignInResult(GoogleSignIn.getSignedInAccountFromIntent(data)); break;
-            case 121: if(resultCode==RESULT_OK){ if(HelperClass.showInternetAlert(getActivity())) { dialog.showDialog(); callCartListApi(); }} break;
+            case 121: if(resultCode==RESULT_OK){ if(HelperClass.showInternetAlert(getActivity())) { binding.progressBar.setVisibility(View.VISIBLE); callCartListApi(); }} break;
         }
     }
 }

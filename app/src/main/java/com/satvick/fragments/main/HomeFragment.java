@@ -85,17 +85,18 @@ import retrofit2.Retrofit;
 import static com.satvick.utils.HelperClass.showInternetAlert;
 
 public class HomeFragment extends Fragment implements View.OnClickListener, MyFirebaseMessagingService.ShowDot, FacebookCallback<LoginResult>, GraphRequest.GraphJSONObjectCallback, ViewTreeObserver.OnScrollChangedListener {
-
+    // Auto Sliding
+    int sliderPostion=-1;
     private Runnable sliderRunnable;
     private Handler sliderHandler=new Handler(Looper.myLooper());
+
+    // This
     private TextView tvBadge;
-    int sliderPostion=-1;
     private Dialog dialog;
     private CallbackManager callbackManager;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 901;
     private  FragmentHomeAfterLoginBinding binding;
-    private MyDialog dailog ;
     private ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
     public HomeFragment(){
@@ -109,7 +110,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding= DataBindingUtil.inflate(inflater, R.layout.fragment_home_after_login, container, false);
+        binding= FragmentHomeAfterLoginBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -121,7 +122,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
     }
 
     private void init() {
-        dailog=new MyDialog(requireActivity());
         callbackManager = CallbackManager.Factory.create();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         SharedPreferenceWriter.getInstance(requireActivity()).writeBooleanValue("kIsFirstTime",true);
@@ -161,7 +161,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
     }
 
     private void callLoginApiForSocial(final String name, final String fbid, final String email,final String profilePhoto,final String socialType) {
-        dailog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<SocialLoginModel> call = apiInterface.socialLogin(fbid, socialType,
                                                                 SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.DEVICE_TOKEN),
                                                                 "android", name, email,profilePhoto,"",
@@ -172,7 +172,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
         call.enqueue(new Callback<SocialLoginModel>() {
             @Override
             public void onResponse(Call<SocialLoginModel> call, Response<SocialLoginModel> response) {
-                dailog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equals("SUCCESS")) CommonUtil.saveData(requireActivity(),response);
                     else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.mainRl,response.body().getMessage(),getActivity());
@@ -181,28 +181,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
 
             @Override
             public void onFailure(Call<SocialLoginModel> call, Throwable t) {
-                dailog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.mainRl,t.getMessage(),getActivity());
             }
         });
     }
 
-    private void saveUserData(Response<SocialLoginModel> response) {
-        SharedPreferenceWriter.getInstance(getActivity()).getString(SharedPreferenceKey.BATCH_COUNT, "");
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.FULL_NAME, response.body().getSociallogin().getName());
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.EMAIL, (String) response.body().getSociallogin().getEmail());
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.IMAGE, response.body().getSociallogin().getImage());
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.USER_ID, "" + response.body().getSociallogin().getId());
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.TOKEN, response.body().getSociallogin().getToken());
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.CRTEATED_AT, response.body().getSociallogin().getCreatedAt());
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.UPDATED_AT, response.body().getSociallogin().getUpdatedAt());
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(SharedPreferenceKey.CURRENT_LOGIN, "true");
-        SharedPreferenceWriter.getInstance(getActivity()).writeBooleanValue(SharedPreferenceKey.NOTIFICATION_STATUS, true);
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.product_id,"");
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.color_name,"");
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.quantity,"");
-        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.size,"");
-    }
+
 
 
     private void initCtrl() {
@@ -217,22 +202,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
 
 
     private void callHomeApi() {
-        dailog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<HomeResponseModel> call = apiInterface.getHomeResult(HelperClass.getCacheData(requireActivity()).second, HelperClass.getCacheData(requireActivity()).first);
         call.enqueue(new Callback<HomeResponseModel>() {
             public void onResponse(Call<HomeResponseModel> call, Response<HomeResponseModel> response) {
-                    dailog.hideDialog();
+                if(getActivity()!=null) {
+                    binding.progressBar.setVisibility(View.GONE);
                     if (response.isSuccessful()) {
                         if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setDataToUI(response.body());
-                        else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.mainRl,response.body().getMessage(), requireActivity());
-                    }
-                    else CommonUtil.setUpSnackbarMessage(binding.mainRl,"Internal Server Error", requireActivity());
+                        else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.mainRl, response.body().getMessage(), requireActivity());
+                    } else CommonUtil.setUpSnackbarMessage(binding.mainRl, "Internal Server Error", requireActivity());
+                }
             }
 
             @Override
             public void onFailure(Call<HomeResponseModel> call, Throwable t) {
-                dailog.hideDialog();
-                CommonUtil.setUpSnackbarMessage(binding.mainRl,t.getMessage(),requireActivity());
+                if(getActivity()!=null) {
+                    binding.progressBar.setVisibility(View.GONE);
+                    CommonUtil.setUpSnackbarMessage(binding.mainRl, t.getMessage(), requireActivity());
+                }
             }
         });
     }
@@ -383,7 +371,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
                 }
             }
             binding.nestedScrollbar.getViewTreeObserver().removeOnScrollChangedListener(this);
-
         }
     }
 }

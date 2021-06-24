@@ -54,10 +54,12 @@ import retrofit2.Retrofit;
 import static com.satvick.utils.HelperClass.showInternetAlert;
 import static com.satvick.utils.HelperClass.showSatvikLifeArticle;
 
-public class LifeDescriptionActivity extends AppCompatActivity implements View.OnClickListener {
+public class LifeDescriptionActivity extends AppCompatActivity implements View.OnClickListener, Callback<LifeResponseModel> {
 
     private ActivityLifeDescriptionBinding binding;
     private LifeResponseModel.Blog data;
+    private MyDialog dialog;
+    private ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,28 +71,50 @@ public class LifeDescriptionActivity extends AppCompatActivity implements View.O
         if(showInternetAlert(this)) lifeCategoryApi();
     }
 
-    private void lifeCategoryApi() {
-        final MyDialog myDialog=new MyDialog(this);
-        myDialog.showDialog();
-        Retrofit retrofit = ApiClient.getClient();
-        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-        Call<LifeResponseModel> call = apiInterface.lifeContentApi(getIntent().getLongExtra("_id",0)+"", HelperClass.getCacheData(this).second);
-        call.enqueue(new Callback<LifeResponseModel>() {
-            public void onResponse(Call<LifeResponseModel> call, Response<LifeResponseModel> response) {
-                myDialog.hideDialog();
-                if (response.isSuccessful()) {
-                    if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setDataToUI(response.body());
-                    else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(), LifeDescriptionActivity.this);
-                }
-                else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error", LifeDescriptionActivity.this);
-            }
 
-            @Override
-            public void onFailure(Call<LifeResponseModel> call, Throwable t) {
-                myDialog.hideDialog();
-                CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),LifeDescriptionActivity.this);
-            }
-        });
+
+    public void init(){
+        dialog=new MyDialog(this);
+        binding.tvDescription.setMovementMethod(LinkMovementMethod.getInstance());
+        binding.toolbar.tvTitle.setText(/*getIntent().getStringExtra("title")*/"Satvik Life");
+    }
+
+    public void initCtrl(){
+        binding.toolbar.ivBack.setOnClickListener(this);
+        binding.ivPlay.setOnClickListener(this);
+        binding.btnBuyNow.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.ivBack : onBackPressed(); break;
+            case R.id.ivPlay : binding.btnBuyNow.performClick(); break;
+            case R.id.btnBuyNow : showSatvikLifeArticle(this,Math.round(data.getPrice())+"",data.getId().toString());break;
+        }
+    }
+
+
+    private void lifeCategoryApi() {
+        dialog.showDialog();
+        Call<LifeResponseModel> call = apiInterface.lifeContentApi(getIntent().getLongExtra("_id",0)+"", HelperClass.getCacheData(this).second);
+        call.enqueue(this);
+    }
+
+    @Override
+    public void onResponse(Call<LifeResponseModel> call, Response<LifeResponseModel> response) {
+        dialog.hideDialog();
+        if (response.isSuccessful()) {
+            if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setDataToUI(response.body());
+            else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(), LifeDescriptionActivity.this);
+        }
+        else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error", LifeDescriptionActivity.this);
+    }
+
+    @Override
+    public void onFailure(Call<LifeResponseModel> call, Throwable t) {
+        dialog.hideDialog();
+        CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(), LifeDescriptionActivity.this);
     }
 
     private void setDataToUI(LifeResponseModel body) {
@@ -100,7 +124,7 @@ public class LifeDescriptionActivity extends AppCompatActivity implements View.O
         binding.tvDate.setText("Posted On: "+ServerTimeCalculator.getDateDifference(body.getAppsatvicklifecontent().getBlog().getCreatedAt()));
         binding.tvVideoTitle.setText(""+body.getAppsatvicklifecontent().getBlog().getVideoTitle());
         if(body.getAppsatvicklifecontent().getBlog().getPaymentMode().equalsIgnoreCase("Free") ||
-           body.getAppsatvicklifecontent().getHave_subscribe().equalsIgnoreCase("1")) {
+                body.getAppsatvicklifecontent().getHave_subscribe().equalsIgnoreCase("1")) {
             binding.btnBuyNow.setVisibility(View.GONE);
             binding.tvDescription.setText(Html.fromHtml(body.getAppsatvicklifecontent().getBlog().getLongDesc()));
             if(body.getAppsatvicklifecontent().getBlog().getVideo()!=null){
@@ -126,35 +150,4 @@ public class LifeDescriptionActivity extends AppCompatActivity implements View.O
             }
         }
     }
-
-    public void init(){
-        binding.tvDescription.setMovementMethod(LinkMovementMethod.getInstance());
-        binding.toolbar.tvTitle.setText(/*getIntent().getStringExtra("title")*/"Satvik Life");
-    }
-
-    public void initCtrl(){
-        binding.toolbar.ivBack.setOnClickListener(this);
-        binding.ivPlay.setOnClickListener(this);
-        binding.btnBuyNow.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-
-            case R.id.ivBack :
-            onBackPressed();
-            break;
-
-            case R.id.ivPlay :
-            binding.btnBuyNow.performClick();
-            break;
-
-            case R.id.btnBuyNow :
-            showSatvikLifeArticle(this,Math.round(data.getPrice())+"",data.getId().toString());
-            break;
-        }
-    }
-
-
 }

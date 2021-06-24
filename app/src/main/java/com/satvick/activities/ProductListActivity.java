@@ -420,7 +420,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         binding.tvLowToHigh.setOnClickListener(this);
         binding.tvHighToLow.setOnClickListener(this);
         binding.tvDeliveryTime.setOnClickListener(this);
-        bottomSheetDialog.show();
+        sortByDailog.show();
     }
 
     private void filterProduct() {

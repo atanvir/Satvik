@@ -34,10 +34,12 @@ import retrofit2.Retrofit;
 
 import static com.satvick.utils.HelperClass.showInternetAlert;
 
-public class LifeCategoryActivity extends YouTubeBaseActivity implements View.OnClickListener, YouTubePlayer.OnInitializedListener, YouTubePlayer.PlayerStateChangeListener {
+public class LifeCategoryActivity extends YouTubeBaseActivity implements View.OnClickListener, YouTubePlayer.OnInitializedListener, YouTubePlayer.PlayerStateChangeListener, Callback<LifeResponseModel> {
 
     private ActivityLifeCategoryBinding binding;
     private YouTubePlayer youTubePlayer;
+    private MyDialog dialog;
+    private ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class LifeCategoryActivity extends YouTubeBaseActivity implements View.On
     }
 
     public void init(){
+        dialog=new MyDialog(this);
         binding.playerView.initialize(getString(R.string.youtube_api), this);
         binding.toolbar.tvTitle.setText(getIntent().getStringExtra("title"));
     }
@@ -66,28 +69,9 @@ public class LifeCategoryActivity extends YouTubeBaseActivity implements View.On
     }
 
     private void lifeCategoryApi() {
-        final MyDialog myDialog=new MyDialog(this);
-        myDialog.showDialog();
-        Retrofit retrofit = ApiClient.getClient();
-        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
+        dialog.showDialog();
         Call<LifeResponseModel> call = apiInterface.lifeCategoryApi(getIntent().getLongExtra("_id",0)+"");
-        call.enqueue(new Callback<LifeResponseModel>() {
-            public void onResponse(Call<LifeResponseModel> call, Response<LifeResponseModel> response) {
-                myDialog.hideDialog();
-                if (response.isSuccessful()) {
-                    if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setDataToUI(response.body());
-                    else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(), LifeCategoryActivity.this);
-                }
-                else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error", LifeCategoryActivity.this);
-
-            }
-
-            @Override
-            public void onFailure(Call<LifeResponseModel> call, Throwable t) {
-                myDialog.hideDialog();
-                CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),LifeCategoryActivity.this);
-            }
-        });
+        call.enqueue(this);
     }
 
     private void setDataToUI(LifeResponseModel body) {
@@ -107,12 +91,9 @@ public class LifeCategoryActivity extends YouTubeBaseActivity implements View.On
     private List<LifeTabBean> getSubCategories(List<LifeResponseModel.RandomBlog> randomBlogs) {
         List<LifeTabBean> list=new ArrayList<>();
         for(int i=0;i<randomBlogs.size();i++){
-            list.add(new LifeTabBean(randomBlogs.get(i).getId(),
-                                     randomBlogs.get(i).getImage(),
-                                     randomBlogs.get(i).getTitle(),
-                                     randomBlogs.get(i).getSlug(),
-                                     randomBlogs.get(i).getPaymentMode(),
-                                     randomBlogs.get(i).getPrice(),
+            list.add(new LifeTabBean(randomBlogs.get(i).getId(), randomBlogs.get(i).getImage(),
+                                     randomBlogs.get(i).getTitle(), randomBlogs.get(i).getSlug(),
+                                     randomBlogs.get(i).getPaymentMode(), randomBlogs.get(i).getPrice(),
                                      randomBlogs.get(i).getShortDesc()));
         }
         return list;
@@ -178,7 +159,22 @@ public class LifeCategoryActivity extends YouTubeBaseActivity implements View.On
 
     @Override
     public void onBackPressed() {
-//        youTubePlayer.release();
         super.onBackPressed();
+    }
+
+    @Override
+    public void onResponse(Call<LifeResponseModel> call, Response<LifeResponseModel> response) {
+        dialog.hideDialog();
+        if (response.isSuccessful()) {
+            if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setDataToUI(response.body());
+            else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(), LifeCategoryActivity.this);
+        }
+        else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error", LifeCategoryActivity.this);
+    }
+
+    @Override
+    public void onFailure(Call<LifeResponseModel> call, Throwable t) {
+        dialog.hideDialog();
+        CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(), LifeCategoryActivity.this);
     }
 }

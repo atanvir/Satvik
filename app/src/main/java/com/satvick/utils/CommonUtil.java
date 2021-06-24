@@ -2,24 +2,39 @@ package com.satvick.utils;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 import com.satvick.R;
+import com.satvick.activities.EditProfileActivity;
 import com.satvick.activities.MainActivity;
 import com.satvick.activities.MyOrderActivity;
 import com.satvick.activities.OrderManageActivity;
@@ -27,8 +42,14 @@ import com.satvick.activities.ProductDetailActivity;
 import com.satvick.activities.ProductListActivity;
 import com.satvick.database.SharedPreferenceKey;
 import com.satvick.database.SharedPreferenceWriter;
+import com.satvick.databinding.ActivityEditProfleBinding;
 import com.satvick.databinding.PopUpCancellationRequestBinding;
 import com.satvick.model.SocialLoginModel;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Response;
 
@@ -184,5 +205,66 @@ public class CommonUtil {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
     }
+    public static void setAdapter(Context context, String [] list, Spinner spinner, View textView) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,android.R.layout.simple_spinner_item,list){
+            @Override
+            public boolean isEnabled(int position) {
+                return position!=0;
+            }
 
+            @Override
+            public View getDropDownView(int position, @Nullable @org.jetbrains.annotations.Nullable View convertView, @NonNull @NotNull ViewGroup parent) {
+                View view=super.getDropDownView(position, convertView, parent);
+                ((TextView)view).setTextSize(15);
+                if(position==0) ((TextView)view).setTextColor(context.getResources().getColor(R.color.quantum_grey));
+                else ((TextView)view).setTextColor(context.getResources().getColor(R.color.black));
+                view.setPadding(view.getPaddingLeft(),18,view.getPaddingRight(),18);
+                return view;
+            }
+        };
+
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(textView instanceof TextInputEditText) ((TextInputEditText)textView).setText(parent.getItemAtPosition(position).toString());
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spinner.setAdapter(adapter);
+    }
+
+    public static void startNewActivity(Context context, Class className){
+        Intent intent=new Intent(context,className);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+    public Intent getPickIntent(Context context,Uri cameraOutputUri) {
+        final List<Intent> intents = new ArrayList();
+        intents.add(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI));
+        setCameraIntents(context,intents, cameraOutputUri);
+        if (intents.isEmpty()) return null;
+        Intent result = Intent.createChooser(intents.remove(0), null);
+        if (!intents.isEmpty()) result.putExtra(Intent.EXTRA_INITIAL_INTENTS, intents.toArray(new Parcelable[] {}));
+        return result;
+    }
+
+    public  void setCameraIntents(Context context,List<Intent> cameraIntents, Uri output) {
+        final Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        final PackageManager packageManager = context.getPackageManager();
+        final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
+        for (ResolveInfo res : listCam) {
+            final String packageName = res.activityInfo.packageName;
+            final Intent intent = new Intent(captureIntent);
+            intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+            intent.setPackage(packageName);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, output);
+            intent.putExtra("uri",output);
+            cameraIntents.add(intent);
+        }
+    }
 }
