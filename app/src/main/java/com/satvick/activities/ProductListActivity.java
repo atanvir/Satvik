@@ -418,6 +418,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         binding.tvWhatsNew.setOnClickListener(this);
         binding.tvPopularity.setOnClickListener(this);
         binding.tvLowToHigh.setOnClickListener(this);
+        binding.tvDiscount.setOnClickListener(this);
         binding.tvHighToLow.setOnClickListener(this);
         binding.tvDeliveryTime.setOnClickListener(this);
         sortByDailog.show();
