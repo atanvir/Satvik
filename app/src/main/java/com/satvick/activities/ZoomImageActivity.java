@@ -33,5 +33,6 @@ public class ZoomImageActivity  extends AppCompatActivity {
     private void init(){
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         binding.viewPager.setAdapter(new ZoomImageAdapter(this,getIntent().getStringArrayListExtra("images")));
+        binding.viewPager.setCurrentItem(getIntent().getIntExtra("position",0));
     }
 }

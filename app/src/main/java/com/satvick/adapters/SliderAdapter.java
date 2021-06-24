@@ -106,7 +106,7 @@ public class SliderAdapter extends PagerAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 //                new FullImagePopUpWithZoom(context,imgUrl).show();
-                context.startActivity(new Intent(context, ZoomImageActivity.class).putStringArrayListExtra("images",new ArrayList<String>(color)));
+                context.startActivity(new Intent(context, ZoomImageActivity.class).putStringArrayListExtra("images",new ArrayList<String>(color)).putExtra("position",position));
             }
         });
 
