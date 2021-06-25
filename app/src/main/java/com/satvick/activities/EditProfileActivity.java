@@ -79,13 +79,14 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private void init() {
         isValidAge=true;
         dailog=new MyDialog(this);
+        CommonUtil.setAdapter(this,new String[]{"Please Select Gender","Male", "Female","Others"},binding.spnGender,binding.edtGender);
         binding.tvName.setText(getIntent().getStringExtra("name"));
         binding.edtFullName.setText(getIntent().getStringExtra("name"));
         binding.edtPhone.setText(getIntent().getStringExtra("phone"));
         binding.edtEmail.setText(getIntent().getStringExtra("email"));
         binding.edtDOB.setText(getIntent().getStringExtra("dob"));
+        binding.edtGender.setText(getIntent().getStringExtra("gender"));
         loadProfilePic(getIntent().getStringExtra("image"));
-        CommonUtil.setAdapter(this,new String[]{"Please Select Gender","Male", "Female","Others"},binding.spnGender,binding.edtGender);
     }
 
 

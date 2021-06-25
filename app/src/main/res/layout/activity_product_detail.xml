@@ -10,6 +10,14 @@
         android:background="@color/colorWhite"
         tools:context=".fragments.ProductDetailFragment">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
+            android:elevation="@dimen/_5sdp"
+            android:layout_centerInParent="true"
+            />
+
         <LinearLayout
             android:id="@+id/layout"
             android:layout_width="wrap_content"
@@ -232,13 +240,6 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/dp_4">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Product Code :"
-                                android:textColor="@color/colorBlack"
-                                android:textSize="14dp"
-                                app:font="@{`lato_regular`}" />
 
                             <TextView
                                 android:id="@+id/tvHsnCode"
@@ -255,19 +256,11 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/dp_4">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Sold by : "
-                                android:textColor="@color/colorBlack"
-                                android:textSize="14dp"
-                                app:font="@{`lato_regular`}" />
 
                             <TextView
                                 android:id="@+id/tvSoldBy"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text=""
                                 android:textColor="@color/colorLogOut"
                                 android:textSize="14dp"
                                 app:font="@{`lato_regular`}" />

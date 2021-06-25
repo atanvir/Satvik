@@ -31,7 +31,6 @@ import retrofit2.Retrofit;
 
 public class ApplyCouponActivity extends AppCompatActivity implements View.OnClickListener, Callback<ApplyCouponModel> {
     private ActivityApplyCouponBinding binding;
-    private MyDialog dialog;
     private ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
     @Override
@@ -44,7 +43,6 @@ public class ApplyCouponActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void init(){
-        dialog=new MyDialog(this);
     }
 
     private void initCtrl(){
@@ -62,7 +60,7 @@ public class ApplyCouponActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void applyCouponApi() {
-        dialog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<ApplyCouponModel> call = apiInterface.getApplyCouponResult(binding.edtCoupon.getText().toString(),
                 BillingHelper.getInstance().getBillingData().getTOTAL(),
                 HelperClass.getCacheData(this).second,
@@ -73,7 +71,7 @@ public class ApplyCouponActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onResponse(Call<ApplyCouponModel> call, Response<ApplyCouponModel> response) {
-        dialog.hideDialog();
+        binding.progressBar.setVisibility(View.GONE);
         if (response.isSuccessful()) {
             if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) { setResult(RESULT_OK); finish();}
             else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) { CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(),ApplyCouponActivity.this); }
@@ -82,7 +80,7 @@ public class ApplyCouponActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onFailure(Call<ApplyCouponModel> call, Throwable t) {
-        dialog.hideDialog();
+        binding.progressBar.setVisibility(View.GONE);
         CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),ApplyCouponActivity.this);
     }
 

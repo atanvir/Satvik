@@ -23,7 +23,7 @@
     android:shape="oval">
 
     <solid android:color="@color/colorWhite"/>
-    <size android:width="@dimen/dp_35" android:height="@dimen/dp_35"/>
+    <size android:width="37dp" android:height="37dp"/>
     <stroke android:color="@color/colorBlack" android:width="@dimen/dp_1"/>
 
 

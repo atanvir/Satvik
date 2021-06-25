@@ -18,7 +18,7 @@ public class AddRequestBody<T> {
             requestBodyMap.put("email", RequestBody.create(mediaType, ((UpdateProfileModel) data).getEmail()));
             requestBodyMap.put("phone", RequestBody.create(mediaType, ((UpdateProfileModel) data).getPhoneNo()));
             requestBodyMap.put("fullname", RequestBody.create(mediaType, ((UpdateProfileModel) data).getName()));
-            requestBodyMap.put("gender", RequestBody.create(mediaType, ((UpdateProfileModel) data).getName()));
+            requestBodyMap.put("gender", RequestBody.create(mediaType, ((UpdateProfileModel) data).getGender()));
             requestBodyMap.put("dob", RequestBody.create(mediaType, ((UpdateProfileModel) data).getDOB()));
             requestBodyMap.put("user_id", RequestBody.create(mediaType, ((UpdateProfileModel) data).getId()));
             requestBodyMap.put("token", RequestBody.create(mediaType, ((UpdateProfileModel) data).getToken()));

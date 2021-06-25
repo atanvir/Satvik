@@ -43,7 +43,6 @@ import static com.satvick.utils.HelperClass.showInternetAlert;
 public class LifeActivity extends YouTubeBaseActivity implements View.OnClickListener, YouTubePlayer.OnInitializedListener, YouTubePlayer.PlayerStateChangeListener, Callback<LifeResponseModel> {
     private ActivityLifeTabBinding binding;
     private YouTubePlayer youTubePlayer;
-    private MyDialog dailog;
     private ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
     @Override
@@ -64,7 +63,6 @@ public class LifeActivity extends YouTubeBaseActivity implements View.OnClickLis
        }
 
     public void init(){
-        dailog=new MyDialog(this);
         binding.toolbar.tvTitle.setText(getIntent().getStringExtra("title"));
     }
 
@@ -80,7 +78,6 @@ public class LifeActivity extends YouTubeBaseActivity implements View.OnClickLis
     }
 
     private void lifeApi() {
-        dailog.showDialog();
         Call<LifeResponseModel> call = apiInterface.appsatvicklife();
         call.enqueue(this);
     }
@@ -179,7 +176,7 @@ public class LifeActivity extends YouTubeBaseActivity implements View.OnClickLis
 
     @Override
     public void onResponse(Call<LifeResponseModel> call, Response<LifeResponseModel> response) {
-        dailog.hideDialog();
+        binding.progressBar.setVisibility(View.GONE);
         if (response.isSuccessful()) {
             if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setDataToUI(response.body());
             else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(), LifeActivity.this);
@@ -189,7 +186,7 @@ public class LifeActivity extends YouTubeBaseActivity implements View.OnClickLis
 
     @Override
     public void onFailure(Call<LifeResponseModel> call, Throwable t) {
-        dailog.hideDialog();
+        binding.progressBar.setVisibility(View.GONE);
         CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(), LifeActivity.this);
     }
 }

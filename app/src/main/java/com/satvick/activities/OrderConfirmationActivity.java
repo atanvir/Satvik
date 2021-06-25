@@ -44,12 +44,10 @@ import retrofit2.Response;
 public class OrderConfirmationActivity extends AppCompatActivity implements View.OnClickListener, AddressAdapter.setOnAddressClick {
 
     private ActivityOrderConfirmationBinding binding;
-    private MyDialog dialog;
     private ApiInterface apiInterface;
     private ViewAddressModel.Viewaddress viewAddress;
     private final int NEW_ADDRESS_REQUEST=12,
                       UPDATE_ADDRESS_REQUEST=21;
-
     private List<ViewAddressModel.Viewaddress> addressList;
     private boolean isValidPinCode=false;
 
@@ -64,10 +62,7 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
     }
 
     private void init() {
-
-        dialog = new MyDialog(this);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
-
         binding.toolbar.tvTitle.setText("Address");
         binding.tvTotalMrp.setText(BillingHelper.getInstance().getBillingData().TOTAL);
         binding.tvCouponDiscount.setText("-" + Math.round(Double.parseDouble(BillingHelper.getInstance().getBillingData().DISCOUNT!=null?BillingHelper.getInstance().getBillingData().DISCOUNT:"0")));
@@ -89,13 +84,11 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
 
 
     private void addressApi() {
-        dialog=new MyDialog(this);
-        dialog.showDialog();
         Call<ViewAddressModel> call = apiInterface.getViewAddressResult(HelperClass.getCacheData(this).second);
         call.enqueue(new Callback<ViewAddressModel>() {
             @Override
             public void onResponse(Call<ViewAddressModel> call, Response<ViewAddressModel> response) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) loadAddressUI(response.body().getViewaddress());
                     else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(),OrderConfirmationActivity.this);
@@ -106,7 +99,7 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
 
             @Override
             public void onFailure(Call<ViewAddressModel> call, Throwable t) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),OrderConfirmationActivity.this);
             }
         });
@@ -123,13 +116,12 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
 
     private void shippingChargesApi(String addressId) {
         String giftWrap=SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.gift_wrapup_status);
-        dialog=new MyDialog(this);
-        dialog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<ShippingChargesModel> call = apiInterface.getShippingCharges(HelperClass.getCacheData(this).second,addressId,giftWrap.equalsIgnoreCase("Yes")?"1":"0");
         call.enqueue(new Callback<ShippingChargesModel>() {
             @Override
             public void onResponse(Call<ShippingChargesModel> call, Response<ShippingChargesModel> response) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) loadBilling(response.body().getGetshippingcharges().getPayment());
                     else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(), response.body().getMessage(),OrderConfirmationActivity.this);
@@ -138,7 +130,7 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
 
             @Override
             public void onFailure(Call<ShippingChargesModel> call, Throwable t) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),OrderConfirmationActivity.this);
             }
         });
@@ -185,12 +177,12 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
 
 
     private void generateOrderIdApi() {
-        dialog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<GenerateOrderIdModel> call = apiInterface.getOrderId();
         call.enqueue(new Callback<GenerateOrderIdModel>() {
             @Override
             public void onResponse(Call<GenerateOrderIdModel> call, Response<GenerateOrderIdModel> response) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     if (response.body().status.equalsIgnoreCase(GlobalVariables.SUCCESS)) CCAvenueLaucher(response.body().generateordercode.orderNumber);
                     else if (response.body().status.equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(), response.body().message,OrderConfirmationActivity.this);
@@ -199,14 +191,13 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
 
             @Override
             public void onFailure(Call<GenerateOrderIdModel> call, Throwable t) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),OrderConfirmationActivity.this);
             }
         });
     }
 
     private void CCAvenueLaucher(String orderId) {
-
         Intent intent = new Intent(OrderConfirmationActivity.this, WebViewActivity.class);
         intent.putExtra("cameFrom", OrderConfirmationActivity.class.getSimpleName());
         intent.putExtra(AvenuesParams.ACCESS_CODE, getString(R.string.access_code_key));
@@ -221,9 +212,6 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
         intent.putExtra(AvenuesParams.RSA_KEY_URL, getString(R.string.rsa_key_url));
         startActivity(intent);
     }
-
-
-
 
 
     @Override

@@ -10,6 +10,13 @@
         android:background="@color/colorWhite"
         tools:context=".fragments.AddressMainFragment">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
+            android:layout_centerInParent="true"
+            />
+
 
         <include
             android:id="@+id/toolbar"

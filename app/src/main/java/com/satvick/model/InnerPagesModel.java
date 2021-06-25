@@ -111,6 +111,31 @@ public class InnerPagesModel {
         @Expose
         public List<Data> data = null;
 
+        @SerializedName("bannerList")
+        @Expose
+        private List<Bannerlist> bannerList;
+
+        @SerializedName("flash_sale")
+        @Expose
+        private List<Flash_sale> flash_sale;
+
+
+        public List<Flash_sale> getFlash_sale() {
+            return flash_sale;
+        }
+
+        public void setFlash_sale(List<Flash_sale> flash_sale) {
+            this.flash_sale = flash_sale;
+        }
+
+        public List<Bannerlist> getBannerList() {
+            return bannerList;
+        }
+
+        public void setBannerList(List<Bannerlist> bannerList) {
+            this.bannerList = bannerList;
+        }
+
         public List<Data> getData() {
             return data;
         }

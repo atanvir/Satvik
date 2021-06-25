@@ -227,7 +227,7 @@ public class CommonUtil {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(textView instanceof TextInputEditText) ((TextInputEditText)textView).setText(parent.getItemAtPosition(position).toString());
+                if(position!=0) if(textView instanceof TextInputEditText) ((TextInputEditText)textView).setText(parent.getItemAtPosition(position).toString());
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {

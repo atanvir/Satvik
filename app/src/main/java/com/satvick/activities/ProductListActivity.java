@@ -58,7 +58,6 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     private ActivityProductListBinding binding;
     private final ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-    private MyDialog dialog;
     private BottomSheetDialog bottomSheetDialog,sortByDailog;
     private List<Moreproductlist> productListingResponseList = new ArrayList<>();
 
@@ -84,8 +83,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void init() {
-        dialog=new MyDialog(this);
-        dialog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         callbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(callbackManager,this);
         mGoogleSignInClient = GoogleSignIn.getClient(ProductListActivity.this, new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build());
@@ -220,7 +218,6 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 subsubcatid = getIntent().getStringExtra(GlobalVariables.subsubcatid);
                 subcatid = getIntent().getStringExtra(GlobalVariables.subcatid);
                 subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
-
             }
 
         }
@@ -235,7 +232,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         call.enqueue(new Callback<ProductListingResponse>() {
             @Override
             public void onResponse(Call<ProductListingResponse> call, Response<ProductListingResponse> response) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setDataToUI(response.body().getMoreproductlist());
                     else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(), response.body().getMessage(),ProductListActivity.this);
@@ -244,7 +241,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
             @Override
             public void onFailure(Call<ProductListingResponse> call, Throwable t) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),ProductListActivity.this);
             }
         });
@@ -255,12 +252,12 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         switch (v.getId()) {
 
             // Sort By Bottom Sheet
-            case R.id.tvDeliveryTime : sortByDailog.dismiss(); dialog.showDialog(); sortBy = "delivery_time"; callProductListApi(); break;
-            case R.id.tvHighToLow : sortByDailog.dismiss(); dialog.showDialog(); sortBy = "high_to_low"; callProductListApi(); break;
-            case R.id.tvLowToHigh : sortByDailog.dismiss(); dialog.showDialog(); sortBy = "low_to_high"; callProductListApi(); break;
-            case R.id.tvDiscount : sortByDailog.dismiss(); dialog.showDialog(); sortBy = "discount";  callProductListApi(); break;
-            case R.id.tvPopularity : sortByDailog.dismiss(); dialog.showDialog(); sortBy = "popularity";  callProductListApi(); break;
-            case R.id.tvWhatsNew : sortByDailog.dismiss(); dialog.showDialog(); sortBy = "new";  callProductListApi(); break;
+            case R.id.tvDeliveryTime : sortData("delivery_time");  break;
+            case R.id.tvHighToLow : sortData("high_to_low"); break;
+            case R.id.tvLowToHigh :  sortData("low_to_high"); break;
+            case R.id.tvDiscount :  sortData("discount"); break;
+            case R.id.tvPopularity :  sortData("popularity"); break;
+            case R.id.tvWhatsNew :  sortData("new");  break;
 
             // Login Bottom Sheet
             case R.id.ivCross: bottomSheetDialog.dismiss(); break;
@@ -280,6 +277,13 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
             break;
 
         }
+    }
+
+    private void sortData(String type) {
+        sortByDailog.dismiss();
+        sortBy=type;
+        binding.progressBar.setVisibility(View.VISIBLE);
+        callProductListApi();
     }
 
 
@@ -349,7 +353,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     private void callLoginApiForSocial(final String name, final String fbid,
                                        final String email, final String profilePhoto, final String socialType) {
-        dialog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<SocialLoginModel> call = apiInterface.socialLogin(fbid, socialType,
                                                                SharedPreferenceWriter.getInstance(ProductListActivity.this).getString(SharedPreferenceKey.DEVICE_TOKEN),
                                                                "android", name, email, profilePhoto, "",
@@ -362,7 +366,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         call.enqueue(new Callback<SocialLoginModel>() {
             @Override
             public void onResponse(Call<SocialLoginModel> call, Response<SocialLoginModel> response) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equals("SUCCESS")) CommonUtil.saveData(ProductListActivity.this,response);
                     else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(), response.body().getMessage(), ProductListActivity.this);
@@ -372,7 +376,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
             @Override
             public void onFailure(Call<SocialLoginModel> call, Throwable t) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(), ProductListActivity.this);
             }
         });
@@ -380,7 +384,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
 
     private void callAddToWishlistApi(int pos) {
-        dialog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(HelperClass.getCacheData(this).first,
                                                                             HelperClass.getCacheData(this).second,
                                                                             productListingResponseList.get(pos).getProductId(),
@@ -391,18 +395,18 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equals("SUCCESS")){ sortBy=""; callProductListApi(); }
                      else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
-                        dialog.hideDialog();
+                        binding.progressBar.setVisibility(View.GONE);
                         CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(),ProductListActivity.this);
                     }
                 } else {
-                    dialog.hideDialog();
+                    binding.progressBar.setVisibility(View.GONE);
                     CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!",ProductListActivity.this);
                 }
             }
 
             @Override
             public void onFailure(Call<MyWishListResponse> call, Throwable t) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),ProductListActivity.this);
             }
         });

@@ -10,6 +10,13 @@
         android:layout_height="match_parent"
         android:background="@color/colorWhite">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
+            android:elevation="@dimen/_5sdp"
+            android:layout_centerInParent="true"/>
+
         <LinearLayout
             android:id="@+id/layout_add_new_address"
             android:layout_width="match_parent"

@@ -38,7 +38,6 @@ public class LifeCategoryActivity extends YouTubeBaseActivity implements View.On
 
     private ActivityLifeCategoryBinding binding;
     private YouTubePlayer youTubePlayer;
-    private MyDialog dialog;
     private ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
     @Override
@@ -59,7 +58,6 @@ public class LifeCategoryActivity extends YouTubeBaseActivity implements View.On
     }
 
     public void init(){
-        dialog=new MyDialog(this);
         binding.playerView.initialize(getString(R.string.youtube_api), this);
         binding.toolbar.tvTitle.setText(getIntent().getStringExtra("title"));
     }
@@ -69,7 +67,6 @@ public class LifeCategoryActivity extends YouTubeBaseActivity implements View.On
     }
 
     private void lifeCategoryApi() {
-        dialog.showDialog();
         Call<LifeResponseModel> call = apiInterface.lifeCategoryApi(getIntent().getLongExtra("_id",0)+"");
         call.enqueue(this);
     }
@@ -164,7 +161,7 @@ public class LifeCategoryActivity extends YouTubeBaseActivity implements View.On
 
     @Override
     public void onResponse(Call<LifeResponseModel> call, Response<LifeResponseModel> response) {
-        dialog.hideDialog();
+        binding.progressBar.setVisibility(View.GONE);
         if (response.isSuccessful()) {
             if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setDataToUI(response.body());
             else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(), LifeCategoryActivity.this);
@@ -174,7 +171,7 @@ public class LifeCategoryActivity extends YouTubeBaseActivity implements View.On
 
     @Override
     public void onFailure(Call<LifeResponseModel> call, Throwable t) {
-        dialog.hideDialog();
+        binding.progressBar.setVisibility(View.GONE);
         CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(), LifeCategoryActivity.this);
     }
 }

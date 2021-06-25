@@ -69,7 +69,6 @@ import retrofit2.Response;
 public class ProductDetailActivity extends AppCompatActivity implements View.OnClickListener, ViewTreeObserver.OnScrollChangedListener, SelectSizeProductDetailsAdapter.SelectSizeListener, FacebookCallback<LoginResult>, GraphRequest.GraphJSONObjectCallback, AdapterView.OnItemClickListener, ViewTreeObserver.OnGlobalLayoutListener {
 
     private ActivityProductDetailBinding binding;
-    private MyDialog dailog ;
     private ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
     private Runnable sliderRunnable;
     private Handler sliderHandler=new Handler(Looper.myLooper());
@@ -103,7 +102,6 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     }
 
     private void init() {
-        dailog=new MyDialog(this);
         listPopupWindow = new ListPopupWindow(this);
         convertedAmout = Double.parseDouble(SharedPreferenceWriter.getInstance(this).getString("converted_amount"));
         symbol = SharedPreferenceWriter.getInstance(this).getString("symbol");
@@ -147,14 +145,13 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
 
     private void callAddToWishlistApi() {
-        dailog.showDialog();
         Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(HelperClass.getCacheData(this).first,
                                                                             HelperClass.getCacheData(this).second,
                                                                             productId,sizeName==null?"":sizeName);
         call.enqueue(new Callback<MyWishListResponse>() {
             @Override
             public void onResponse(Call<MyWishListResponse> call, Response<MyWishListResponse> response) {
-                dailog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equals("SUCCESS")) {
                         if (response.body().getMessage().equalsIgnoreCase("Product removed from wishlist successfully")) {
@@ -178,21 +175,21 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void onFailure(Call<MyWishListResponse> call, Throwable t) {
-                dailog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),ProductDetailActivity.this);
             }
         });
 
     }
     private void callAddToCartOrBaglistApi() {
-        dailog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<CartListModel2> call = apiInterface.getAddToCartResult3(HelperClass.getCacheData(this).first,
                                                                      HelperClass.getCacheData(this).second,
                                                                      productId, "", sizeName==null?"":sizeName, selectedQuantity);
         call.enqueue(new Callback<CartListModel2>() {
             @Override
             public void onResponse(Call<CartListModel2> call, Response<CartListModel2> response) {
-                dailog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
                         CommonUtil.commonMessagePopup(ProductDetailActivity.this,response.body().getMessage(), GlobalVariables.SUCCESS);
@@ -208,13 +205,13 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void onFailure(Call<CartListModel2> call, Throwable t) {
-                dailog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),ProductDetailActivity.this);
             }
         });
     }
     private void callLoginApiForSocial(final String name, final String fbid, final String email, final String profilePhoto, final String socialType) {
-        dailog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<SocialLoginModel> call = apiInterface.socialLogin(fbid, socialType,
                 SharedPreferenceWriter.getInstance(ProductDetailActivity.this).getString(SharedPreferenceKey.DEVICE_TOKEN), "android", name, email, profilePhoto, "",
                 SharedPreferenceWriter.getInstance(ProductDetailActivity.this).getString(GlobalVariables.product_id),
@@ -225,7 +222,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         call.enqueue(new Callback<SocialLoginModel>() {
             @Override
             public void onResponse(Call<SocialLoginModel> call, Response<SocialLoginModel> response) {
-                dailog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equals("SUCCESS")) CommonUtil.saveData(ProductDetailActivity.this,response);
                     else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.mainRl, response.body().getMessage(), ProductDetailActivity.this);
@@ -233,19 +230,19 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
             }
             @Override
             public void onFailure(Call<SocialLoginModel> call, Throwable t) {
-                dailog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),ProductDetailActivity.this);
             }
         });
     }
     private void callProductDetailsApi() {
-        dailog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<ProductDetailsResponse> call = apiInterface.getProductDetailsResult(HelperClass.getCacheData(this).first,
                                                                                  HelperClass.getCacheData(this).second, productId);
         call.enqueue(new Callback<ProductDetailsResponse>() {
             @Override
             public void onResponse(Call<ProductDetailsResponse> call, Response<ProductDetailsResponse> response) {
-                dailog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     binding.scrollView.setVisibility(View.VISIBLE);
                     binding.llButtonStart.setVisibility(View.VISIBLE);
@@ -257,18 +254,18 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void onFailure(Call<ProductDetailsResponse> call, Throwable t) {
-                dailog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),ProductDetailActivity.this);
             }
         });
     }
     private void getImageByColor(String colorName, String sizeName) {
-        dailog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<CommonModel> call = apiInterface.getImageByColor(colorName, productId, sizeName);
         call.enqueue(new Callback<CommonModel>() {
             @Override
             public void onResponse(Call<CommonModel> call, Response<CommonModel> response) {
-                dailog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equalsIgnoreCase("SUCCESS")) {
                         color = response.body().getResponse().getImageList();
@@ -303,7 +300,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void onFailure(Call<CommonModel> call, Throwable t) {
-                dailog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(), t.getMessage(), ProductDetailActivity.this);
             }
         });
@@ -344,8 +341,8 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         }
         binding.tvPrice.setText(symbol + " " + Math.round(Double.parseDouble(data.getProductdetails().getSp()) * convertedAmout));
         binding.tvBrand.setText(data.getProductdetails().getBrand());
-        binding.tvSoldBy.setText(data.getProductdetails().getSoldBy());
-        binding.tvHsnCode.setText(data.getProductdetails().getHsnCode());
+        binding.tvSoldBy.setText("Sold by : "+data.getProductdetails().getSoldBy());
+        binding.tvHsnCode.setText("Product Code : "+data.getProductdetails().getHsnCode());
         binding.tvMoreDescription.setText(data.getProductdetails().getDescription());
 
         //  Badge Count
@@ -353,7 +350,6 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         binding.notificationBadge.setText(String.valueOf(counts));
         if (counts == 0) binding.notificationBadge.setVisibility(View.GONE);
         else { binding.notificationBadge.setVisibility(View.VISIBLE);}
-
 
         // Size
         binding.tvLabelSize.setText(data.getProductdetails().getSize_label());
@@ -381,7 +377,6 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         }
 
         // Add To Bag
-        Log.e("quantity",""+data.getProductdetails().getQuantity());
         if (data.getProductdetails().getQuantity().equalsIgnoreCase("0") ||
             !(Integer.parseInt(data.getProductdetails().getQuantity()) > 0)) {
             outOfStock = true;

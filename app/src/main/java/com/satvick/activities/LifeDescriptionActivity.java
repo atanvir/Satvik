@@ -58,7 +58,6 @@ public class LifeDescriptionActivity extends AppCompatActivity implements View.O
 
     private ActivityLifeDescriptionBinding binding;
     private LifeResponseModel.Blog data;
-    private MyDialog dialog;
     private ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
     @Override
@@ -74,7 +73,6 @@ public class LifeDescriptionActivity extends AppCompatActivity implements View.O
 
 
     public void init(){
-        dialog=new MyDialog(this);
         binding.tvDescription.setMovementMethod(LinkMovementMethod.getInstance());
         binding.toolbar.tvTitle.setText(/*getIntent().getStringExtra("title")*/"Satvik Life");
     }
@@ -96,14 +94,13 @@ public class LifeDescriptionActivity extends AppCompatActivity implements View.O
 
 
     private void lifeCategoryApi() {
-        dialog.showDialog();
         Call<LifeResponseModel> call = apiInterface.lifeContentApi(getIntent().getLongExtra("_id",0)+"", HelperClass.getCacheData(this).second);
         call.enqueue(this);
     }
 
     @Override
     public void onResponse(Call<LifeResponseModel> call, Response<LifeResponseModel> response) {
-        dialog.hideDialog();
+        binding.progressBar.setVisibility(View.GONE);
         if (response.isSuccessful()) {
             if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setDataToUI(response.body());
             else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(), LifeDescriptionActivity.this);
@@ -113,7 +110,7 @@ public class LifeDescriptionActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onFailure(Call<LifeResponseModel> call, Throwable t) {
-        dialog.hideDialog();
+        binding.progressBar.setVisibility(View.GONE);
         CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(), LifeDescriptionActivity.this);
     }
 

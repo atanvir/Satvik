@@ -63,7 +63,6 @@ import static com.satvick.retrofit.ApiClient.PIN_CODE_URL;
 
 public class AddressActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener, TextWatcher {
     private ActivityAddressBinding binding;
-    private MyDialog dialog;
     private ApiInterface apiInterface=ApiClient.getClient().create(ApiInterface.class);
     private String addressType="";
     private ViewAddressModel.Viewaddress address;
@@ -79,7 +78,6 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void init() {
-        dialog = new MyDialog(this);
         address=getIntent().getParcelableExtra("data");
 
         if(address!=null) {
@@ -123,12 +121,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
         }
 
     private void pinCodeApi() {
-        try {
-            dialog = new MyDialog(this);
-            dialog.showDialog();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<PinCodeModel> call = apiInterface.getPinCodeResult(binding.edtPinCode.getText().toString());
         call.enqueue(new Callback<PinCodeModel>() {
             @Override
@@ -137,7 +130,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
                         if(response.body().getCheckpincodeseller().getStatus().equalsIgnoreCase("0")) {
-                            dialog.hideDialog();
+                            binding.progressBar.setVisibility(View.GONE);
                             CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(), AddressActivity.this);
                         }
                         else if(address==null) saveAddress(); else editAddress();
@@ -148,7 +141,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onFailure(Call<PinCodeModel> call, Throwable t) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);;
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(), AddressActivity.this);
             }
         });
@@ -239,7 +232,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
         call.enqueue(new Callback<AddAddressModel>() {
             @Override
             public void onResponse(Call<AddAddressModel> call, Response<AddAddressModel> response) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
                         setResult(RESULT_OK);
@@ -251,14 +244,14 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onFailure(Call<AddAddressModel> call, Throwable t) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(), AddressActivity.this);
             }
         });
     }
 
     private void editAddress() {
-        dialog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<EditAddressModel> call = apiInterface.getEditAddressResult(HelperClass.getCacheData(this).second,
                                                                         HelperClass.getCacheData(this).first,
                                                                         binding.edtName.getText().toString(),
@@ -273,7 +266,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
         call.enqueue(new Callback<EditAddressModel>() {
             @Override
             public void onResponse(Call<EditAddressModel> call, Response<EditAddressModel> response) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
                         setResult(RESULT_OK);
@@ -285,7 +278,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onFailure(Call<EditAddressModel> call, Throwable t) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(), AddressActivity.this);
             }
         });
@@ -315,12 +308,12 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void getCurrentStateApi() {
-        dialog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<AddressValidModel> call=ApiClient.getClient(PIN_CODE_URL).create(ApiInterface.class).getValidAddress(binding.edtPinCode.getText().toString());
         call.enqueue(new Callback<AddressValidModel>() {
             @Override
             public void onResponse(Call<AddressValidModel> call, Response<AddressValidModel> response) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 if(response.isSuccessful()){
                     if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)){
                         isValidPincode=true;
@@ -338,9 +331,8 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onFailure(Call<AddressValidModel> call, Throwable t) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),AddressActivity.this);
-
             }
         });
     }
