@@ -112,7 +112,12 @@ public class CategoriesFragment extends Fragment implements View.OnClickListener
 
     private Map<CategoryModel.Categorylist, List<CategoryModel.Categorylist.SubCategoryModel>> getAllData(CategoryModel model) {
         allData.clear();
-        for(int i=0;i<model.getCategory_name().size();i++) { allData.put(model.getCategory_name().get(i),model.getCategory_name().get(i).getSubcategory()); }
+        for(int i=0;i<model.getCategory_name().size();i++) {
+            if(model.getCategory_name().get(i).getCategory_name().equalsIgnoreCase("Natural & Homemade")) model.getCategory_name().get(i).setCat_image(""+R.drawable.natural);
+            if(model.getCategory_name().get(i).getCategory_name().equalsIgnoreCase("Ayurvedic")) model.getCategory_name().get(i).setCat_image(""+R.drawable.ayurvedi);
+            if(model.getCategory_name().get(i).getCategory_name().equalsIgnoreCase("Organic")) model.getCategory_name().get(i).setCat_image(""+R.drawable.organic);
+            allData.put(model.getCategory_name().get(i),model.getCategory_name().get(i).getSubcategory());
+        }
         return allData;
     }
 }

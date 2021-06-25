@@ -18,6 +18,7 @@ import com.satvick.utils.CommonUtil;
 import com.satvick.utils.GlobalVariables;
 import com.satvick.utils.HelperClass;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -155,9 +156,11 @@ public class WishListActivity extends AppCompatActivity implements View.OnClickL
 
     }
     private void setItemCount() {
-        if (list.isEmpty()) binding.tvProductCount.setText("No item");
-        else if (list.size()==1) binding.tvProductCount.setText("1 Item");
-        else if (list.size()>1) binding.tvProductCount.setText(list.size() + " Items");
+        if(list!=null) {
+            if (list.isEmpty()) binding.tvProductCount.setText("No item");
+            else if (list.size() == 1) binding.tvProductCount.setText("1 Item");
+            else if (list.size() > 1) binding.tvProductCount.setText(list.size() + " Items");
+        }else binding.tvProductCount.setText("No item");
     }
     private void updateList(int pos) {
         list.remove(pos);

@@ -37,8 +37,8 @@ public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapte
     public void onBindViewHolder(MainCategoryAdapter.ViewHolder holder, int position) {
 //        if(list.get(position).getName().equalsIgnoreCase("Satvik Life")) holder.binding.image.setImageResource(R.drawable.lifea);
         if(position==0) Glide.with(context).load(context.getDrawable(R.drawable.lifea)).into(holder.binding.image);
-        else if(position==2) Glide.with(context).load(context.getDrawable(R.drawable.ayuverdic)).into(holder.binding.image);
-        else if (position==3) Glide.with(context).load(context.getDrawable(R.drawable.natural)).into(holder.binding.image);
+        else if(position==2) Glide.with(context).load(context.getDrawable(R.drawable.natural)).into(holder.binding.image);
+        else if (position==3) Glide.with(context).load(context.getDrawable(R.drawable.ayurvedi)).into(holder.binding.image);
         else if(position==4)  Glide.with(context).load(context.getDrawable(R.drawable.organic)).into(holder.binding.image);
         else Glide.with(context).load(list.get(position).getImage()).into(holder.binding.image);
         holder.binding.tvProductName.setText(list.get(position).getName());

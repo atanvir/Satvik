@@ -84,7 +84,7 @@
                 android:layout_height="@dimen/dp_100"
                 android:scaleType="fitXY"
                 android:layout_centerInParent="true"
-                android:src="@drawable/home_made" />
+                 />
 
 
         </RelativeLayout>

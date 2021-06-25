@@ -4,8 +4,16 @@ import java.util.List;
 
 public class CategoryModel {
     private String status;
+    private String cat_image;
     private List<Categorylist> catandsubcat;
 
+    public String getCat_image() {
+        return cat_image;
+    }
+
+    public void setCat_image(String cat_image) {
+        this.cat_image = cat_image;
+    }
 
     public String getStatus() {
         return status;
@@ -65,6 +73,7 @@ public class CategoryModel {
             private String id;
             private String category_id;
             private String subcategory_name;
+
 
 
             public String getId() {

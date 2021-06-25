@@ -88,7 +88,11 @@ public class ThreeLevelListAdapter extends BaseExpandableListAdapter {
 
         if (data.keySet().toArray()[groupPosition] instanceof CategoryModel.Categorylist) {
             text.setText("" + ((CategoryModel.Categorylist) data.keySet().toArray()[groupPosition]).getCategory_name());
-            Glide.with(context).load(((CategoryModel.Categorylist) data.keySet().toArray()[groupPosition]).getCat_image()).into(imageViewCategoriesItem);
+            if(!((CategoryModel.Categorylist) data.keySet().toArray()[groupPosition]).getCategory_name().equalsIgnoreCase("Herbal")){
+                imageViewCategoriesItem.setImageResource(Integer.parseInt(((CategoryModel.Categorylist) data.keySet().toArray()[groupPosition]).getCat_image()));
+            }else{
+                Glide.with(context).load(((CategoryModel.Categorylist) data.keySet().toArray()[groupPosition]).getCat_image()).into(imageViewCategoriesItem);
+            }
         }
 
         return convertView;
