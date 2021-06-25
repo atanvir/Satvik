@@ -299,7 +299,7 @@ public class RequestForExchangeProductActivity extends AppCompatActivity impleme
                 break;
 
             case R.id.ivWishList:
-                startActivity(new Intent(RequestForExchangeProductActivity.this, MyWishListActivity.class));
+                startActivity(new Intent(RequestForExchangeProductActivity.this, WishListActivity.class));
                 break;
 
             case R.id.ivBag:

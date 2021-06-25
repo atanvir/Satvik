@@ -67,7 +67,7 @@ public class WebViewActivity extends AppCompatActivity {
 
     private ActivityWebviewBinding binding;
     private MyDialog dialog;
-    private ApiInterface apiInterface;
+    private ApiInterface apiInterface=ApiClient.getClient().create(ApiInterface.class);
     private ViewAddressModel.Viewaddress viewAddress;
 
 
@@ -77,13 +77,12 @@ public class WebViewActivity extends AppCompatActivity {
         binding=ActivityWebviewBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_webview);
         init();
+        getRSAkey();
     }
 
     public void init() {
         dialog = new MyDialog(this);
-        apiInterface = ApiClient.getClient().create(ApiInterface.class);
         viewAddress=getIntent().getParcelableExtra("data");
-        getRSAkey();
     }
 
     public void getRSAkey() {
@@ -121,8 +120,6 @@ public class WebViewActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             LoadingDialog.showLoadingDialog(WebViewActivity.this, "Loading...");
-
-//            dialog.showDialog();
         }
 
         @Override
@@ -140,7 +137,6 @@ public class WebViewActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-//            dialog.hideDialog();
             LoadingDialog.cancelLoading();
 
             @SuppressWarnings("unused")

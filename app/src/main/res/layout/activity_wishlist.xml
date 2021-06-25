@@ -8,7 +8,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorWhite"
-        tools:context=".activities.MyWishListActivity">
+        tools:context=".activities.WishListActivity">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
+            android:elevation="@dimen/_5sdp"
+            android:layout_centerInParent="true"/>
 
 
         <androidx.appcompat.widget.Toolbar
@@ -39,10 +46,11 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="WISHLIST"
+
                         android:textColor="@color/colorBlack"
                         android:textSize="@dimen/sp_16"
                         app:font="@{`lato_regular`}" />

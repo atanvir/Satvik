@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import android.os.Looper;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -46,11 +45,9 @@ import com.satvick.model.CommonModel;
 import com.satvick.model.MyWishListResponse;
 import com.satvick.model.ProductDetails;
 import com.satvick.model.ProductDetailsResponse;
-import com.satvick.model.SignUpModel;
 import com.satvick.model.SocialLoginModel;
 import com.satvick.retrofit.ApiClient;
 import com.satvick.retrofit.ApiInterface;
-import com.satvick.retrofit.MyDialog;
 import com.satvick.utils.CommonUtil;
 import com.satvick.utils.GlobalVariables;
 import com.satvick.utils.GuestUserData;
@@ -60,8 +57,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -496,7 +492,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
             // Main Screen
             case R.id.ivWishlist:
             if(CommonUtil.isUserLogin(this)) openLoginSignUpBottomSheetWhenUserNotLogedIn();
-            else startActivity(new Intent(this, MyWishListActivity.class));
+            else startActivity(new Intent(this, WishListActivity.class));
             break;
 
             case R.id.llAddToWishList:

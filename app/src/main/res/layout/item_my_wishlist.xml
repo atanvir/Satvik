@@ -26,8 +26,9 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView2"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_360"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_5"
+            app:cardUseCompatPadding="true"
             android:background="@color/colorWhite"
             android:elevation="0dp"
             app:cardPreventCornerOverlap="false"
@@ -70,28 +71,19 @@
                         android:layout_height="1dp"
                         android:background="@color/stroke" />
 
-                    <TextView
-                        android:id="@+id/tvName"
-                        android:layout_width="@dimen/_minus1sdp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp_8"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:layout_marginEnd="@dimen/dp_8"
-                        android:text=""
-                        android:textColor="@color/colorBlack"
-                        android:textSize="14dp"
-                        app:font="@{`lato_regular`}" />
 
 
                     <TextView
                         android:id="@+id/textDisc"
                         android:layout_width="@dimen/_minus1sdp"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/tvName"
+                        android:layout_below="@+id/viewwsd"
                         android:layout_marginStart="@dimen/dp_8"
                         android:layout_marginTop="@dimen/dp_5"
                         android:layout_marginEnd="@dimen/dp_8"
-                        android:text=""
+                        android:text="ajhadhadjhadjhadjhadjhadjhdjhaadjhadjhadjhadjhadjhadjjhadjhadjhadjhadjhadjhadjhadjhadjhadjhadjhadjhjhjhdajhadjhj"
+                        android:maxLines="2"
+                        android:ellipsize="end"
                         android:textColor="@color/colorExremeLite"
                         android:textSize="14dp"
                         app:font="@{`lato_regular`}" />
@@ -148,7 +140,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/view"
-                        android:layout_margin="@dimen/dp_15"
+                        android:padding="@dimen/_10sdp"
                         android:gravity="center">
 
                         <TextView

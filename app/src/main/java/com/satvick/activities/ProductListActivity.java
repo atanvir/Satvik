@@ -2,7 +2,6 @@ package com.satvick.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -39,7 +38,6 @@ import com.satvick.model.ProductListingResponse;
 import com.satvick.model.SocialLoginModel;
 import com.satvick.retrofit.ApiClient;
 import com.satvick.retrofit.ApiInterface;
-import com.satvick.retrofit.MyDialog;
 import com.satvick.utils.CommonUtil;
 import com.satvick.utils.GlobalVariables;
 import com.satvick.utils.HelperClass;
@@ -273,7 +271,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
             case R.id.filterproduct: filterProduct(); break;
             case R.id.ivWishList:
             if(CommonUtil.isUserLogin(this)) openLoginSignUpBottomSheetWhenUserNotLogedIn();
-            else startActivity(new Intent(this, MyWishListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+            else startActivity(new Intent(this, WishListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
             break;
 
         }

@@ -26,24 +26,23 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SavedAddressActivity extends AppCompatActivity implements View.OnClickListener, AddressAdapter.setOnAddressClick {
+
     private ActivitySavedAddressBinding binding;
     private List<ViewAddressModel.Viewaddress> viewAddressModelList = new ArrayList<>();
-    private MyDialog dialog;
-    private ApiInterface apiInterface;
+    private ApiInterface apiInterface=ApiClient.getClient().create(ApiInterface.class);
     private final int NEW_ADDRESS_REQUEST=12,UPDATE_ADDRESS_REQUEST=21;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_saved_address);
+        binding = ActivitySavedAddressBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         init();
         initCtrl();
+        addressApi();
     }
 
-    public void init(){
-        dialog = new MyDialog(this);
-        apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        addressApi();
+    public void init() {
     }
 
     public void initCtrl(){
@@ -53,12 +52,12 @@ public class SavedAddressActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void addressApi() {
-       dialog.showDialog();
+       binding.progressBar.setVisibility(View.VISIBLE);
        Call<ViewAddressModel> call = apiInterface.getViewAddressResult(HelperClass.getCacheData(this).second);
        call.enqueue(new Callback<ViewAddressModel>() {
             @Override
             public void onResponse(Call<ViewAddressModel> call, Response<ViewAddressModel> response) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equals("SUCCESS")) loadAddressUI(response.body().getViewaddress());
                     else if(response.body().getStatus().equalsIgnoreCase("FAILURE")) CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(),SavedAddressActivity.this);
@@ -68,7 +67,7 @@ public class SavedAddressActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void onFailure(Call<ViewAddressModel> call, Throwable t) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),SavedAddressActivity.this);
             }
         });
@@ -85,21 +84,18 @@ public class SavedAddressActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivBack: onBackPressed(); break;
-
-            case R.id.tvAddNewAddress:
-            startActivityForResult(new Intent(this, AddressActivity.class),NEW_ADDRESS_REQUEST);
-            break;
+            case R.id.tvAddNewAddress: startActivityForResult(new Intent(this, AddressActivity.class),NEW_ADDRESS_REQUEST); break;
 
         }
     }
 
     private void deleteAddressApi(String addressId,int pos) {
-        dialog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<ViewAddressModel> call = apiInterface.getRemoveAddressResult(HelperClass.getCacheData(this).second, HelperClass.getCacheData(this).first, addressId);
         call.enqueue(new Callback<ViewAddressModel>() {
             @Override
             public void onResponse(Call<ViewAddressModel> call, Response<ViewAddressModel> response) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equals("SUCCESS")) {
                         viewAddressModelList.remove(pos);
@@ -110,19 +106,19 @@ public class SavedAddressActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void onFailure(Call<ViewAddressModel> call, Throwable t) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),SavedAddressActivity.this);
             }
         });
     }
 
     private void setAsDefaultAddressApi(String addressId,int pos) {
-        dialog.showDialog();
+        binding.progressBar.setVisibility(View.VISIBLE);
         Call<ViewAddressModel> call = apiInterface.getSetAsDefaultAddressResult(HelperClass.getCacheData(this).second, HelperClass.getCacheData(this).first, addressId,"1");
         call.enqueue(new Callback<ViewAddressModel>() {
             @Override
             public void onResponse(Call<ViewAddressModel> call, Response<ViewAddressModel> response) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equals("SUCCESS")) {
                         for(int i=0;i<viewAddressModelList.size();i++){
@@ -137,17 +133,13 @@ public class SavedAddressActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void onFailure(Call<ViewAddressModel> call, Throwable t) {
-                dialog.hideDialog();
+                binding.progressBar.setVisibility(View.GONE);
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),SavedAddressActivity.this);
             }
         });
     }
 
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
 
     @Override
     public void onAddressClick(int pos) {
@@ -169,4 +161,10 @@ public class SavedAddressActivity extends AppCompatActivity implements View.OnCl
         }
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
 }

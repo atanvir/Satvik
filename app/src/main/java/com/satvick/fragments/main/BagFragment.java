@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,8 +32,7 @@ import com.google.android.gms.tasks.Task;
 import com.satvick.R;
 import com.satvick.activities.ApplyCouponActivity;
 import com.satvick.activities.LoginActivity;
-import com.satvick.activities.MainActivity;
-import com.satvick.activities.MyWishListActivity;
+import com.satvick.activities.WishListActivity;
 import com.satvick.activities.OrderConfirmationActivity;
 import com.satvick.activities.ProductDetailActivity;
 import com.satvick.activities.SearchScreenActivity;
@@ -54,7 +52,6 @@ import com.satvick.model.SocialLoginModel;
 import com.satvick.model.UpdateCartQuantity;
 import com.satvick.retrofit.ApiClient;
 import com.satvick.retrofit.ApiInterface;
-import com.satvick.retrofit.MyDialog;
 import com.satvick.utils.BillingHelper;
 import com.satvick.utils.CommonUtil;
 import com.satvick.utils.GlobalVariables;
@@ -152,7 +149,7 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
 
         case R.id.tvWishList:
         if(CommonUtil.isUserLogin(requireActivity())) openLoginSignUpBottomSheetWhenUserNotLogedIn();
-        else CommonUtil.startNewActivity(requireActivity(), MyWishListActivity.class);
+        else CommonUtil.startNewActivity(requireActivity(), WishListActivity.class);
         break;
 
         case R.id.llaa: startActivityForResult(new Intent(getActivity(), ApplyCouponActivity.class), 121); break;
@@ -198,7 +195,7 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
             public void onResponse(Call<CartListModelResponse> call, Response<CartListModelResponse> response) {
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
-                        cartListModelList.clear();
+//                        cartListModelList.clear();
                         callCartListApi();
                     } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
                         binding.progressBar.setVisibility(View.GONE);

@@ -4,14 +4,13 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
+
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.satvick.activities.ReferEarnActivity;
@@ -24,7 +23,7 @@ import com.satvick.activities.EditProfileActivity;
 import com.satvick.activities.HelpCenterActivity;
 import com.satvick.activities.LoginActivity;
 import com.satvick.activities.MyOrderActivity;
-import com.satvick.activities.MyWishListActivity;
+import com.satvick.activities.WishListActivity;
 import com.satvick.activities.NotificationActivity;
 import com.satvick.activities.SettingsActivity;
 import com.satvick.database.SharedPreferenceKey;
@@ -33,7 +32,6 @@ import com.satvick.databinding.FragmentProfileNewBinding;
 import com.satvick.model.ViewProfileModel;
 import com.satvick.retrofit.ApiClient;
 import com.satvick.retrofit.ApiInterface;
-import com.satvick.retrofit.MyDialog;
 import com.satvick.utils.CommonUtil;
 import com.satvick.utils.GlobalVariables;
 import com.satvick.utils.HelperClass;
@@ -104,7 +102,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.LLOrders: startNewActivity(MyOrderActivity.class,"CancelOrderActivity"); break;
-            case R.id.LLWishList: CommonUtil.startNewActivity(requireActivity(),MyWishListActivity.class); break;
+            case R.id.LLWishList: CommonUtil.startNewActivity(requireActivity(), WishListActivity.class); break;
             case R.id.LLAddress: CommonUtil.startNewActivity(requireActivity(),SavedAddressActivity.class); break;
             case R.id.LLArticles :  requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content, subscriptionFragment).addToBackStack(ProfileFragment.class.getSimpleName()).commit(); break;
             case R.id.LLProfileDetails: loadProfileDetail(); break;

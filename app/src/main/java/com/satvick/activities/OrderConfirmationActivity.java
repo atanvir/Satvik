@@ -44,7 +44,7 @@ import retrofit2.Response;
 public class OrderConfirmationActivity extends AppCompatActivity implements View.OnClickListener, AddressAdapter.setOnAddressClick {
 
     private ActivityOrderConfirmationBinding binding;
-    private ApiInterface apiInterface;
+    private ApiInterface apiInterface= ApiClient.getClient().create(ApiInterface.class);
     private ViewAddressModel.Viewaddress viewAddress;
     private final int NEW_ADDRESS_REQUEST=12,
                       UPDATE_ADDRESS_REQUEST=21;
@@ -62,7 +62,6 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
     }
 
     private void init() {
-        apiInterface = ApiClient.getClient().create(ApiInterface.class);
         binding.toolbar.tvTitle.setText("Address");
         binding.tvTotalMrp.setText(BillingHelper.getInstance().getBillingData().TOTAL);
         binding.tvCouponDiscount.setText("-" + Math.round(Double.parseDouble(BillingHelper.getInstance().getBillingData().DISCOUNT!=null?BillingHelper.getInstance().getBillingData().DISCOUNT:"0")));
@@ -92,9 +91,7 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) loadAddressUI(response.body().getViewaddress());
                     else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(),OrderConfirmationActivity.this);
-                }else{
-                    CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error",OrderConfirmationActivity.this);
-                }
+                }else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error",OrderConfirmationActivity.this);
             }
 
             @Override

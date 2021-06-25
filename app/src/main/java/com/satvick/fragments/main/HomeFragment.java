@@ -1,31 +1,22 @@
 package com.satvick.fragments.main;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,8 +36,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.satvick.R;
 import com.satvick.activities.LoginActivity;
-import com.satvick.activities.MainActivity;
-import com.satvick.activities.MyWishListActivity;
+import com.satvick.activities.WishListActivity;
 import com.satvick.activities.NotificationActivity;
 import com.satvick.activities.SearchScreenActivity;
 import com.satvick.activities.SignUpActivity;
@@ -64,7 +54,6 @@ import com.satvick.model.ProductBean;
 import com.satvick.model.SocialLoginModel;
 import com.satvick.retrofit.ApiClient;
 import com.satvick.retrofit.ApiInterface;
-import com.satvick.retrofit.MyDialog;
 import com.satvick.utils.CommonUtil;
 import com.satvick.utils.GlobalVariables;
 import com.satvick.utils.HelperClass;
@@ -74,13 +63,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 import static com.satvick.utils.HelperClass.showInternetAlert;
 
@@ -348,7 +334,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
 
             case R.id.ivWishList:
             if(CommonUtil.isUserLogin(requireActivity())) openLoginSignUpBottomSheet();
-            else getActivity().startActivity(new Intent(getActivity(), MyWishListActivity.class));
+            else getActivity().startActivity(new Intent(getActivity(), WishListActivity.class));
             break;
         }
     }

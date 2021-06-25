@@ -25,96 +25,63 @@ import com.satvick.databinding.ItemMyWishlistBinding;
 import java.util.List;
 
 public class MyWishListAdapter extends RecyclerView.Adapter<MyWishListAdapter.ViewHolder> {
-    Context context;
-    LayoutInflater inflater;
-    private Double convertedPrice;
-    private String symbol;
-    //int[] image;
-
-    List<com.satvick.model.List> wishlistproductList;
-
+    private Context context;
+    private List<com.satvick.model.List> list;
     private MyWishListItemClickListener listener;
 
 
-    public MyWishListAdapter(Context context,  List<com.satvick.model.List> wishlistproductList) {
+    public MyWishListAdapter(Context context,  List<com.satvick.model.List> list,MyWishListItemClickListener listner) {
         this.context = context;
-        this.wishlistproductList = wishlistproductList;
-        setHasStableIds(true);
-        this.convertedPrice = Double.valueOf(Double.parseDouble(SharedPreferenceWriter.getInstance(context).getString("converted_amount")));
-        this.symbol = SharedPreferenceWriter.getInstance(context).getString("symbol");
+        this.list = list;
+        this.listener=listner;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        if (inflater == null) {
-            inflater = LayoutInflater.from(context);
-        }
-        ItemMyWishlistBinding binding = DataBindingUtil.inflate(inflater, R.layout.item_my_wishlist, viewGroup, false);
-        return new ViewHolder(binding);
+        return new ViewHolder(ItemMyWishlistBinding.inflate(LayoutInflater.from(context),viewGroup,false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int position) {
-
-       // viewHolder.itemMywishlistBinding.imgMywishlist.setImageResource(image[i]);
-        String imgUrl = wishlistproductList.get(position).getImage();
-        if (imgUrl != null && imgUrl.length() > 0) {
-            Glide.with(context).load(imgUrl).listener(new RequestListener<Drawable>() {
-                @Override
-                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                    viewHolder.itemMywishlistBinding.progressbar.setVisibility(View.GONE);
-                    return false;
-                }
-
-                @Override
-                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                    viewHolder.itemMywishlistBinding.progressbar.setVisibility(View.GONE);
-                    return false;
-                }
-            }).into(viewHolder.itemMywishlistBinding.imgMywishlist);
-        }
-
-        viewHolder.itemMywishlistBinding.tvName.setText(wishlistproductList.get(position).getBrand());
-        viewHolder.itemMywishlistBinding.tvPrice.setText(symbol+" "+Math.round(Double.parseDouble(wishlistproductList.get(position).getSp())*convertedPrice));
-        viewHolder.itemMywishlistBinding.tvOff.setText(wishlistproductList.get(position).getPercentage()+"% OFF");
-        viewHolder.itemMywishlistBinding.textDisc.setText(wishlistproductList.get(position).getName());
-
-        viewHolder.itemMywishlistBinding.tvCuttedText.setText(symbol+" "+Math.round(Double.parseDouble(wishlistproductList.get(position).getMrp())*convertedPrice));
-        viewHolder.itemMywishlistBinding.tvCuttedText.setPaintFlags( viewHolder.itemMywishlistBinding.tvCuttedText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        Glide.with(context).load(list.get(position).getImage()).into(viewHolder.binding.imgMywishlist);
+        viewHolder.binding.tvPrice.setText("₹ "+Math.round(Double.parseDouble(list.get(position).getSp())));
+        viewHolder.binding.tvOff.setText(list.get(position).getPercentage()+"% OFF");
+        viewHolder.binding.textDisc.setText(list.get(position).getName());
+        viewHolder.binding.tvCuttedText.setText("₹ "+Math.round(Double.parseDouble(list.get(position).getMrp())));
+        viewHolder.binding.tvCuttedText.setPaintFlags( viewHolder.binding.tvCuttedText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
     }
 
 
     @Override
     public int getItemCount() {
-        return wishlistproductList.size();
+        return list!=null?list.size():0;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-        ItemMyWishlistBinding itemMywishlistBinding;
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        ItemMyWishlistBinding binding;
 
         ViewHolder(ItemMyWishlistBinding binding) {
             super(binding.getRoot());
-            this.itemMywishlistBinding = binding;
+            init(binding);
+            initCtrl();
+        }
 
+        private void init (ItemMyWishlistBinding binding) {
+            this.binding = binding;
+        }
 
-            binding.llMoveToBag.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+        private void initCtrl(){
+            binding.llMoveToBag.setOnClickListener(this);
+            binding.ivCross.setOnClickListener(this);
+        }
 
-                    if (listener != null)
-                        listener.onMoveToBagItemClick(view, getAdapterPosition());
-                }
-            });
-
-            binding.ivCross.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    if (listener != null)
-                        listener.onIvCrossItemClick(view, getAdapterPosition());
-                }
-            });
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.llMoveToBag:  if (listener != null) listener.onMoveToBagItemClick(view, getAbsoluteAdapterPosition()); break;
+                case R.id.ivCross:   if (listener != null) listener.onIvCrossItemClick(view, getAbsoluteAdapterPosition()); break;
+            }
         }
     }
 
@@ -123,7 +90,4 @@ public class MyWishListAdapter extends RecyclerView.Adapter<MyWishListAdapter.Vi
         void onIvCrossItemClick(View view,int pos);
     }
 
-    public void setListener(MyWishListItemClickListener listener) {
-        this.listener = listener;
-    }
 }

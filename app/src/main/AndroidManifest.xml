@@ -99,7 +99,7 @@
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name=".activities.MyWishListActivity"
+            android:name=".activities.WishListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppThemeWhite"
             android:windowSoftInputMode="stateHidden" />
