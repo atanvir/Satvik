@@ -205,7 +205,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
         }
         else if(binding.edtMobile.getText().toString().length()!=10){
             validate=false;
-            CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please Enter Valid Mobile Number",AddressActivity.this);
+            CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please enter valid Mobile Number",AddressActivity.this);
         }
         else if(TextUtils.isEmpty(addressType)){
             validate=false;
