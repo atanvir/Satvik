@@ -68,8 +68,8 @@ public class ProductCategoriesActivity extends AppCompatActivity implements View
             case R.id.ivBack: onBackPressed(); break;
             case R.id.ivSearch: CommonUtil.startNewActivity(this,SearchScreenActivity.class); break;
             case R.id.ivSave: CommonUtil.startNewActivity(this, WishListActivity.class); break;
-            case R.id.ivLeftSlide: binding.rvCategories.scrollToPosition(((LinearLayoutManager)binding.rvCategories.getLayoutManager()).findFirstVisibleItemPosition() - 1);  break;
-            case R.id.ivRightSlider: binding.rvCategories.scrollToPosition(((LinearLayoutManager)binding.rvCategories.getLayoutManager()).findLastVisibleItemPosition() + 1); break;
+            case R.id.ivLeftSlide: binding.rvCategories.smoothScrollToPosition(((LinearLayoutManager)binding.rvCategories.getLayoutManager()).findFirstVisibleItemPosition());  break;
+            case R.id.ivRightSlider: binding.rvCategories.smoothScrollToPosition(((LinearLayoutManager)binding.rvCategories.getLayoutManager()).findLastVisibleItemPosition() + 1); break;
         }
     }
 

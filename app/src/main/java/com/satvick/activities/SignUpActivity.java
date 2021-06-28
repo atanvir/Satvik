@@ -68,6 +68,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private void init() {
         dialog = new MyDialog(this);
         auth = FirebaseAuth.getInstance();
+        auth.setLanguageCode("en");
     }
 
     private void initCtrl() {
@@ -251,7 +252,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void sendOtp() {
-        auth.setLanguageCode("en");
+
         PhoneAuthOptions options = PhoneAuthOptions.newBuilder(auth).setPhoneNumber(binding.ccpSinUp.getSelectedCountryCodeWithPlus()+binding.edtPhone.getText().toString())
                                                                     .setTimeout(60L, TimeUnit.SECONDS).setActivity(this).setCallbacks(mCallback).build();
         PhoneAuthProvider.verifyPhoneNumber(options);

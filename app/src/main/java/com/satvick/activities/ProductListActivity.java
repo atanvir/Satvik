@@ -2,6 +2,7 @@ package com.satvick.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -77,6 +78,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         init();
         initCtrl();
         getIntents();
+        binding.tvProductName.setText(subcatname.replace("_"," "));
+        binding.tvProductName.setRawInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         callProductListApi();
     }
 
@@ -92,7 +95,6 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         binding.filterproduct.setOnClickListener(this);
         binding.ivWishList.setOnClickListener(this);
         binding.ivSearch.setOnClickListener(this);
-        binding.tvProductName.setText(subcatname);
     }
     private void getIntents() {
         comeFrom = getIntent().getStringExtra("from");

@@ -335,7 +335,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
             binding.tvCuttedText.setText(symbol + " " + Math.round(Double.parseDouble(data.getProductdetails().getMrp()) * convertedAmout));
             binding.tvCuttedText.setPaintFlags(binding.tvCuttedText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
-        binding.tvPrice.setText(symbol + " " + Math.round(Double.parseDouble(data.getProductdetails().getSp()) * convertedAmout));
+        if(data.getProductdetails().getSp()!=null) binding.tvPrice.setText(symbol + " " + Math.round(Double.parseDouble(data.getProductdetails().getSp()) * convertedAmout));
         binding.tvBrand.setText(data.getProductdetails().getBrand());
         binding.tvSoldBy.setText("Sold by : "+data.getProductdetails().getSoldBy());
         binding.tvHsnCode.setText("Product Code : "+data.getProductdetails().getHsnCode());

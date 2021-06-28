@@ -52,7 +52,7 @@ public class ProductListingAdapter extends RecyclerView.Adapter<ProductListingAd
 
         holder.binding.tvDesc.setText(list.get(position).getName());
         holder.binding.tvName.setText(list.get(position).getBrand());
-        holder.binding.tvPrice.setText(symbol+" "+Math.round(Double.parseDouble(""+list.get(position).getSp())*convertedAmount));
+        if(list.get(position).getSp()!=null) holder.binding.tvPrice.setText(symbol+" "+Math.round(Double.parseDouble(""+list.get(position).getSp()!=null?list.get(position).getSp():"0")*convertedAmount));
 
         if(list.get(position).getPercentage().equalsIgnoreCase("0")){
             holder.binding.tvCuttedText.setVisibility(View.GONE);

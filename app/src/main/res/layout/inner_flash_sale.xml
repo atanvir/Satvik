@@ -83,6 +83,7 @@
             android:id="@+id/progressbar"
             android:layout_width="@dimen/dp_90"
             android:layout_height="@dimen/dp_90"
+            android:visibility="gone"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="@+id/llFlashSale"
             app:layout_constraintEnd_toEndOf="parent"

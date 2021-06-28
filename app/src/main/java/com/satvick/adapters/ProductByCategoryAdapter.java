@@ -41,7 +41,7 @@ public class ProductByCategoryAdapter extends RecyclerView.Adapter<ProductByCate
     public void onBindViewHolder(@NonNull final ProductByCategoryAdapter.ViewHolder viewHolder, final int position) {
         Glide.with(context).load(list.get(position).getImage()).into(viewHolder.binding.image);
         viewHolder.binding.tvDesc.setText(list.get(position).getName());
-        viewHolder.binding.tvPrice.setText(""+list.get(position).getSp());
+        viewHolder.binding.tvPrice.setText("₹ "+list.get(position).getSp());
 
         if(list.get(position).getPercentage().equalsIgnoreCase("0")){
             viewHolder.binding.tvCuttedText.setVisibility(View.GONE);
