@@ -40,10 +40,12 @@ import com.satvick.activities.MyOrderActivity;
 import com.satvick.activities.OrderManageActivity;
 import com.satvick.activities.ProductDetailActivity;
 import com.satvick.activities.ProductListActivity;
+import com.satvick.activities.SignUpActivity;
 import com.satvick.database.SharedPreferenceKey;
 import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.ActivityEditProfleBinding;
 import com.satvick.databinding.PopUpCancellationRequestBinding;
+import com.satvick.model.SignUpModel;
 import com.satvick.model.SocialLoginModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -56,7 +58,9 @@ import retrofit2.Response;
 public class CommonUtil {
 
 
-    public static void setUpSnackbarMessage(View view,String message, Activity context) {
+    public static final String REGX  = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*()\\-     _=+{}|?>.<,:;~`’]{6,}$";
+
+    public static void setUpSnackbarMessage(View view, String message, Activity context) {
         if(message.equalsIgnoreCase("already saved")){
             message="Default Address Already Saved";
         }
@@ -241,6 +245,26 @@ public class CommonUtil {
         Intent intent=new Intent(context,className);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
+
+    public static void saveSignupData(Context context, Response<SignUpModel> response) {
+
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.FULL_NAME, response.body().getSignup().getName());
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.CONTACT_NUMBER, response.body().getSignup().getPhone());
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.EMAIL, response.body().getSignup().getEmail());
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.USER_ID, response.body().getSignup().getUser_id());
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.TOKEN, response.body().getSignup().getToken());
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.COUNTRY, response.body().getSignup().getCountry());
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.CURRENT_LOGIN, "true");
+        SharedPreferenceWriter.getInstance(context).writeBooleanValue(SharedPreferenceKey.NOTIFICATION_STATUS, true);
+        SharedPreferenceWriter.getInstance(context).writeStringValue(GlobalVariables.product_id, "");
+        SharedPreferenceWriter.getInstance(context).writeStringValue(GlobalVariables.quantity, "");
+        SharedPreferenceWriter.getInstance(context).writeStringValue(GlobalVariables.size, "");
+        SharedPreferenceWriter.getInstance(context).writeStringValue(GlobalVariables.color_name, "");
+
+        Intent intent = new Intent(context, MainActivity.class);
+        context.startActivity(intent);
+
     }
 
     public Intent getPickIntent(Context context,Uri cameraOutputUri) {

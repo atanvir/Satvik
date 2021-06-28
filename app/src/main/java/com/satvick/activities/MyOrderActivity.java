@@ -52,7 +52,8 @@ public class MyOrderActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_my_order);
+        binding=ActivityMyOrderBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         init();
         initCtrl();
     }
