@@ -94,7 +94,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private PopUpForgotPasswordBinding forgotPasswordBinding;
 
     // OTP Verfication Bottom Sheet
-    private BottomSheetDialog otpDailog;
+    private BottomSheetDialog otpBottomSheet;
     private PopUpResendOtpBinding otpBinding;
 
 
@@ -145,7 +145,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             // OTP Verification Bottom Sheet
             case R.id.btnSubmitResendOtp:
             if(verificationCode!=null) {
-                if (!otpBinding.edtCode.getText().toString().isEmpty()) auth.signInWithCredential(PhoneAuthProvider.getCredential(verificationCode, otpBinding.edtCode.getText().toString())).addOnCompleteListener(this);
+                if (!otpBinding.edtCode.getText().toString().isEmpty()){ dialog.showDialog(); auth.signInWithCredential(PhoneAuthProvider.getCredential(verificationCode, otpBinding.edtCode.getText().toString())).addOnCompleteListener(this); }
                 else Toast.makeText(this, getResources().getString(R.string.please_enter_otp), Toast.LENGTH_SHORT).show();
             } else Toast.makeText(this, "Please wait for the otp", Toast.LENGTH_SHORT).show();
             break;
@@ -231,13 +231,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         forgotPasswordBottomSheet.show();
     }
     private void otpBottomSheet() {
-        otpDailog = new BottomSheetDialog(this);
+        otpBottomSheet = new BottomSheetDialog(this);
         otpBinding = PopUpResendOtpBinding.inflate(LayoutInflater.from(this),null);
-        otpDailog.setContentView(otpBinding.getRoot());
-        otpDailog.getWindow().findViewById(R.id.design_bottom_sheet).setBackgroundResource(android.R.color.transparent);
+        otpBottomSheet.setContentView(otpBinding.getRoot());
+        otpBottomSheet.getWindow().findViewById(R.id.design_bottom_sheet).setBackgroundResource(android.R.color.transparent);
         otpBinding.tvResendOtp.setOnClickListener(this);
         otpBinding.btnSubmitResendOtp.setOnClickListener(this);
-        otpDailog.show();
+        otpBottomSheet.show();
     }
     private void changePasswordBottomSheet() {
         resetPasswordBottomSheet = new BottomSheetDialog(LoginActivity.this);
@@ -278,7 +278,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (phoneNumberBinding.edtPhone.getText().toString().isEmpty()) {
             ret = false;
             Toast.makeText(this, "Please enter phone number", Toast.LENGTH_SHORT).show();
-        } else if (phoneNumberBinding.edtPhone.getText().length() > 10) {
+        } else if (phoneNumberBinding.edtPhone.getText().length() !=10) {
             ret = false;
             Toast.makeText(this, "Please enter valid mobile number", Toast.LENGTH_SHORT).show();
 
@@ -291,7 +291,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (forgotPasswordBinding.edtPhone.getText().toString().isEmpty()) {
             ret = false;
             Toast.makeText(this, "Please enter phone number", Toast.LENGTH_SHORT).show();
-        } else if (forgotPasswordBinding.edtPhone.getText().length() > 10) {
+        } else if (forgotPasswordBinding.edtPhone.getText().length() != 10) {
             ret = false;
             Toast.makeText(this, "Please enter valid mobile number", Toast.LENGTH_SHORT).show();
 
@@ -349,7 +349,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void checkPhoneApi() {
         dialog.showDialog();
-        Call<CheckPhoneModel> call = apiInterface.getCheckPhoneResult(phoneNumberBinding.edtPhone.getText().toString());
+        Call<CheckPhoneModel> call = apiInterface.getCheckPhoneResult(phoneNumberBinding!=null?phoneNumberBinding.edtPhone.getText().toString():forgotPasswordBinding.edtPhone.getText().toString());
         call.enqueue(new Callback<CheckPhoneModel>() {
             @Override
             public void onResponse(Call<CheckPhoneModel> call, Response<CheckPhoneModel> response) {
@@ -358,9 +358,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
                         Toast.makeText(LoginActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
-                        mobileNo=phoneNumberBinding.ccpSinUp.getSelectedCountryCodeWithPlus()+phoneNumberBinding.edtPhone.getText().toString().trim();
+                        if(phoneNumberBinding!=null) mobileNo = phoneNumberBinding.ccpSinUp.getSelectedCountryCodeWithPlus() + phoneNumberBinding.edtPhone.getText().toString().trim();
+                        else mobileNo = forgotPasswordBinding.ccpSinUp.getSelectedCountryCodeWithPlus() + forgotPasswordBinding.edtPhone.getText().toString().trim();
                         sendOTP();
-                        SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(SharedPreferenceKey.PHONE, phoneNumberBinding.edtPhone.getText().toString().trim());
+                        SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(SharedPreferenceKey.PHONE, phoneNumberBinding!=null?phoneNumberBinding.edtPhone.getText().toString().trim():forgotPasswordBinding.edtPhone.getText().toString().trim());
                         if(phoneNoBottomSheet!=null) phoneNoBottomSheet.dismiss();
                         if(forgotPasswordBottomSheet!=null) forgotPasswordBottomSheet.dismiss();
                         otpBottomSheet();
@@ -379,7 +380,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallback  = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         @Override
         public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-            if(phoneAuthCredential.getSmsCode()!=null) auth.signInWithCredential(phoneAuthCredential);
+            if(phoneAuthCredential.getSmsCode()!=null){
+                dialog.showDialog();
+                otpBinding.edtCode.setText(phoneAuthCredential.getSmsCode());
+                auth.signInWithCredential(phoneAuthCredential);
+            }
         }
 
         @Override
@@ -453,19 +458,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         call.enqueue(new Callback<ForgotPasswordModel>() {
             @Override
             public void onResponse(Call<ForgotPasswordModel> call, Response<ForgotPasswordModel> response) {
+                if(otpBottomSheet!=null) otpBottomSheet.dismiss();
                 dialog.hideDialog();
                 if (response.isSuccessful()) {
                     if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
                         Toast.makeText(LoginActivity.this, "Password changed successfully", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
                     } else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(),LoginActivity.this);
                 } else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error", LoginActivity.this);
             }
 
             @Override
             public void onFailure(Call<ForgotPasswordModel> call, Throwable t) {
+                if(otpBottomSheet!=null) otpBottomSheet.dismiss();
                 dialog.hideDialog();
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),LoginActivity.this);
             }
@@ -500,10 +504,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        finishAffinity();
-    }
 
 
     @Override
@@ -513,11 +513,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onCancel() {
+        Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onError(FacebookException error) {
-    CommonUtil.setUpSnackbarMessage(binding.getRoot(),error.getMessage(),this);
+     CommonUtil.setUpSnackbarMessage(binding.getRoot(),error.getMessage(),this);
     }
 
     @Override
@@ -527,7 +528,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
+        dialog.hideDialog();
         if(task.isSuccessful()) {
+            if(otpBottomSheet!=null) otpBottomSheet.dismiss();
             if(forgotPassword) changePasswordBottomSheet(); else checkMobileApi();
         }else Toast.makeText(this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
     }

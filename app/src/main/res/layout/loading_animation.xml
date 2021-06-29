@@ -21,8 +21,8 @@
 <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <androidx.core.widget.ContentLoadingProgressBar
-        android:layout_width="@dimen/dp_42"
-        android:layout_height="@dimen/dp_42"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
         android:backgroundTint="@color/green"
         style="@style/Widget.AppCompat.ProgressBar"
         app:layout_constraintBottom_toBottomOf="parent"

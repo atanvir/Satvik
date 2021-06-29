@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +34,11 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.satvick.R;
 import com.satvick.activities.EditProfileActivity;
 import com.satvick.activities.MainActivity;
@@ -43,11 +47,13 @@ import com.satvick.activities.OrderManageActivity;
 import com.satvick.activities.ProductDetailActivity;
 import com.satvick.activities.ProductListActivity;
 import com.satvick.activities.SignUpActivity;
+import com.satvick.activities.SplashActivity;
 import com.satvick.database.SharedPreferenceKey;
 import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.ActivityEditProfleBinding;
 import com.satvick.databinding.PopUpCancellationRequestBinding;
 import com.satvick.model.LoginModel;
+import com.satvick.model.ProductDetails;
 import com.satvick.model.SignUpModel;
 import com.satvick.model.SocialLoginModel;
 
@@ -76,6 +82,25 @@ public class CommonUtil {
 
     public static boolean isValidEmail(CharSequence target) {
         return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
+
+    public static List<ProductDetails> setCartData(Context context){
+        List<ProductDetails> productDetails=new ArrayList<>();
+        String product[]=SharedPreferenceWriter.getInstance(context).getString(GlobalVariables.product_id).split(",");
+        String sizess[]=SharedPreferenceWriter.getInstance(context).getString(GlobalVariables.size).split(",");
+        String quantiy[]=SharedPreferenceWriter.getInstance(context).getString(GlobalVariables.quantity).split(",");
+        Log.e("product",""+product.length);
+        for(int i=0;i<product.length;i++) {
+            if (!product[i].equalsIgnoreCase("")){
+                try {
+                    productDetails.add(new ProductDetails(product[i], "", sizess[i], quantiy[i]));
+                } catch (Exception e) {
+                    productDetails.add(new ProductDetails(product[i], "", "", quantiy[i]));
+                }
+            }
+        }
+
+        return productDetails;
     }
 
 
@@ -296,6 +321,23 @@ public class CommonUtil {
         context.startActivity(intent);
 
     }
+
+    public static void getDeviceToken(Context context) {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>(){
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if(task.isSuccessful()){
+                    if (task.getResult() == null) getDeviceToken(context);
+                    else SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.DEVICE_TOKEN, task.getResult());
+                }
+            }
+        });
+    }
+
+    public static String  getDeepLinkProductId(String url) {
+       return ""+(url.substring(url.lastIndexOf("/") + 1));
+    }
+
 
     public Intent getPickIntent(Context context,Uri cameraOutputUri) {
         final List<Intent> intents = new ArrayList();

@@ -33,18 +33,14 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".activities.ZoomImageActivity"
-            android:theme="@style/MyAppThemeWhite2"
             ></activity>
         <activity
             android:name=".activities.LifeDescriptionActivity"
-            android:theme="@style/MyAppThemeWhite"
 
             android:configChanges="orientation|keyboardHidden|screenLayout|screenSize"
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activities.LifeCategoryActivity"
-            android:theme="@style/MyAppThemeWhite"
-
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity android:name=".activities.SizeChartActivity" />
@@ -56,7 +52,7 @@
         <activity
             android:name=".activities.SplashActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -82,191 +78,191 @@
         <activity
             android:name=".activities.LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".activities.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.SignUpActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.SearchScreenActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".activities.WishListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.NotificationActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.ProductListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.OrderConfirmationActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.EditProfileActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.MyOrderActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.ReturnOrderActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.RequestForExchangeProductActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.HelpCenterActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite" />
+             />
         <activity
             android:name=".activities.PaymentRefundActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite" />
+             />
         <activity
             android:name=".activities.OffersDiscountsCouponsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite" />
+             />
         <activity
             android:name=".activities.ManageYourAccountActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite" />
+             />
         <activity
             android:name=".activities.SavedAddressActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite" />
+             />
         <activity
             android:name=".activities.EditAddressActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.OtherActivity"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.CouponsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.SettingsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.SavedCardActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.PaymentActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.PaymentActivityAfterSelect"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.AddNewAddressActivityPlaceOrderActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.ReturnItemActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.MyOrderTrackActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.OrderManageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.ReturnOrderCancelActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.ShopByThemeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.FilterProductListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.AccessoriesActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.ProductCategoriesActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.ProductDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.AboutActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.FaqsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.TermsOfUseActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.ApplyCouponActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ccavenue.WebViewActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".utils.TakePhoto" />
 
@@ -299,7 +295,7 @@
             android:theme="@style/Base.Theme.AppCompat" />
         <activity
             android:name=".activities.LifeActivity"
-            android:theme="@style/MyAppThemeWhite"
+            
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity android:name=".activities.ReferEarnActivity" />

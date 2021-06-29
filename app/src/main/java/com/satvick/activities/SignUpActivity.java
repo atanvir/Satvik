@@ -191,16 +191,16 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         if(otpDailog!=null) otpDailog.dismiss();
         dialog.showDialog();
         Call<SignUpModel> call = apiInterface.getSignUpResult(binding.edtName.getText().toString(),
-                binding.edtEmail.getText().toString(),
-                binding.edtPhone.getText().toString(),
-                binding.ccpSinUp.getSelectedCountryCodeWithPlus(),
-                binding.edtPass.getText().toString(), "Android",
-                SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.DEVICE_TOKEN),
-                binding.edtRefferalCode.getText().toString(),
-                SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.product_id),
-                SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.color_name),
-                SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.quantity),
-                SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.size));
+                                                              binding.edtEmail.getText().toString(),
+                                                              binding.edtPhone.getText().toString(),
+                                                              binding.ccpSinUp.getSelectedCountryCodeWithPlus(),
+                                                              binding.edtPass.getText().toString(), "Android",
+                                                              SharedPreferenceWriter.getInstance(this).getString(SharedPreferenceKey.DEVICE_TOKEN),
+                                                              binding.edtRefferalCode.getText().toString(),
+                                                              SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.product_id),
+                                                              SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.color_name),
+                                                              SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.quantity),
+                                                              SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.size));
 
         call.enqueue(new Callback<SignUpModel>() {
             @Override
