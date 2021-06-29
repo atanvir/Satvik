@@ -29,6 +29,7 @@
         android:largeHeap="true"
         android:roundIcon="@drawable/app_icon_round"
         android:supportsRtl="true"
+        android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".activities.ZoomImageActivity"

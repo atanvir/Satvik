@@ -181,7 +181,6 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
                 if(getActivity()!=null) {
                     binding.progressBar.setVisibility(View.GONE);
                 }
-              //  CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),requireActivity());
             }
         });
     }

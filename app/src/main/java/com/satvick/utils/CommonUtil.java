@@ -13,6 +13,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +47,7 @@ import com.satvick.database.SharedPreferenceKey;
 import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.ActivityEditProfleBinding;
 import com.satvick.databinding.PopUpCancellationRequestBinding;
+import com.satvick.model.LoginModel;
 import com.satvick.model.SignUpModel;
 import com.satvick.model.SocialLoginModel;
 
@@ -70,6 +73,11 @@ public class CommonUtil {
         mSnackbar.show();
 
     }
+
+    public static boolean isValidEmail(CharSequence target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
+
 
     public static void CommonMessagePopUp(final Context context, String message)
     {
@@ -209,6 +217,28 @@ public class CommonUtil {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
     }
+
+
+    public static void saveLogin(Context context,Response<LoginModel> response) {
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.FULL_NAME, response.body().getLoginResponse().getName());
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.CONTACT_NUMBER, response.body().getLoginResponse().getPhone());
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.EMAIL, response.body().getLoginResponse().getEmail());
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.USER_ID, response.body().getLoginResponse().getId());
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.TOKEN, response.body().getLoginResponse().getToken());
+        SharedPreferenceWriter.getInstance(context).writeStringValue(SharedPreferenceKey.CURRENT_LOGIN, "true");
+        SharedPreferenceWriter.getInstance(context).writeBooleanValue(SharedPreferenceKey.NOTIFICATION_STATUS, true);
+        SharedPreferenceWriter.getInstance(context).writeStringValue(GlobalVariables.product_id, "");
+        SharedPreferenceWriter.getInstance(context).writeStringValue(GlobalVariables.quantity, "");
+        SharedPreferenceWriter.getInstance(context).writeStringValue(GlobalVariables.size, "");
+        SharedPreferenceWriter.getInstance(context).writeStringValue(GlobalVariables.color_name, "");
+
+
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+    }
+
+
     public static void setAdapter(Context context, String [] list, Spinner spinner, View textView) {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,android.R.layout.simple_spinner_item,list){
             @Override
