@@ -58,7 +58,6 @@ import com.satvick.utils.CommonUtil;
 import com.satvick.utils.GlobalVariables;
 import com.satvick.utils.GuestUserData;
 import com.satvick.utils.HelperClass;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -92,9 +91,8 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
         binding = FragmentBagBinding.inflate(inflater,container,false);
         return binding.getRoot();
     }
-
     @Override
-    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         init();
         initCtrl();
         if (HelperClass.showInternetAlert(getActivity())) { binding.progressBar.setVisibility(View.VISIBLE); callCartListApi();}

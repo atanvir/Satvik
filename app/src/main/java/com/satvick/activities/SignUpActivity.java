@@ -36,7 +36,6 @@ import com.satvick.retrofit.MyDialog;
 import com.satvick.utils.CommonUtil;
 import com.satvick.utils.GlobalVariables;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
@@ -279,7 +278,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
 
     @Override
-    public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
+    public void onComplete(@NonNull  Task<AuthResult> task) {
         if (task.isSuccessful()) signUpApi();
         else Toast.makeText(this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();;
     }

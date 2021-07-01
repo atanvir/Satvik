@@ -48,7 +48,7 @@ public class InnerBannerAdapter extends PagerAdapter {
         binding.progressbar.setVisibility(View.VISIBLE);
         Glide.with(context).load(list.get(position).getImage()).listener(new RequestListener<Drawable>() {
             @Override
-            public boolean onLoadFailed(@Nullable @org.jetbrains.annotations.Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+            public boolean onLoadFailed(@Nullable  GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 binding.progressbar.setVisibility(View.GONE);
                 return false;
             }

@@ -25,7 +25,6 @@ import com.satvick.utils.CommonUtil;
 import com.satvick.utils.GlobalVariables;
 import com.satvick.utils.HelperClass;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +49,7 @@ public class CategoriesFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         init();
         initCtrl();
         if (HelperClass.showInternetAlert(getActivity())) categoriesApi();

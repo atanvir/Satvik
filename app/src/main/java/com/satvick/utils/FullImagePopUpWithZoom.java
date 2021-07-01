@@ -61,7 +61,7 @@ public class FullImagePopUpWithZoom extends Dialog {
         progressBar=findViewById(R.id.progressBar);
         Glide.with(context).load(imageUrl).listener(new RequestListener<Drawable>() {
             @Override
-            public boolean onLoadFailed(@Nullable @org.jetbrains.annotations.Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+            public boolean onLoadFailed(@Nullable  GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 progressBar.setVisibility(View.GONE);
                 return false;
             }

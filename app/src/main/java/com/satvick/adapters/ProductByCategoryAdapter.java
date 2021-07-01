@@ -16,7 +16,6 @@ import com.satvick.databinding.AdapterProductByCategoriesBinding;
 import com.satvick.model.InnerPagesModel;
 import com.satvick.utils.GlobalVariables;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -61,7 +60,7 @@ public class ProductByCategoryAdapter extends RecyclerView.Adapter<ProductByCate
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private AdapterProductByCategoriesBinding binding;
 
-        public ViewHolder(@NonNull @NotNull AdapterProductByCategoriesBinding binding) {
+        public ViewHolder(@NonNull AdapterProductByCategoriesBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
             binding.rlGymTees.setOnClickListener(this);

@@ -17,7 +17,6 @@ import com.satvick.activities.SignUpActivity;
 import com.satvick.databinding.FragmentLoginSignupForProfileBinding;
 import com.satvick.utils.CommonUtil;
 
-import org.jetbrains.annotations.NotNull;
 
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
@@ -31,7 +30,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         init();
         initCtrl();
     }

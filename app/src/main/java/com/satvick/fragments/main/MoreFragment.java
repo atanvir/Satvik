@@ -23,8 +23,6 @@ import com.satvick.activities.TermsOfUseActivity;
 import com.satvick.databinding.FragmentMoreBinding;
 import com.satvick.utils.CommonUtil;
 
-import org.jetbrains.annotations.NotNull;
-
 public class MoreFragment extends Fragment implements View.OnClickListener {
 
     private FragmentMoreBinding binding;
@@ -37,7 +35,7 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         init();
         initCtrl();
     }

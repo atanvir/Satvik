@@ -19,7 +19,6 @@ import com.satvick.databinding.AdapterInnerProductsBinding;
 import com.satvick.model.InnerPagesModel;
 import com.satvick.utils.GlobalVariables;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -73,7 +72,7 @@ public class InnerProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public class FlashSaleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private AdapterFlashSaleBinding binding;
-        public FlashSaleViewHolder(@NonNull @NotNull AdapterFlashSaleBinding binding) {
+        public FlashSaleViewHolder(@NonNull  AdapterFlashSaleBinding binding) {
             super(binding.getRoot());
             this.binding=binding;
             binding.tvViewAll.setOnClickListener(this);
@@ -96,7 +95,7 @@ public class InnerProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public class BannerViewHolder extends RecyclerView.ViewHolder {
         private AdapterInnerBannerBinding binding;
-        public BannerViewHolder(@NonNull @NotNull AdapterInnerBannerBinding binding) {
+        public BannerViewHolder(@NonNull  AdapterInnerBannerBinding binding) {
             super(binding.getRoot());
             this.binding=binding;
         }
@@ -106,7 +105,7 @@ public class InnerProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private AdapterInnerProductsBinding binding;
-        public ProductViewHolder(@NonNull @NotNull AdapterInnerProductsBinding binding) {
+        public ProductViewHolder(@NonNull AdapterInnerProductsBinding binding) {
             super(binding.getRoot());
             this.binding=binding;
             this.binding.tvViewAll.setOnClickListener(this);

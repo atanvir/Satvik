@@ -55,7 +55,6 @@ import com.satvick.utils.CommonUtil;
 import com.satvick.utils.GlobalVariables;
 import com.satvick.utils.HelperClass;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -527,7 +526,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
+    public void onComplete(@NonNull Task<AuthResult> task) {
         dialog.hideDialog();
         if(task.isSuccessful()) {
             if(otpBottomSheet!=null) otpBottomSheet.dismiss();

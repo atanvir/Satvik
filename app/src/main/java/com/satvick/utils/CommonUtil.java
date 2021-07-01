@@ -57,7 +57,6 @@ import com.satvick.model.ProductDetails;
 import com.satvick.model.SignUpModel;
 import com.satvick.model.SocialLoginModel;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -272,7 +271,7 @@ public class CommonUtil {
             }
 
             @Override
-            public View getDropDownView(int position, @Nullable @org.jetbrains.annotations.Nullable View convertView, @NonNull @NotNull ViewGroup parent) {
+            public View getDropDownView(int position, @Nullable  View convertView, @NonNull  ViewGroup parent) {
                 View view=super.getDropDownView(position, convertView, parent);
                 ((TextView)view).setTextSize(15);
                 if(position==0) ((TextView)view).setTextColor(context.getResources().getColor(R.color.quantum_grey));

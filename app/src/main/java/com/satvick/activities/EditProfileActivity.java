@@ -121,7 +121,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         binding.progressBar.setVisibility(View.VISIBLE);
         Glide.with(this).load(object).listener(new RequestListener<Drawable>() {
             @Override
-            public boolean onLoadFailed(@Nullable @org.jetbrains.annotations.Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 binding.progressBar.setVisibility(View.GONE);
                 return false;
             }

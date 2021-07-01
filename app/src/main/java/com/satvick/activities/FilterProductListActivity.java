@@ -197,7 +197,7 @@ public class FilterProductListActivity extends AppCompatActivity implements View
         finish();
     }
 
-    private void setBackground(String type){
+    private void setBackground(String type) {
         if(type.equalsIgnoreCase("price")){
             binding.llSize.setBackgroundColor(getResources().getColor(R.color.colorView));
             binding.tvSize.setTextColor(getResources().getColor(R.color.colorBlack));
@@ -217,7 +217,6 @@ public class FilterProductListActivity extends AppCompatActivity implements View
             binding.rvFilter.setLayoutManager(new LinearLayoutManager(this));
             binding.rvFilter.setAdapter( new FilterProductListBySizeAdapter(this, sizeList));
         }
-
     }
     
     @Override

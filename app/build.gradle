@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+//apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 29
@@ -148,9 +148,9 @@ dependencies {
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
 
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
-    implementation "androidx.core:core-ktx:+"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+//    implementation "androidx.core:core-ktx:+"
+//    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0"
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 // Add the following line to the bottom of the file:

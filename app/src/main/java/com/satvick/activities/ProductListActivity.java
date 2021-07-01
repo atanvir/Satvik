@@ -397,7 +397,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 flashSale = GlobalVariables.flashSale;
                 subcatname = data.getStringExtra(GlobalVariables.section_name);
             } else if (comeFrom.equalsIgnoreCase("SearchAdapter")) {
-                filter = "";
+                filter = "Filter";
                 commaSeparatedSizeNameId = data.getStringExtra("commaSeparatedSizeNameId");
                 commaSeparatedColorNameId = data.getStringExtra("commaSeparatedColorNameId");
                 commaSeparatedBrandNameId = data.getStringExtra("commaSeparatedBrandNameId");

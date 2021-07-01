@@ -16,7 +16,6 @@ import com.bumptech.glide.request.target.Target;
 import com.satvick.R;
 import com.satvick.databinding.AdapterZoomImageBinding;
 
-import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class ZoomImageAdapter extends PagerAdapter {
@@ -33,7 +32,7 @@ public class ZoomImageAdapter extends PagerAdapter {
         AdapterZoomImageBinding binding=AdapterZoomImageBinding.inflate(LayoutInflater.from(context),container,false);
         Glide.with(context).load(list.get(position)).listener(new RequestListener<Drawable>() {
             @Override
-            public boolean onLoadFailed(@androidx.annotation.Nullable @org.jetbrains.annotations.Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+            public boolean onLoadFailed(@androidx.annotation.Nullable  GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 binding.progressBar.setVisibility(View.GONE);
                 return false;
             }
@@ -55,7 +54,7 @@ public class ZoomImageAdapter extends PagerAdapter {
     }
 
     @Override
-    public boolean isViewFromObject(@NonNull @NotNull View view, @NonNull @NotNull Object object) {
+    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
         return view==object;
     }
 
