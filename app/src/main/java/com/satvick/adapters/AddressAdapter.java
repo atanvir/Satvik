@@ -41,7 +41,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull AddressAdapter.MyViewHolder holder, int position) {
         if(isRemove) {
-            if(list.get(position).getRemark().equals("0")) holder.binding.tvAddNewAddress.setText("Marks as Default");
+            if(list.get(position).getRemark().equals("0")) holder.binding.tvAddNewAddress.setText("Remove");
             else holder.binding.tvAddNewAddress.setText("Remove");
         }else{
             if(list.get(position).getRemark().equals("0")) holder.binding.cbDefaultAddress.setVisibility(View.VISIBLE);

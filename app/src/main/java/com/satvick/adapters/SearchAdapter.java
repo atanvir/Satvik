@@ -56,8 +56,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 intent.putExtra(GlobalVariables.section_name,searchListModelList.get(position).getName());
                 intent.putExtra(GlobalVariables.subsubcatid,""+searchListModelList.get(position).getSubsubcatid());
                 intent.putExtra(GlobalVariables.catid,searchListModelList.get(position).getCatid());
-                intent.putExtra(GlobalVariables.filter_data,searchListModelList.get(position).getBrand());
-                intent.putExtra(GlobalVariables.search,"filter");
+                intent.putExtra(GlobalVariables.filter_data,"");
+                intent.putExtra(GlobalVariables.search,"");
                 intent.putExtra(GlobalVariables.type,"");
                 context.startActivity(intent);
             }

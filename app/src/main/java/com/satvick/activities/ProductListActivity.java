@@ -148,7 +148,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 flashSale = GlobalVariables.flashSale;
                 subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
             } else if (comeFrom.equalsIgnoreCase("SearchAdapter")) {
-                filter = "Filter";
+                filter = "";
                 commaSeparatedSizeNameId = getIntent().getStringExtra("commaSeparatedSizeNameId");
                 commaSeparatedColorNameId = getIntent().getStringExtra("commaSeparatedColorNameId");
                 commaSeparatedBrandNameId = getIntent().getStringExtra("commaSeparatedBrandNameId");
@@ -336,6 +336,139 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
             case RC_SIGN_IN: handleSignInResult(GoogleSignIn.getSignedInAccountFromIntent(data)); break;
+            case 101:
+            if(resultCode==RESULT_OK){
+                setFilterData(data);
+                callProductListApi();
+            }
+            break;
+        }
+    }
+
+    private void setFilterData(Intent data) {
+        comeFrom=data.getStringExtra("from");
+        if (data != null) {
+            if (comeFrom.equalsIgnoreCase("FilterProductListActivity")) {
+                filter = "Filter";
+                commaSeparatedSizeNameId = data.getStringExtra("commaSeparatedSizeNameId");
+                commaSeparatedColorNameId = data.getStringExtra("commaSeparatedColorNameId");
+                commaSeparatedBrandNameId = data.getStringExtra("commaSeparatedBrandNameId");
+
+                minValue = data.getStringExtra(GlobalVariables.minValue);
+                maxValue = data.getStringExtra(GlobalVariables.maxValue);
+                type = data.getStringExtra(GlobalVariables.type);
+                subcatname = data.getStringExtra(GlobalVariables.section_name);
+                subcatid = data.getStringExtra(GlobalVariables.subcatid);
+                subsubcatid = data.getStringExtra(GlobalVariables.subsubcatid);
+                catid = data.getStringExtra(GlobalVariables.catid);
+
+            } else if (comeFrom.equalsIgnoreCase("ThreeLevelListAdapter")) {
+                filter = "Filter";
+                commaSeparatedSizeNameId = data.getStringExtra("commaSeparatedSizeNameId");
+                commaSeparatedColorNameId = data.getStringExtra("commaSeparatedColorNameId");
+                commaSeparatedBrandNameId = data.getStringExtra("commaSeparatedBrandNameId");
+                minValue = data.getStringExtra(GlobalVariables.minValue);
+                maxValue = data.getStringExtra(GlobalVariables.maxValue);
+                type = data.getStringExtra(GlobalVariables.type);
+                subcatname = data.getStringExtra(GlobalVariables.section_name);
+                catid = data.getStringExtra(GlobalVariables.catid);
+                subsubcatid = data.getStringExtra(GlobalVariables.subsubcatid);
+
+            } else if (comeFrom.equalsIgnoreCase("HomeFragmentAfterLogin")) {
+
+                subcatid = data.getStringExtra(GlobalVariables.subcatid);
+                subcatname = data.getStringExtra(GlobalVariables.subcatname);
+
+            } else if (comeFrom.equalsIgnoreCase(GlobalVariables.ProductDetailsActivityFinal)) {
+                moreSection = data.getStringExtra(GlobalVariables.section);
+                subcatname = data.getStringExtra(GlobalVariables.section_name).split("More")[1];
+                if (moreSection.equalsIgnoreCase("moreTextOne")) {
+                    subsubcatid = String.valueOf(data.getIntExtra(GlobalVariables.subsubcatid, 0));
+                    brandname = data.getStringExtra(GlobalVariables.brandname);
+
+                } else if (moreSection.equalsIgnoreCase("moreTextTwo")) {
+                    subsubcatid = String.valueOf(data.getIntExtra(GlobalVariables.subsubcatid, 0));
+                    defaultcolor = data.getStringExtra(GlobalVariables.defaultcolor);
+                } else if (moreSection.equalsIgnoreCase("moreTextThree")) {
+                    subsubcatid = String.valueOf(data.getIntExtra(GlobalVariables.subsubcatid, 0));
+                }
+
+            } else if (comeFrom.equalsIgnoreCase(GlobalVariables.flashSale)) {
+                flashSale = GlobalVariables.flashSale;
+                subcatname = data.getStringExtra(GlobalVariables.section_name);
+            } else if (comeFrom.equalsIgnoreCase("SearchAdapter")) {
+                filter = "";
+                commaSeparatedSizeNameId = data.getStringExtra("commaSeparatedSizeNameId");
+                commaSeparatedColorNameId = data.getStringExtra("commaSeparatedColorNameId");
+                commaSeparatedBrandNameId = data.getStringExtra("commaSeparatedBrandNameId");
+
+                minValue = data.getStringExtra(GlobalVariables.minValue);
+                maxValue = data.getStringExtra(GlobalVariables.maxValue);
+                type = data.getStringExtra(GlobalVariables.type);
+                subcatname = data.getStringExtra(GlobalVariables.section_name);
+                subcatid = data.getStringExtra(GlobalVariables.subcatid);
+                catid = data.getStringExtra(GlobalVariables.catid);
+                subsubcatid = data.getStringExtra(GlobalVariables.subsubcatid);
+
+            } else if (comeFrom.equalsIgnoreCase("BrandInFocusAdapter")) {
+                filter = "filter";
+                subcatname = data.getStringExtra(GlobalVariables.section_name);
+                commaSeparatedBrandNameId = subcatname;
+
+            } else if (comeFrom.equalsIgnoreCase("FilteredBrandInFocus")) {
+                filter = "filter";
+                subcatname = data.getStringExtra(GlobalVariables.section_name);
+                commaSeparatedColorNameId = data.getStringExtra("commaSeparatedColorNameId");
+                commaSeparatedBrandNameId = data.getStringExtra("commaSeparatedBrandNameId");
+                minValue = data.getStringExtra(GlobalVariables.minValue);
+                maxValue = data.getStringExtra(GlobalVariables.maxValue);
+            } else if (comeFrom.equalsIgnoreCase("ShopByThemeAdapter")) {
+                minValue = data.getStringExtra(GlobalVariables.minValue);
+                maxValue = data.getStringExtra(GlobalVariables.maxValue);
+                commaSeparatedSizeNameId = data.getStringExtra("commaSeparatedSizeNameId");
+                commaSeparatedColorNameId = data.getStringExtra("commaSeparatedColorNameId");
+                commaSeparatedBrandNameId = data.getStringExtra("commaSeparatedBrandNameId");
+                theme_id = data.getStringExtra(GlobalVariables.subcatid);
+                theme = data.getStringExtra(GlobalVariables.theme);
+                subcatname = data.getStringExtra(GlobalVariables.section_name);
+                filter = data.getStringExtra(GlobalVariables.filter_data);
+            } else if (comeFrom.equalsIgnoreCase("MenSectionShopByOccassionAdapter")) {
+
+                subsubcatid = data.getStringExtra(GlobalVariables.subsubcatid);
+                subcatname = data.getStringExtra(GlobalVariables.section_name);
+                filter = data.getStringExtra(GlobalVariables.filter_data);
+                commaSeparatedSizeNameId = data.getStringExtra("commaSeparatedSizeNameId");
+                commaSeparatedColorNameId = data.getStringExtra("commaSeparatedColorNameId");
+                commaSeparatedBrandNameId = data.getStringExtra("commaSeparatedBrandNameId");
+                minValue = data.getStringExtra(GlobalVariables.minValue);
+                maxValue = data.getStringExtra(GlobalVariables.maxValue);
+
+            } else if (comeFrom.equalsIgnoreCase("AutoSlideViewPagerBannerAdapter")) {
+                subsubcatid = data.getStringExtra(GlobalVariables.subsubcatid);
+                subcatname = data.getStringExtra(GlobalVariables.section_name);
+                filter = data.getStringExtra(GlobalVariables.filter_data);
+                commaSeparatedSizeNameId = data.getStringExtra("commaSeparatedSizeNameId");
+                commaSeparatedColorNameId = data.getStringExtra("commaSeparatedColorNameId");
+                commaSeparatedBrandNameId = data.getStringExtra("commaSeparatedBrandNameId");
+                minValue = data.getStringExtra(GlobalVariables.minValue);
+                maxValue = data.getStringExtra(GlobalVariables.maxValue);
+
+            } else if (comeFrom.equalsIgnoreCase(MyFirebaseMessagingService.class.getSimpleName())) {
+                subsubcatid = data.getStringExtra(GlobalVariables.subsubcatid);
+                subcatname = data.getStringExtra(GlobalVariables.section_name);
+                filter = getIntent().getStringExtra(GlobalVariables.filter_data);
+                commaSeparatedSizeNameId = data.getStringExtra("commaSeparatedSizeNameId");
+                commaSeparatedColorNameId = data.getStringExtra("commaSeparatedColorNameId");
+                commaSeparatedBrandNameId = data.getStringExtra("commaSeparatedBrandNameId");
+                minValue = data.getStringExtra(GlobalVariables.minValue);
+                maxValue = data.getStringExtra(GlobalVariables.maxValue);
+
+            } else {
+                subsubcatid = data.getStringExtra(GlobalVariables.subsubcatid);
+                subcatid = data.getStringExtra(GlobalVariables.subcatid);
+                subcatname = data.getStringExtra(GlobalVariables.section_name);
+            }
+
         }
     }
 
@@ -494,7 +627,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         } else if (comeFrom.equalsIgnoreCase(MyFirebaseMessagingService.class.getSimpleName())) {
             intent.putExtra(GlobalVariables.subsubcatid, subcatid);
         }
-        startActivity(intent);
+        startActivityForResult(intent,101);
 
     }
 
@@ -537,4 +670,6 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     public void onBackPressed() {
         super.onBackPressed();
     }
+
+
 }

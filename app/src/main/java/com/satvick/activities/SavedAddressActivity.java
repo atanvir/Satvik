@@ -147,8 +147,8 @@ public class SavedAddressActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onAddressRemove(int pos) {
-        if(viewAddressModelList.get(pos).getRemark().equalsIgnoreCase("0")) setAsDefaultAddressApi(""+viewAddressModelList.get(pos).getId(),pos);
-        else deleteAddressApi(""+viewAddressModelList.get(pos).getId(),pos);
+        /*if(viewAddressModelList.get(pos).getRemark().equalsIgnoreCase("0")) setAsDefaultAddressApi(""+viewAddressModelList.get(pos).getId(),pos);
+        else */ deleteAddressApi(""+viewAddressModelList.get(pos).getId(),pos);
     }
 
     @Override

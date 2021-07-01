@@ -71,7 +71,7 @@ public class CommonUtil {
 
     public static void setUpSnackbarMessage(View view, String message, Activity context) {
         if(message.equalsIgnoreCase("already saved")){
-            message="Default Address Already Saved";
+            message="Address Already Saved";
         }
         Snackbar mSnackbar = Snackbar.make(context.findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG);
         mSnackbar.setActionTextColor(ContextCompat.getColor(context, R.color.colorWhite));
@@ -300,6 +300,8 @@ public class CommonUtil {
         Intent intent=new Intent(context,className);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+
+
     }
 
     public static void saveSignupData(Context context, Response<SignUpModel> response) {

@@ -9,6 +9,13 @@
         android:layout_height="match_parent"
         android:background="@color/colorWhite">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
+            android:elevation="@dimen/_10sdp"
+            android:layout_centerInParent="true"/>
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_filter_list"
             android:layout_width="match_parent"
@@ -58,6 +65,10 @@
             android:layout_above="@+id/relative_filter"
             android:layout_below="@+id/view_filter">
 
+
+
+
+
             <LinearLayout
                 android:id="@+id/containerLl"
                 android:layout_width="@dimen/dp_100"
@@ -93,76 +104,8 @@
                             android:background="@color/colorLightGrey" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/llColor"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:visibility="gone"
-                        android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/tvColor"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/dp_16"
-                            android:text="COLOR"
-                            android:textColor="@color/colorBlack"
-                            android:textSize="12dp"
-                            app:font="@{`lato_regular`}" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/colorLightGrey" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/llBrand"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvBrand"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/dp_16"
-                            android:text="BRAND"
-                            android:textColor="@color/colorBlack"
-                            android:textSize="@dimen/_12sdp"
-                            app:font="@{`lato_regular`}" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/colorLightGrey"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/llFabric"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:visibility="gone"
-                        android:background="@color/stroke"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvFabric"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/dp_16"
-                            android:text="Fabric"
-                            android:textAllCaps="true"
-                            android:textColor="@color/colorBlack"
-                            android:textSize="14dp"
-                            app:font="@{`lato_regular`}" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/colorLightGrey" />
-                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/llPrice"
@@ -196,7 +139,7 @@
                 android:background="@android:color/white">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/filter_recyclerview"
+                    android:id="@+id/rvFilter"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 

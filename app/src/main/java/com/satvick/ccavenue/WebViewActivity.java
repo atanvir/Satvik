@@ -12,6 +12,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -31,6 +32,7 @@ import com.satvick.activities.OrderConfirmationActivity;
 import com.satvick.database.SharedPreferenceKey;
 import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.ActivityWebviewBinding;
+import com.satvick.databinding.SatvikLifeBinding;
 import com.satvick.model.LifeResponseModel;
 import com.satvick.model.PaymentResponseModel;
 import com.satvick.model.PlaceOrderModel;
@@ -53,6 +55,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -280,6 +283,41 @@ public class WebViewActivity extends AppCompatActivity {
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),WebViewActivity.this);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Dialog dialog = new Dialog(this, android.R.style.Theme_Black);
+        Objects.requireNonNull(dialog.getWindow()).requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        SatvikLifeBinding binding = SatvikLifeBinding.inflate(LayoutInflater.from(this));
+        dialog.setContentView(binding.getRoot());
+        binding.messagetxt.setText("Are you sure wants to cancel the transaction");
+
+
+        binding.closeiv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        binding.okbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                WebViewActivity.super.onBackPressed();
+            }
+        });
+
+        binding.btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
 }

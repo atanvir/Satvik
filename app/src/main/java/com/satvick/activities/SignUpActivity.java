@@ -281,6 +281,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
         if (task.isSuccessful()) signUpApi();
-        else CommonUtil.setUpSnackbarMessage(binding.getRoot(),task.getException().getMessage(),SignUpActivity.this);
+        else Toast.makeText(this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();;
     }
 }

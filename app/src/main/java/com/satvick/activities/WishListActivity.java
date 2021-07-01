@@ -31,6 +31,7 @@ public class WishListActivity extends AppCompatActivity implements View.OnClickL
     private ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
     private int badgeCount=0;
     private List<com.satvick.model.List> list;
+    private boolean isProductAdded;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -145,6 +146,7 @@ public class WishListActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void updateDataToUI(int pos) {
+        isProductAdded=true;
         updateList(pos);
         setItemCount();
         setBadgeCount(badgeCount++);
@@ -165,5 +167,12 @@ public class WishListActivity extends AppCompatActivity implements View.OnClickL
     private void updateList(int pos) {
         list.remove(pos);
         binding.recyclerView.getAdapter().notifyItemRemoved(pos);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(getIntent().getBooleanExtra("isRefresh",false) && isProductAdded) binding.ivBag.performClick();
+        else if(getIntent().getBooleanExtra("isCartUpdate",false) && isProductAdded) startActivity(new Intent(this,MainActivity.class));
+        else super.onBackPressed();
     }
 }

@@ -7,18 +7,14 @@
     android:layout_height="match_parent">
 
 
-    <com.airbnb.lottie.LottieAnimationView
+    <ProgressBar
         android:id="@+id/progressbar"
-        android:layout_width="@dimen/dp_150"
-        android:layout_height="@dimen/dp_150"
-        android:scaleType="centerCrop"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
         app:layout_constraintBottom_toBottomOf="@+id/image_view_slider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/image_view_slider"
-        app:layout_constraintTop_toTopOf="@+id/image_view_slider"
-        app:lottie_autoPlay="true"
-        app:lottie_fileName="loading.json"
-        app:lottie_loop="true" />
+        app:layout_constraintTop_toTopOf="@+id/image_view_slider" />
 
 
     <ImageView

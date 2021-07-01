@@ -15,12 +15,12 @@ public class CartListModel {
     @SerializedName("status")
     @Expose
     public String status;
-    @SerializedName("Product list retrieved successfully")
+    @SerializedName("Cartlistproduct")
     @Expose
     public List<ProductListRetrievedSuccessfully> productListRetrievedSuccessfully = null;
     @SerializedName("message")
     @Expose
-    public List<String> message = null;
+    public String message = null;
     @SerializedName("requestKey")
     @Expose
     public String requestKey;
@@ -50,11 +50,11 @@ public class CartListModel {
         this.productListRetrievedSuccessfully = productListRetrievedSuccessfully;
     }
 
-    public List<String> getMessage() {
+    public String getMessage() {
         return message;
     }
 
-    public void setMessage(List<String> message) {
+    public void setMessage(String message) {
         this.message = message;
     }
 

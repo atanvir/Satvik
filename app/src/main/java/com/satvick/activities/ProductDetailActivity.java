@@ -400,22 +400,22 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         }
 
 
-        //More Sections
-        if(!data.getProductdetails().getMorebrand().isEmpty()){
-            if(data.getProductdetails().getMorebrand().get(0)!=null){
-                binding.layoutProductDetail7.setVisibility(View.VISIBLE);
-                binding.moreTextOne.setText(data.getProductdetails().getMorebrand().get(0));
-            }
-            if(data.getProductdetails().getMorebrand().get(1)!=null){
-                binding.layoutProductDetail8.setVisibility(View.VISIBLE);
-                binding.moreTextTwo.setText(data.getProductdetails().getMorebrand().get(1));
-            }
-
-            if(data.getProductdetails().getMorebrand().get(2)!=null){
-                binding.layoutProductDetail9.setVisibility(View.VISIBLE);
-                binding.moreTextThree.setText(data.getProductdetails().getMorebrand().get(2));
-            }
-        }
+//        //More Sections
+//        if(!data.getProductdetails().getMorebrand().isEmpty()){
+//            if(data.getProductdetails().getMorebrand().get(0)!=null){
+//                binding.layoutProductDetail7.setVisibility(View.VISIBLE);
+//                binding.moreTextOne.setText(data.getProductdetails().getMorebrand().get(0));
+//            }
+//            if(data.getProductdetails().getMorebrand().get(1)!=null){
+//                binding.layoutProductDetail8.setVisibility(View.VISIBLE);
+//                binding.moreTextTwo.setText(data.getProductdetails().getMorebrand().get(1));
+//            }
+//
+//            if(data.getProductdetails().getMorebrand().get(2)!=null){
+//                binding.layoutProductDetail9.setVisibility(View.VISIBLE);
+//                binding.moreTextThree.setText(data.getProductdetails().getMorebrand().get(2));
+//            }
+//        }
 
 
         //Customer also like

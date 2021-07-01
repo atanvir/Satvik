@@ -334,7 +334,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyFi
 
             case R.id.ivWishList:
             if(CommonUtil.isUserLogin(requireActivity())) openLoginSignUpBottomSheet();
-            else getActivity().startActivity(new Intent(getActivity(), WishListActivity.class));
+            else{
+                startActivity(new Intent(getActivity(), WishListActivity.class).putExtra("isCartUpdate",true));
+            }
             break;
         }
     }

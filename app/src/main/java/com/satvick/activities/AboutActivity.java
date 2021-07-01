@@ -23,7 +23,6 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_about_us);
 
         webView = findViewById(R.id.webview);
@@ -45,9 +44,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.ivBack:
-                onBackPressed();
-                break;
+            case R.id.ivBack: onBackPressed(); break;
         }
     }
 

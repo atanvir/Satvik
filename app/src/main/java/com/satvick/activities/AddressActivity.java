@@ -227,7 +227,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
                                                                       binding.edtLocality.getText().toString(),
                                                                       binding.edtCity.getText().toString(),
                                                                       binding.edtState.getText().toString(),
-                                                                      addressType,binding.chbSelectPerson.isChecked()==true?"0":"1",
+                                                                      addressType,/*binding.chbSelectPerson.isChecked()==true?"0":"1"*/"0",
                                                                       "0","India","0.0","0.0");
         call.enqueue(new Callback<AddAddressModel>() {
             @Override

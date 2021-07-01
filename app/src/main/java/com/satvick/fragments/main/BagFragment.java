@@ -38,6 +38,7 @@ import com.satvick.activities.ProductDetailActivity;
 import com.satvick.activities.SearchScreenActivity;
 import com.satvick.activities.SignUpActivity;
 import com.satvick.adapters.CartListAdapter;
+import com.satvick.ccavenue.WebViewActivity;
 import com.satvick.database.SharedPreferenceKey;
 import com.satvick.database.SharedPreferenceWriter;
 import com.satvick.databinding.FragmentBagBinding;
@@ -149,7 +150,12 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
 
         case R.id.tvWishList:
         if(CommonUtil.isUserLogin(requireActivity())) openLoginSignUpBottomSheetWhenUserNotLogedIn();
-        else CommonUtil.startNewActivity(requireActivity(), WishListActivity.class);
+        else {
+            Intent intent=new Intent(getActivity(),WishListActivity.class);
+            intent.putExtra("isRefresh",true);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
         break;
 
         case R.id.llaa: startActivityForResult(new Intent(getActivity(), ApplyCouponActivity.class), 121); break;
@@ -171,7 +177,11 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
                     binding.progressBar.setVisibility(View.GONE);
                     if (response.isSuccessful()) {
                         if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) setDataToUI(response.body());
-                        else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(), "FAILURE", requireActivity());
+                        else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)){
+                            SharedPreferenceWriter.getInstance(getActivity()).clearPreferenceValue(SharedPreferenceKey.gift_wrapup_status, "no");
+                            SharedPreferenceWriter.getInstance(getActivity()).writeBooleanValue(GlobalVariables.COUPON_APPLIED, false);
+                            hideSectionVisiblity();
+                        }
                     } else CommonUtil.setUpSnackbarMessage(binding.getRoot(), "Internal Server Error!", requireActivity());
                 }
             }
@@ -246,9 +256,8 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
         call.enqueue(new Callback<CancelCouponModel>() {
             public void onResponse(Call<CancelCouponModel> call, Response<CancelCouponModel> response) {
                 if (response.isSuccessful()) {
-                    if (response.body().getStatus().equalsIgnoreCase("SUCCESS")) {
-                        callCartListApi();
-                    } else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
+                    if (response.body().getStatus().equalsIgnoreCase("SUCCESS")) { callCartListApi(); }
+                    else if(response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
                         binding.progressBar.setVisibility(View.GONE);
                         CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(),requireActivity());
                     }
@@ -279,14 +288,10 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
             public void onResponse(Call<SocialLoginModel> call, Response<SocialLoginModel> response) {
                 binding.progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
-                    if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
-                        CommonUtil.saveData(requireActivity(),response);
-                    } else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
-                        CommonUtil.setUpSnackbarMessage(binding.getRoot(), response.body().getMessage(), getActivity());
-                    }
-                } else {
-                    CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!",requireActivity());
-                }
+                    if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) CommonUtil.saveData(requireActivity(),response);
+                    else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) CommonUtil.setUpSnackbarMessage(binding.getRoot(), response.body().getMessage(), getActivity());
+                } else CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Internal Server Error!",requireActivity());
+
             }
 
             @Override
@@ -296,6 +301,7 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
             }
         });
     }
+
     private void callAddToWishlistApi (String productId,String size){
         binding.progressBar.setVisibility(View.VISIBLE);
         Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(HelperClass.getCacheData(requireActivity()).first,
@@ -344,7 +350,7 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
         couponDiscount=0.0;
         giftWrapPrice=0.0;
         for (int i = 0; i < cartListModelList.size(); i++) {
-            total += Double.parseDouble(""+cartListModelList.get(i).getActualPrice()) * Double.parseDouble(""+cartListModelList.get(i).getQuantity());
+            total += Double.parseDouble(""+(cartListModelList.get(i).getActualPrice().isEmpty()?"0":cartListModelList.get(i).getActualPrice())) * Double.parseDouble(""+cartListModelList.get(i).getQuantity());
             couponDiscount += (Double.parseDouble(cartListModelList.get(i).getDiscount_coupon()));
             coponCode=cartListModelList.get(i).getCoupon_code();
             if(gift_wrapup_status.equalsIgnoreCase("yes")) giftWrapPrice += Integer.parseInt("30");
@@ -415,9 +421,14 @@ public class BagFragment extends Fragment implements View.OnClickListener, Faceb
             SharedPreferenceWriter.getInstance(requireActivity()).writeStringValue(GlobalVariables.size, TextUtils.join(",",sizeList));
             SharedPreferenceWriter.getInstance(requireActivity()).writeStringValue(GlobalVariables.quantity,TextUtils.join(",",quantityList));
 
-            if (cartListModelList.isEmpty()) hideSectionVisiblity();
+            if (cartListModelList.isEmpty()) {
+                SharedPreferenceWriter.getInstance(getActivity()).clearPreferenceValue(SharedPreferenceKey.gift_wrapup_status, "no");
+                SharedPreferenceWriter.getInstance(getActivity()).writeBooleanValue(GlobalVariables.COUPON_APPLIED, false);
+                hideSectionVisiblity();
+            }
             else tvBadge.setText(""+details.size());
             binding.progressBar.setVisibility(View.GONE);
+
         }
     }
     private void openLoginSignUpBottomSheetWhenUserNotLogedIn() {
