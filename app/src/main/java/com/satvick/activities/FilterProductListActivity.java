@@ -35,7 +35,7 @@ public class FilterProductListActivity extends AppCompatActivity implements View
     private ActivityFilterProductListBinding binding;
     private ApiInterface apiInterface=ApiClient.getClient().create(ApiInterface.class);
     private List<SizeCheckedListModel> sizeList = new ArrayList<>();
-    private String maxValue="100",minValue="10000",comeFrom = "";
+    private String maxValue="100",minValue="10000",type="";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class FilterProductListActivity extends AppCompatActivity implements View
     }
 
     private void init() {
-        comeFrom = getIntent().getStringExtra("from");
+
     }
 
     private void initCtrl() {
@@ -115,8 +115,8 @@ public class FilterProductListActivity extends AppCompatActivity implements View
             case R.id.llSize: setBackground("size"); break;
             case R.id.llPrice: setBackground("price"); break;
             case R.id.llClose: onBackPressed(); break;
-            case R.id.llApply: applyFilter(); break;
-            case R.id.tvClearAll: sizeList.clear(); applyFilter(); break;
+            case R.id.llApply: type="Filter"; applyFilter(); break;
+            case R.id.tvClearAll: sizeList.clear(); minValue=""; maxValue=""; type=""; applyFilter(); break;
         }
     }
 
@@ -126,76 +126,19 @@ public class FilterProductListActivity extends AppCompatActivity implements View
             if(sizeList.get(i).isSizeChecked()) selectedSizedList.add(sizeList.get(i).getSizeName());
         }
 
-        if(!comeFrom.equalsIgnoreCase("ThreeLevelListAdapter") &&
-           !comeFrom.equalsIgnoreCase("SearchAdapter") &&
-           !comeFrom.equalsIgnoreCase("MenSectionShopByOccassionAdapter") &&
-           !comeFrom.equalsIgnoreCase("AutoSlideViewPagerBannerAdapter") &&
-           !comeFrom.equalsIgnoreCase(MyFirebaseMessagingService.class.getSimpleName()))
-        {
-            comeFrom="FilterProductListActivity";
-        }
-        callingIntent(comeFrom,TextUtils.join(",",selectedSizedList),
-                        "","",
-                      getIntent().getStringExtra(GlobalVariables.section_name),
-                      getIntent().getStringExtra(GlobalVariables.subcatid),
-                      minValue,maxValue,
-                      getIntent().getStringExtra(GlobalVariables.type)!=null?getIntent().getStringExtra(GlobalVariables.type):"");
-    }
-
-
-    private void callingIntent(String comeFrom, String sizeName, String colorName, String BrandName,
-                               String sectionName, String subcatid, String minValue, String maxValue, String type) {
-
         Intent intent=new Intent();
-        intent.putExtra("from", comeFrom);
-        intent.putExtra("commaSeparatedSizeNameId", sizeName);
-        intent.putExtra("commaSeparatedColorNameId", colorName);
-        intent.putExtra("commaSeparatedBrandNameId", BrandName);
-        intent.putExtra(GlobalVariables.section_name,sectionName);
+        intent.putExtra("filterSize", TextUtils.join(",",selectedSizedList));
+        intent.putExtra(GlobalVariables.catid,getIntent().getStringExtra(GlobalVariables.catid));
+        intent.putExtra(GlobalVariables.subcatid,getIntent().getStringExtra(GlobalVariables.subcatid));
+        intent.putExtra(GlobalVariables.subsubcatid,getIntent().getStringExtra(GlobalVariables.subsubcatid));
         intent.putExtra(GlobalVariables.minValue,minValue);
         intent.putExtra(GlobalVariables.maxValue,maxValue);
         intent.putExtra(GlobalVariables.type,type);
-
-        if(comeFrom.equalsIgnoreCase("ThreeLevelListAdapter"))
-        {
-         intent.putExtra(GlobalVariables.subsubcatid,subcatid);
-        }
-        else if(comeFrom.equalsIgnoreCase("FilterProductListActivity"))
-        {
-            intent.putExtra(GlobalVariables.subcatid,subcatid);
-        }
-        else if(comeFrom.equalsIgnoreCase("SearchAdapter"))
-        {
-            intent.putExtra(GlobalVariables.catid,getIntent().getStringExtra(GlobalVariables.catid));
-            intent.putExtra(GlobalVariables.subsubcatid,subcatid);
-            intent.putExtra(GlobalVariables.filter_data,getIntent().getStringExtra(GlobalVariables.filter_data));
-            intent.putExtra(GlobalVariables.type,"");
-        }else if(comeFrom.equalsIgnoreCase("ShopByThemeAdapter"))
-        {
-            intent.putExtra(GlobalVariables.subcatid,subcatid);
-            intent.putExtra(GlobalVariables.theme,getIntent().getStringExtra(GlobalVariables.theme));
-            intent.putExtra(GlobalVariables.filter_data,"filter");
-        }else if(comeFrom.equalsIgnoreCase("MenSectionShopByOccassionAdapter"))
-        {
-            intent.putExtra(GlobalVariables.subsubcatid,getIntent().getStringExtra(GlobalVariables.subsubcatid));
-            intent.putExtra(GlobalVariables.filter_data,"filter");
-        }else if(comeFrom.equalsIgnoreCase("AutoSlideViewPagerBannerAdapter"))
-        {
-            intent.putExtra(GlobalVariables.subsubcatid,getIntent().getStringExtra(GlobalVariables.subsubcatid));
-            intent.putExtra(GlobalVariables.filter_data,"filter");
-        }else if(comeFrom.equalsIgnoreCase(MyFirebaseMessagingService.class.getSimpleName()))
-        {
-            intent.putExtra(GlobalVariables.subsubcatid,getIntent().getStringExtra(GlobalVariables.subsubcatid));
-            intent.putExtra(GlobalVariables.filter_data,"filter");
-        }else if(comeFrom.equalsIgnoreCase("FilteredBrandInFocus"))
-        {
-            intent.putExtra("commaSeparatedBrandNameId",getIntent().getStringExtra(GlobalVariables.section_name));
-
-        }
-
         setResult(RESULT_OK,intent);
         finish();
     }
+
+
 
     private void setBackground(String type) {
         if(type.equalsIgnoreCase("price")){

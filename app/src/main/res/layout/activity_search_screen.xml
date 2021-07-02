@@ -9,6 +9,13 @@
         android:layout_height="match_parent"
         android:background="@color/colorWhite">
 
+        <ProgressBar
+            android:id="@+id/progressbar"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
+            android:visibility="gone"
+            android:layout_centerInParent="true"/>
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"

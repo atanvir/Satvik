@@ -47,9 +47,9 @@ public class AutoSlideViewPagerBannerAdapter extends PagerAdapter {
 
         view.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 Intent intent=new Intent(context,ProductListActivity.class);
-                intent.putExtra("from","AutoSlideViewPagerBannerAdapter");
+                intent.putExtra(GlobalVariables.catid,"");
+                intent.putExtra(GlobalVariables.subcatid,"");
                 intent.putExtra(GlobalVariables.subsubcatid,list.get(position).getFilterData());
                 intent.putExtra(GlobalVariables.section_name,"Banner");
                 context.startActivity(intent);

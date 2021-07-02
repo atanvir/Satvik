@@ -21,62 +21,53 @@ import java.util.List;
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder>{
 
     private Context context;
-    LayoutInflater inflater;
-
-    List<Searchlist> searchListModelList;
+    private List<Searchlist> list;
 
 
-    public SearchAdapter(Context context,List<Searchlist> searchListModelList) {
+    public SearchAdapter(Context context,List<Searchlist> list) {
         this.context = context;
-        this.searchListModelList = searchListModelList;
+        this.list = list;
     }
 
     @NonNull
     @Override
     public SearchAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-
-        if (inflater == null) {
-            inflater = LayoutInflater.from(context);
-        }
-
-        ItemSearchListBinding binding = DataBindingUtil.inflate(inflater, R.layout.item_search_list, viewGroup, false);
-        return new SearchAdapter.ViewHolder(binding);
+        return new SearchAdapter.ViewHolder(ItemSearchListBinding.inflate(LayoutInflater.from(context),viewGroup, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull SearchAdapter.ViewHolder viewHolder, final int position) {
-
-        viewHolder.binding.tvName.setText(searchListModelList.get(position).getName());
-
-        viewHolder.binding.llWomen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(context, ProductListActivity.class);
-                intent.putExtra("from","SearchAdapter");
-                intent.putExtra(GlobalVariables.section_name,searchListModelList.get(position).getName());
-                intent.putExtra(GlobalVariables.subsubcatid,""+searchListModelList.get(position).getSubsubcatid());
-                intent.putExtra(GlobalVariables.catid,searchListModelList.get(position).getCatid());
-                intent.putExtra(GlobalVariables.filter_data,"");
-                intent.putExtra(GlobalVariables.search,"");
-                intent.putExtra(GlobalVariables.type,"");
-                context.startActivity(intent);
-            }
-        });
+        viewHolder.binding.tvName.setText(list.get(position).getName());
     }
 
     @Override
     public int getItemCount() {
-        return searchListModelList.size();
+        return list!=null?list.size():0;
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ItemSearchListBinding binding;
 
         ViewHolder(ItemSearchListBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            this.binding.llWomen.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.llWomen:
+                Intent intent=new Intent(context, ProductListActivity.class);
+                intent.putExtra(GlobalVariables.catid,list.get(getAbsoluteAdapterPosition()).getCatid());
+                intent.putExtra(GlobalVariables.subcatid,"");
+                intent.putExtra(GlobalVariables.subsubcatid,""+list.get(getAbsoluteAdapterPosition()).getSubsubcatid());
+                intent.putExtra(GlobalVariables.section_name,list.get(getAbsoluteAdapterPosition()).getName());
+                context.startActivity(intent);    
+                break;
+            }
         }
     }
 }

@@ -62,28 +62,30 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     private CallbackManager callbackManager;
     private GoogleSignInClient mGoogleSignInClient;
-    private static final int RC_SIGN_IN = 901;
 
-    private String subcatid = "",type="",comeFrom="",sortBy="", subcatname = "",
-                   moreSection = "", subsubcatid = "", brandname = "", defaultcolor = "",
-                   minValue = "100", maxValue = "10000", flashSale = "", search = "",
-                   search_key = "", catid = "", filter = "", theme_id = "", theme = "",
-                   commaSeparatedSizeNameId="",commaSeparatedColorNameId="",commaSeparatedBrandNameId="";
+    private final int RC_SIGN_IN = 901,
+                      FILTER_RESULT = 101;
+
+    private String subcatid = "",sortBy="", subcatname = "",
+                   subsubcatid = "", brandname = "", defaultcolor = "",
+                   minValue = "", maxValue = "", flashSale = "",
+                   search = "", search_key = "", catid = "", filter = "",
+                   theme_id = "", theme = "", filterSize="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityProductListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        getIntents();
         init();
         initCtrl();
-        getIntents();
-        binding.tvProductName.setText(subcatname.replace("_"," "));
-        binding.tvProductName.setRawInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-        callProductListApi();
+        productListApi();
     }
 
     private void init() {
+        binding.tvProductName.setText(subcatname.replace("_"," "));
+        binding.tvProductName.setRawInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         binding.progressBar.setVisibility(View.VISIBLE);
         callbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(callbackManager,this);
@@ -97,136 +99,16 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         binding.ivSearch.setOnClickListener(this);
     }
     private void getIntents() {
-        comeFrom = getIntent().getStringExtra("from");
-        if (getIntent() != null) {
-            if (comeFrom.equalsIgnoreCase("FilterProductListActivity")) {
-                filter = "Filter";
-                commaSeparatedSizeNameId = getIntent().getStringExtra("commaSeparatedSizeNameId");
-                commaSeparatedColorNameId = getIntent().getStringExtra("commaSeparatedColorNameId");
-                commaSeparatedBrandNameId = getIntent().getStringExtra("commaSeparatedBrandNameId");
-
-                minValue = getIntent().getStringExtra(GlobalVariables.minValue);
-                maxValue = getIntent().getStringExtra(GlobalVariables.maxValue);
-                type = getIntent().getStringExtra(GlobalVariables.type);
-                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
-                subcatid = getIntent().getStringExtra(GlobalVariables.subcatid);
-                subsubcatid = getIntent().getStringExtra(GlobalVariables.subsubcatid);
-                catid = getIntent().getStringExtra(GlobalVariables.catid);
-
-            } else if (comeFrom.equalsIgnoreCase("ThreeLevelListAdapter")) {
-                filter = "Filter";
-                commaSeparatedSizeNameId = getIntent().getStringExtra("commaSeparatedSizeNameId");
-                commaSeparatedColorNameId = getIntent().getStringExtra("commaSeparatedColorNameId");
-                commaSeparatedBrandNameId = getIntent().getStringExtra("commaSeparatedBrandNameId");
-                minValue = getIntent().getStringExtra(GlobalVariables.minValue);
-                maxValue = getIntent().getStringExtra(GlobalVariables.maxValue);
-                type = getIntent().getStringExtra(GlobalVariables.type);
-                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
-                catid = getIntent().getStringExtra(GlobalVariables.catid);
-                subsubcatid = getIntent().getStringExtra(GlobalVariables.subsubcatid);
-
-            } else if (comeFrom.equalsIgnoreCase("HomeFragmentAfterLogin")) {
-
-                subcatid = getIntent().getStringExtra(GlobalVariables.subcatid);
-                subcatname = getIntent().getStringExtra(GlobalVariables.subcatname);
-
-            } else if (comeFrom.equalsIgnoreCase(GlobalVariables.ProductDetailsActivityFinal)) {
-                moreSection = getIntent().getStringExtra(GlobalVariables.section);
-                subcatname = getIntent().getStringExtra(GlobalVariables.section_name).split("More")[1];
-                if (moreSection.equalsIgnoreCase("moreTextOne")) {
-                    subsubcatid = String.valueOf(getIntent().getIntExtra(GlobalVariables.subsubcatid, 0));
-                    brandname = getIntent().getStringExtra(GlobalVariables.brandname);
-
-                } else if (moreSection.equalsIgnoreCase("moreTextTwo")) {
-                    subsubcatid = String.valueOf(getIntent().getIntExtra(GlobalVariables.subsubcatid, 0));
-                    defaultcolor = getIntent().getStringExtra(GlobalVariables.defaultcolor);
-                } else if (moreSection.equalsIgnoreCase("moreTextThree")) {
-                    subsubcatid = String.valueOf(getIntent().getIntExtra(GlobalVariables.subsubcatid, 0));
-                }
-
-            } else if (comeFrom.equalsIgnoreCase(GlobalVariables.flashSale)) {
-                flashSale = GlobalVariables.flashSale;
-                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
-            } else if (comeFrom.equalsIgnoreCase("SearchAdapter")) {
-                filter = "";
-                commaSeparatedSizeNameId = getIntent().getStringExtra("commaSeparatedSizeNameId");
-                commaSeparatedColorNameId = getIntent().getStringExtra("commaSeparatedColorNameId");
-                commaSeparatedBrandNameId = getIntent().getStringExtra("commaSeparatedBrandNameId");
-
-                minValue = getIntent().getStringExtra(GlobalVariables.minValue);
-                maxValue = getIntent().getStringExtra(GlobalVariables.maxValue);
-                type = getIntent().getStringExtra(GlobalVariables.type);
-                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
-                subcatid = getIntent().getStringExtra(GlobalVariables.subcatid);
-                catid = getIntent().getStringExtra(GlobalVariables.catid);
-                subsubcatid = getIntent().getStringExtra(GlobalVariables.subsubcatid);
-
-            } else if (comeFrom.equalsIgnoreCase("BrandInFocusAdapter")) {
-                filter = "filter";
-                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
-                commaSeparatedBrandNameId = subcatname;
-
-            } else if (comeFrom.equalsIgnoreCase("FilteredBrandInFocus")) {
-                filter = "filter";
-                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
-                commaSeparatedColorNameId = getIntent().getStringExtra("commaSeparatedColorNameId");
-                commaSeparatedBrandNameId = getIntent().getStringExtra("commaSeparatedBrandNameId");
-                minValue = getIntent().getStringExtra(GlobalVariables.minValue);
-                maxValue = getIntent().getStringExtra(GlobalVariables.maxValue);
-            } else if (comeFrom.equalsIgnoreCase("ShopByThemeAdapter")) {
-                minValue = getIntent().getStringExtra(GlobalVariables.minValue);
-                maxValue = getIntent().getStringExtra(GlobalVariables.maxValue);
-                commaSeparatedSizeNameId = getIntent().getStringExtra("commaSeparatedSizeNameId");
-                commaSeparatedColorNameId = getIntent().getStringExtra("commaSeparatedColorNameId");
-                commaSeparatedBrandNameId = getIntent().getStringExtra("commaSeparatedBrandNameId");
-                theme_id = getIntent().getStringExtra(GlobalVariables.subcatid);
-                theme = getIntent().getStringExtra(GlobalVariables.theme);
-                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
-                filter = getIntent().getStringExtra(GlobalVariables.filter_data);
-            } else if (comeFrom.equalsIgnoreCase("MenSectionShopByOccassionAdapter")) {
-
-                subsubcatid = getIntent().getStringExtra(GlobalVariables.subsubcatid);
-                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
-                filter = getIntent().getStringExtra(GlobalVariables.filter_data);
-                commaSeparatedSizeNameId = getIntent().getStringExtra("commaSeparatedSizeNameId");
-                commaSeparatedColorNameId = getIntent().getStringExtra("commaSeparatedColorNameId");
-                commaSeparatedBrandNameId = getIntent().getStringExtra("commaSeparatedBrandNameId");
-                minValue = getIntent().getStringExtra(GlobalVariables.minValue);
-                maxValue = getIntent().getStringExtra(GlobalVariables.maxValue);
-
-            } else if (comeFrom.equalsIgnoreCase("AutoSlideViewPagerBannerAdapter")) {
-                subsubcatid = getIntent().getStringExtra(GlobalVariables.subsubcatid);
-                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
-                filter = getIntent().getStringExtra(GlobalVariables.filter_data);
-                commaSeparatedSizeNameId = getIntent().getStringExtra("commaSeparatedSizeNameId");
-                commaSeparatedColorNameId = getIntent().getStringExtra("commaSeparatedColorNameId");
-                commaSeparatedBrandNameId = getIntent().getStringExtra("commaSeparatedBrandNameId");
-                minValue = getIntent().getStringExtra(GlobalVariables.minValue);
-                maxValue = getIntent().getStringExtra(GlobalVariables.maxValue);
-
-            } else if (comeFrom.equalsIgnoreCase(MyFirebaseMessagingService.class.getSimpleName())) {
-                subsubcatid = getIntent().getStringExtra(GlobalVariables.subsubcatid);
-                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
-                filter = getIntent().getStringExtra(GlobalVariables.filter_data);
-                commaSeparatedSizeNameId = getIntent().getStringExtra("commaSeparatedSizeNameId");
-                commaSeparatedColorNameId = getIntent().getStringExtra("commaSeparatedColorNameId");
-                commaSeparatedBrandNameId = getIntent().getStringExtra("commaSeparatedBrandNameId");
-                minValue = getIntent().getStringExtra(GlobalVariables.minValue);
-                maxValue = getIntent().getStringExtra(GlobalVariables.maxValue);
-
-            } else {
-                subsubcatid = getIntent().getStringExtra(GlobalVariables.subsubcatid);
-                subcatid = getIntent().getStringExtra(GlobalVariables.subcatid);
-                subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
-            }
-
-        }
+        catid= getIntent().getStringExtra(GlobalVariables.catid);
+        subcatid = getIntent().getStringExtra(GlobalVariables.subcatid);
+        subsubcatid = getIntent().getStringExtra(GlobalVariables.subsubcatid);
+        subcatname = getIntent().getStringExtra(GlobalVariables.section_name);
     }
-    private void callProductListApi() {
+    private void productListApi() {
         Call<ProductListingResponse> call = apiInterface.getProductListResult(HelperClass.getCacheData(this).second,
                                                                               brandname, defaultcolor, subcatid, subsubcatid,
-                                                                              catid, filter, commaSeparatedSizeNameId,
-                                                                              commaSeparatedColorNameId, commaSeparatedBrandNameId,
+                                                                              catid, filter, filterSize,
+                                                                              "", "",
                                                                               flashSale, search, search_key, minValue,
                                                                               maxValue, sortBy, theme, theme_id);
         call.enqueue(new Callback<ProductListingResponse>() {
@@ -283,7 +165,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         sortByDailog.dismiss();
         sortBy=type;
         binding.progressBar.setVisibility(View.VISIBLE);
-        callProductListApi();
+        productListApi();
     }
 
 
@@ -336,140 +218,20 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
             case RC_SIGN_IN: handleSignInResult(GoogleSignIn.getSignedInAccountFromIntent(data)); break;
-            case 101:
-            if(resultCode==RESULT_OK){
-                setFilterData(data);
-                callProductListApi();
-            }
-            break;
+            case FILTER_RESULT: if(resultCode==RESULT_OK) setFilterData(data); break;
         }
     }
 
     private void setFilterData(Intent data) {
-        comeFrom=data.getStringExtra("from");
-        if (data != null) {
-            if (comeFrom.equalsIgnoreCase("FilterProductListActivity")) {
-                filter = "Filter";
-                commaSeparatedSizeNameId = data.getStringExtra("commaSeparatedSizeNameId");
-                commaSeparatedColorNameId = data.getStringExtra("commaSeparatedColorNameId");
-                commaSeparatedBrandNameId = data.getStringExtra("commaSeparatedBrandNameId");
-
-                minValue = data.getStringExtra(GlobalVariables.minValue);
-                maxValue = data.getStringExtra(GlobalVariables.maxValue);
-                type = data.getStringExtra(GlobalVariables.type);
-                subcatname = data.getStringExtra(GlobalVariables.section_name);
-                subcatid = data.getStringExtra(GlobalVariables.subcatid);
-                subsubcatid = data.getStringExtra(GlobalVariables.subsubcatid);
-                catid = data.getStringExtra(GlobalVariables.catid);
-
-            } else if (comeFrom.equalsIgnoreCase("ThreeLevelListAdapter")) {
-                filter = "Filter";
-                commaSeparatedSizeNameId = data.getStringExtra("commaSeparatedSizeNameId");
-                commaSeparatedColorNameId = data.getStringExtra("commaSeparatedColorNameId");
-                commaSeparatedBrandNameId = data.getStringExtra("commaSeparatedBrandNameId");
-                minValue = data.getStringExtra(GlobalVariables.minValue);
-                maxValue = data.getStringExtra(GlobalVariables.maxValue);
-                type = data.getStringExtra(GlobalVariables.type);
-                subcatname = data.getStringExtra(GlobalVariables.section_name);
-                catid = data.getStringExtra(GlobalVariables.catid);
-                subsubcatid = data.getStringExtra(GlobalVariables.subsubcatid);
-
-            } else if (comeFrom.equalsIgnoreCase("HomeFragmentAfterLogin")) {
-
-                subcatid = data.getStringExtra(GlobalVariables.subcatid);
-                subcatname = data.getStringExtra(GlobalVariables.subcatname);
-
-            } else if (comeFrom.equalsIgnoreCase(GlobalVariables.ProductDetailsActivityFinal)) {
-                moreSection = data.getStringExtra(GlobalVariables.section);
-                subcatname = data.getStringExtra(GlobalVariables.section_name).split("More")[1];
-                if (moreSection.equalsIgnoreCase("moreTextOne")) {
-                    subsubcatid = String.valueOf(data.getIntExtra(GlobalVariables.subsubcatid, 0));
-                    brandname = data.getStringExtra(GlobalVariables.brandname);
-
-                } else if (moreSection.equalsIgnoreCase("moreTextTwo")) {
-                    subsubcatid = String.valueOf(data.getIntExtra(GlobalVariables.subsubcatid, 0));
-                    defaultcolor = data.getStringExtra(GlobalVariables.defaultcolor);
-                } else if (moreSection.equalsIgnoreCase("moreTextThree")) {
-                    subsubcatid = String.valueOf(data.getIntExtra(GlobalVariables.subsubcatid, 0));
-                }
-
-            } else if (comeFrom.equalsIgnoreCase(GlobalVariables.flashSale)) {
-                flashSale = GlobalVariables.flashSale;
-                subcatname = data.getStringExtra(GlobalVariables.section_name);
-            } else if (comeFrom.equalsIgnoreCase("SearchAdapter")) {
-                filter = "Filter";
-                commaSeparatedSizeNameId = data.getStringExtra("commaSeparatedSizeNameId");
-                commaSeparatedColorNameId = data.getStringExtra("commaSeparatedColorNameId");
-                commaSeparatedBrandNameId = data.getStringExtra("commaSeparatedBrandNameId");
-
-                minValue = data.getStringExtra(GlobalVariables.minValue);
-                maxValue = data.getStringExtra(GlobalVariables.maxValue);
-                type = data.getStringExtra(GlobalVariables.type);
-                subcatname = data.getStringExtra(GlobalVariables.section_name);
-                subcatid = data.getStringExtra(GlobalVariables.subcatid);
-                catid = data.getStringExtra(GlobalVariables.catid);
-                subsubcatid = data.getStringExtra(GlobalVariables.subsubcatid);
-
-            } else if (comeFrom.equalsIgnoreCase("BrandInFocusAdapter")) {
-                filter = "filter";
-                subcatname = data.getStringExtra(GlobalVariables.section_name);
-                commaSeparatedBrandNameId = subcatname;
-
-            } else if (comeFrom.equalsIgnoreCase("FilteredBrandInFocus")) {
-                filter = "filter";
-                subcatname = data.getStringExtra(GlobalVariables.section_name);
-                commaSeparatedColorNameId = data.getStringExtra("commaSeparatedColorNameId");
-                commaSeparatedBrandNameId = data.getStringExtra("commaSeparatedBrandNameId");
-                minValue = data.getStringExtra(GlobalVariables.minValue);
-                maxValue = data.getStringExtra(GlobalVariables.maxValue);
-            } else if (comeFrom.equalsIgnoreCase("ShopByThemeAdapter")) {
-                minValue = data.getStringExtra(GlobalVariables.minValue);
-                maxValue = data.getStringExtra(GlobalVariables.maxValue);
-                commaSeparatedSizeNameId = data.getStringExtra("commaSeparatedSizeNameId");
-                commaSeparatedColorNameId = data.getStringExtra("commaSeparatedColorNameId");
-                commaSeparatedBrandNameId = data.getStringExtra("commaSeparatedBrandNameId");
-                theme_id = data.getStringExtra(GlobalVariables.subcatid);
-                theme = data.getStringExtra(GlobalVariables.theme);
-                subcatname = data.getStringExtra(GlobalVariables.section_name);
-                filter = data.getStringExtra(GlobalVariables.filter_data);
-            } else if (comeFrom.equalsIgnoreCase("MenSectionShopByOccassionAdapter")) {
-
-                subsubcatid = data.getStringExtra(GlobalVariables.subsubcatid);
-                subcatname = data.getStringExtra(GlobalVariables.section_name);
-                filter = data.getStringExtra(GlobalVariables.filter_data);
-                commaSeparatedSizeNameId = data.getStringExtra("commaSeparatedSizeNameId");
-                commaSeparatedColorNameId = data.getStringExtra("commaSeparatedColorNameId");
-                commaSeparatedBrandNameId = data.getStringExtra("commaSeparatedBrandNameId");
-                minValue = data.getStringExtra(GlobalVariables.minValue);
-                maxValue = data.getStringExtra(GlobalVariables.maxValue);
-
-            } else if (comeFrom.equalsIgnoreCase("AutoSlideViewPagerBannerAdapter")) {
-                subsubcatid = data.getStringExtra(GlobalVariables.subsubcatid);
-                subcatname = data.getStringExtra(GlobalVariables.section_name);
-                filter = data.getStringExtra(GlobalVariables.filter_data);
-                commaSeparatedSizeNameId = data.getStringExtra("commaSeparatedSizeNameId");
-                commaSeparatedColorNameId = data.getStringExtra("commaSeparatedColorNameId");
-                commaSeparatedBrandNameId = data.getStringExtra("commaSeparatedBrandNameId");
-                minValue = data.getStringExtra(GlobalVariables.minValue);
-                maxValue = data.getStringExtra(GlobalVariables.maxValue);
-
-            } else if (comeFrom.equalsIgnoreCase(MyFirebaseMessagingService.class.getSimpleName())) {
-                subsubcatid = data.getStringExtra(GlobalVariables.subsubcatid);
-                subcatname = data.getStringExtra(GlobalVariables.section_name);
-                filter = getIntent().getStringExtra(GlobalVariables.filter_data);
-                commaSeparatedSizeNameId = data.getStringExtra("commaSeparatedSizeNameId");
-                commaSeparatedColorNameId = data.getStringExtra("commaSeparatedColorNameId");
-                commaSeparatedBrandNameId = data.getStringExtra("commaSeparatedBrandNameId");
-                minValue = data.getStringExtra(GlobalVariables.minValue);
-                maxValue = data.getStringExtra(GlobalVariables.maxValue);
-
-            } else {
-                subsubcatid = data.getStringExtra(GlobalVariables.subsubcatid);
-                subcatid = data.getStringExtra(GlobalVariables.subcatid);
-                subcatname = data.getStringExtra(GlobalVariables.section_name);
-            }
-
-        }
+        catid = data.getStringExtra(GlobalVariables.catid);
+        subcatid = data.getStringExtra(GlobalVariables.subcatid);
+        subsubcatid = data.getStringExtra(GlobalVariables.subsubcatid);
+        subcatname = data.getStringExtra(GlobalVariables.section_name);
+        minValue = data.getStringExtra(GlobalVariables.minValue);
+        maxValue = data.getStringExtra(GlobalVariables.maxValue);
+        filterSize = data.getStringExtra("filterSize");
+        filter=data.getStringExtra(GlobalVariables.type);
+        productListApi();
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> task) {
@@ -526,7 +288,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onResponse(Call<MyWishListResponse> call, Response<MyWishListResponse> response) {
                 if (response.isSuccessful()) {
-                    if (response.body().getStatus().equals("SUCCESS")){ sortBy=""; callProductListApi(); }
+                    if (response.body().getStatus().equals("SUCCESS")){ sortBy=""; productListApi(); }
                      else if (response.body().getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
                         binding.progressBar.setVisibility(View.GONE);
                         CommonUtil.setUpSnackbarMessage(binding.getRoot(),response.body().getMessage(),ProductListActivity.this);
@@ -562,73 +324,13 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void filterProduct() {
-        String types = "",from="";
-        if (comeFrom.equalsIgnoreCase(GlobalVariables.flashSale) || type.equalsIgnoreCase(GlobalVariables.flashSale)) {
-            subcatid = "0";
-            types = GlobalVariables.flashSale;
-            from="ProductListActivity";
-        } else if (comeFrom.equalsIgnoreCase("ThreeLevelListAdapter")) {
-            subcatid = subsubcatid;
-            types = "subsubcat";
-            from="ThreeLevelListAdapter";
-        } else if (comeFrom.equalsIgnoreCase("SearchAdapter")) {
-            subcatid = subsubcatid;
-            types = "subsubcat";
-            from=comeFrom;
-        } else if (comeFrom.equalsIgnoreCase("BrandInFocusAdapter")) {
-            subcatid = "";
-            types = subcatname;
-            from=comeFrom;
-        } else if (comeFrom.equalsIgnoreCase("FilteredBrandInFocus")) {
-            subcatid = "";
-            types = subcatname;
-            from="BrandInFocusAdapter";
-        } else if (comeFrom.equalsIgnoreCase(GlobalVariables.ProductDetailsActivityFinal)) {
-            types = "subcat";
-            from=comeFrom;
-        } else if (comeFrom.equalsIgnoreCase("ShopByThemeAdapter")) {
-            types = "theme";
-            subcatid = theme_id;
-            from=comeFrom;
-        } else if (comeFrom.equalsIgnoreCase("MenSectionShopByOccassionAdapter")) {
-            types = "subsubcat";
-            from="MenSectionShopByOccassionAdapter";
-        } else if (comeFrom.equalsIgnoreCase("AutoSlideViewPagerBannerAdapter")) {
-            types = "subsubcat";
-            from="AutoSlideViewPagerBannerAdapter";
-        } else if (comeFrom.equalsIgnoreCase(MyFirebaseMessagingService.class.getSimpleName())) {
-            types = "subsubcat";
-            from=MyFirebaseMessagingService.class.getSimpleName();
-        } else {
-            types = "subcat";
-            from="ProductListActivity";
-        }
-
-        callingIntent(from, binding.tvProductName.getText().toString(), subcatid, types);
-    }
-
-    private void callingIntent(String from, String section_name, String subcatid, String type) {
         Intent intent = new Intent(this, FilterProductListActivity.class);
-        intent.putExtra("from", from);
-        intent.putExtra(GlobalVariables.section_name, section_name);
+        intent.putExtra(GlobalVariables.catid, catid);
         intent.putExtra(GlobalVariables.subcatid, subcatid);
-        intent.putExtra(GlobalVariables.type, type);
-        if (from.equalsIgnoreCase("SearchAdapter")) {
-            intent.putExtra(GlobalVariables.catid, catid);
-            intent.putExtra(GlobalVariables.filter_data, getIntent().getStringExtra(GlobalVariables.filter_data));
-
-        } else if (comeFrom.equalsIgnoreCase("ShopByThemeAdapter")) {
-            intent.putExtra(GlobalVariables.theme, theme);
-
-        } else if (comeFrom.equalsIgnoreCase("MenSectionShopByOccassionAdapter")) {
-            intent.putExtra(GlobalVariables.subsubcatid, subsubcatid);
-        } else if (comeFrom.equalsIgnoreCase("AutoSlideViewPagerBannerAdapter")) {
-            intent.putExtra(GlobalVariables.subsubcatid, subsubcatid);
-        } else if (comeFrom.equalsIgnoreCase(MyFirebaseMessagingService.class.getSimpleName())) {
-            intent.putExtra(GlobalVariables.subsubcatid, subcatid);
-        }
-        startActivityForResult(intent,101);
-
+        intent.putExtra(GlobalVariables.subsubcatid, subsubcatid);
+        intent.putExtra(GlobalVariables.section_name, subcatname);
+        intent.putExtra(GlobalVariables.type, "subcat");
+        startActivityForResult(intent,FILTER_RESULT);
     }
 
 

@@ -84,9 +84,10 @@ public class InnerProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 case R.id.tvViewAll:
                 Intent intent=new Intent(context,ProductListActivity.class);
-                intent.putExtra("from",GlobalVariables.flashSale);
+                intent.putExtra(GlobalVariables.catid,"");
+                intent.putExtra(GlobalVariables.subcatid,"");
+                intent.putExtra(GlobalVariables.subsubcatid,"");
                 intent.putExtra(GlobalVariables.section_name,"Flash Sale");
-                context.startActivity(intent);
                 break;
 
             }
@@ -116,8 +117,9 @@ public class InnerProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             switch (view.getId()){
                 case R.id.tvViewAll :
                 Intent intent=new Intent(context,ProductListActivity.class);
-                intent.putExtra("from","MenActivity");
                 intent.putExtra(GlobalVariables.subcatid,""+list.get(getAbsoluteAdapterPosition()).getSubcatId());
+                intent.putExtra(GlobalVariables.subsubcatid,"");
+                intent.putExtra(GlobalVariables.catid,"");
                 intent.putExtra(GlobalVariables.section_name,list.get(getAbsoluteAdapterPosition()).getSectionName());
                 context.startActivity(intent);
                 break;
