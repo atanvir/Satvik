@@ -373,5 +373,4 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         super.onBackPressed();
     }
 
-
 }

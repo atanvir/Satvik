@@ -58,6 +58,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.satvick.utils.Utility.isValidEmail;
+
 public class EditProfileActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
     private ActivityEditProfleBinding binding;
     private Date date= Calendar.getInstance().getTime();
@@ -158,7 +160,11 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             ret=false;
             CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please enter email id",this);
 
+        }  else if (!isValidEmail(binding.edtEmail.getText().toString().trim())) {
+            ret=false;
+            CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please enter valid email",this);
         }
+
         else if(binding.edtPhone.getText().toString().isEmpty())
         {
             ret=false;

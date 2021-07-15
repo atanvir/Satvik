@@ -149,7 +149,7 @@ public class WishListActivity extends AppCompatActivity implements View.OnClickL
         isProductAdded=true;
         updateList(pos);
         setItemCount();
-        setBadgeCount(badgeCount++);
+        setBadgeCount(badgeCount=badgeCount+1);
     }
     private void setBadgeCount(int count) {
         binding.notificationBadge.setText("" + count);

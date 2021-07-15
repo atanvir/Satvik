@@ -300,6 +300,7 @@
                             android:background="@null"
                             android:hint="@string/phone_number"
                             android:imeOptions="actionDone"
+                            android:digits="0123456789"
                             android:inputType="phone"
                             android:paddingTop="@dimen/_10sdp"
                             android:maxLength="10"

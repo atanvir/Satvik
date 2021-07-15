@@ -221,7 +221,7 @@ public class WebViewActivity extends AppCompatActivity {
                                   AvenuesParams.BILLING_ZIP + "=" + URLEncoder.encode(viewAddress!=null?viewAddress.getPincode():"", "UTF-8")+ "&" +
                                   AvenuesParams.BILLING_CITY + "=" + URLEncoder.encode(viewAddress!=null?viewAddress.getCity():"", "UTF-8")+ "&" +
                                   AvenuesParams.BILLING_STATE + "=" + URLEncoder.encode(viewAddress!=null?viewAddress.getState():"", "UTF-8")+ "&" +
-                                  AvenuesParams.BILLING_EMAIL + "=" + URLEncoder.encode(SharedPreferenceWriter.getInstance(WebViewActivity.this).getString(SharedPreferenceKey.EMAIL), "UTF-8")+ "&" +
+//                                  AvenuesParams.BILLING_EMAIL + "=" + URLEncoder.encode(SharedPreferenceWriter.getInstance(WebViewActivity.this).getString(SharedPreferenceKey.EMAIL), "UTF-8")+ "&" +
                                   AvenuesParams.BILLING_MOBILE_NUMBER + "=" + URLEncoder.encode(viewAddress!=null?viewAddress.getPhone():SharedPreferenceWriter.getInstance(WebViewActivity.this).getString(SharedPreferenceKey.PHONE), "UTF-8")+ "&" +
                                   AvenuesParams.BILLING_NOTES + "=" + URLEncoder.encode("Need it as soon as possible", "UTF-8")+ "&" +
                                   AvenuesParams.BILLING_COUNTRY + "=" + URLEncoder.encode(viewAddress!=null?viewAddress.getCountry():"India", "UTF-8");

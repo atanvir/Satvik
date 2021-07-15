@@ -125,11 +125,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please enter phone number",this);
         }
 
-        else if(binding.edtPhone.getText().toString().trim().length() !=10){
-            validate=false;
-            CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please enter phone number",this);
-        }
-
         else if(binding.edtCountry.getText().toString().length() == 0) {
             validate=false;
             CommonUtil.setUpSnackbarMessage(binding.getRoot(),getString(R.string.please_enter_country_name),this);

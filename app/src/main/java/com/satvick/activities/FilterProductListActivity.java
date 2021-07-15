@@ -32,15 +32,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FilterProductListActivity extends AppCompatActivity implements View.OnClickListener, PriceRangeAdapter.PriceRangerClickListner {
+
     private ActivityFilterProductListBinding binding;
     private ApiInterface apiInterface=ApiClient.getClient().create(ApiInterface.class);
     private List<SizeCheckedListModel> sizeList = new ArrayList<>();
-    private String maxValue="100",minValue="10000",type="";
+    private String maxValue="100", minValue="10000", type="";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding =ActivityFilterProductListBinding.inflate(getLayoutInflater());
+        binding = ActivityFilterProductListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         init();
         initCtrl();
@@ -48,7 +49,6 @@ public class FilterProductListActivity extends AppCompatActivity implements View
     }
 
     private void init() {
-
     }
 
     private void initCtrl() {
@@ -102,9 +102,7 @@ public class FilterProductListActivity extends AppCompatActivity implements View
                 if(!sizeList.isEmpty()) {
                     setBackground("size");
                     binding.llSize.setVisibility(View.VISIBLE);
-                }else{
-                    setBackground("price");
-                }
+                }else{ setBackground("price"); }
             }
         }
     }
@@ -141,22 +139,18 @@ public class FilterProductListActivity extends AppCompatActivity implements View
 
 
     private void setBackground(String type) {
-        if(type.equalsIgnoreCase("price")){
+        if(type.equalsIgnoreCase("price")) {
             binding.llSize.setBackgroundColor(getResources().getColor(R.color.colorView));
             binding.tvSize.setTextColor(getResources().getColor(R.color.colorBlack));
             binding.llPrice.setBackgroundColor(getResources().getColor(R.color.colorWhite));
             binding.tvPrice.setTextColor(getResources().getColor(R.color.colorLogOut));
-
             binding.rvFilter.setLayoutManager(new LinearLayoutManager(this));
             binding.rvFilter.setAdapter(new PriceRangeAdapter(this,this));
-
-
-        }else if(type.equalsIgnoreCase("size")){
+        }else if(type.equalsIgnoreCase("size")) {
             binding.llSize.setBackgroundColor(getResources().getColor(R.color.colorWhite));
             binding.tvSize.setTextColor(getResources().getColor(R.color.colorBlack));
             binding.llPrice.setBackgroundColor(getResources().getColor(R.color.colorView));
             binding.tvPrice.setTextColor(getResources().getColor(R.color.colorLogOut));
-
             binding.rvFilter.setLayoutManager(new LinearLayoutManager(this));
             binding.rvFilter.setAdapter( new FilterProductListBySizeAdapter(this, sizeList));
         }
