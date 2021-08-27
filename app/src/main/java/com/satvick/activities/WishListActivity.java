@@ -36,7 +36,7 @@ public class WishListActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding =ActivityWishlistBinding.inflate(getLayoutInflater());
+        binding = ActivityWishlistBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         initCtrl();
         wishListApi();
@@ -119,8 +119,8 @@ public class WishListActivity extends AppCompatActivity implements View.OnClickL
                 CommonUtil.setUpSnackbarMessage(binding.getRoot(),t.getMessage(),WishListActivity.this);
             }
         });
-
     }
+
     private void addToWishlistApi(int pos){
         binding.progressBar.setVisibility(View.VISIBLE);
         Call<MyWishListResponse> call = apiInterface.getAddToWishListResult(HelperClass.getCacheData(this).first,
@@ -151,12 +151,13 @@ public class WishListActivity extends AppCompatActivity implements View.OnClickL
         setItemCount();
         setBadgeCount(badgeCount=badgeCount+1);
     }
+
     private void setBadgeCount(int count) {
         binding.notificationBadge.setText("" + count);
         if (count>0) binding.notificationBadge.setVisibility(View.VISIBLE);
         else binding.notificationBadge.setVisibility(View.GONE);
-
     }
+
     private void setItemCount() {
         if(list!=null) {
             if (list.isEmpty()) binding.tvProductCount.setText("No item");
@@ -164,6 +165,7 @@ public class WishListActivity extends AppCompatActivity implements View.OnClickL
             else if (list.size() > 1) binding.tvProductCount.setText(list.size() + " Items");
         }else binding.tvProductCount.setText("No item");
     }
+
     private void updateList(int pos) {
         list.remove(pos);
         binding.recyclerView.getAdapter().notifyItemRemoved(pos);

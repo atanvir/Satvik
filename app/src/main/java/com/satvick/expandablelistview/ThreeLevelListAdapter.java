@@ -108,9 +108,10 @@ public class ThreeLevelListAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ProductListActivity.class);
-                intent.putExtra("from", "HomeFragmentAfterLogin");
                 intent.putExtra(GlobalVariables.subcatid, data.get(data.keySet().toArray()[groupPosition]).get(childPosition).getId());
+                intent.putExtra(GlobalVariables.subsubcatid,"");
                 intent.putExtra(GlobalVariables.subcatname, data.get(data.keySet().toArray()[groupPosition]).get(childPosition).getCategory_id());
+                intent.putExtra(GlobalVariables.section_name, data.get(data.keySet().toArray()[groupPosition]).get(childPosition).getSubcategory_name());
                 context.startActivity(intent);
             }
         });

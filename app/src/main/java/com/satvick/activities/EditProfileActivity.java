@@ -169,6 +169,9 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         {
             ret=false;
             CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please enter phone number",this);
+        }else if(binding.edtPhone.getText().toString().trim().length()!=10){
+            ret=false;
+            CommonUtil.setUpSnackbarMessage(binding.getRoot(),"Please enter valid phone number",this);
         }
         else if(binding.edtDOB.getText().toString().isEmpty())
         {
